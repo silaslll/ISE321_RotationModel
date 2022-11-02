@@ -1,0 +1,208 @@
+# © 2018 Frank E. Curtis & Kayleen D. Kelly
+
+#########
+# MODEL #
+#########
+
+model;
+
+########
+# SETS #
+########
+
+# Defines the (ordered) set of people
+set people ordered;
+
+# Defines the (ordered) set of rotations
+set rotations ordered;
+
+# Defines the (ordered) set of blocks
+set blocks ordered;
+
+# Defines the set of residents who are around for the entire year
+set allYearResidents within {people};
+
+# Defines the set of residents who are around for a partial year
+#set partialYearResidents within {people};
+
+# Defines the rotations that all-year residents must do
+set mustDo within {rotations};
+
+# Defines the rotations that are nonessential
+#set nonessential within {rotations};
+
+# Defines parameter indicating busy rotations
+set busyRotations within {rotations};
+
+# Defines the rotations during which vacations are allowed
+set vacationAndInterviewScheduled within {people,blocks};
+
+# Defines set of priority assignments
+set priority within {people, rotations, blocks};
+
+# Defines set of preference assignments
+set preference within {people, rotations, blocks};
+
+# Defines set of impossible assignments
+set impossibleAssignments within {people, rotations, blocks};
+
+# Defines set of blocks in which a person is gone
+set goneRotation within {people,blocks};
+
+# Defines set of impossible rotations for people
+#set impossibleRotationsForPeople within {people,rotations};
+
+# Defines set of impossible rotations for blocks
+set impossibleRotationsForBlocks within {rotations, blocks};
+
+##############
+# PARAMETERS #
+##############
+
+# Defines parameters for the number of people, number of rotations, and number of blocks
+param P;
+param R;
+param B;
+
+# Defines parameter for the minimum number of people for each rotation
+param p_min{rotations} >= 0;
+
+# Defines parameter for the maximum number of people for each rotation
+param p_max{rotations} >= 0;
+
+# Defines parameter for the minimum number of times a person must do the specified rotation
+param r_min{people,rotations} >= 0, default 0;
+
+# Defines parameter for the maximum number of times a person must do the specified rotation
+param r_max{people,rotations} >= 0, default 1000;
+
+#############
+# VARIABLES #
+#############
+
+# Defines the decision variables (x[p,r,b]=1 if person p assigned to rotation r in block b; x[p,r,b]=0 otherwise)
+var x{people,rotations,blocks} binary;
+
+# Defines variables for consecutive busy rotations
+var y{p in people, r1 in busyRotations, r2 in busyRotations, b in 1..B-1} binary;
+
+#############
+# OBJECTIVE #
+#############
+
+# Defines the objective
+minimize objective: sum{p in people,r1 in busyRotations, r2 in busyRotations, b in 1..B-1} (1-y[p,r1,r2,b]) - sum{(p,r,b) in preference} x[p,r,b];
+
+###############
+# CONSTRAINTS #
+###############
+
+# Ensures one person cannot be assigned two things at once
+s.t. personOneAssignmentPerBlock{p in people, b in blocks}:
+  sum{r in rotations} x[p,r,b] = 1;
+
+# Ensures sufficient coverage for each rotation
+s.t. rotationCoverage{r in rotations, b in blocks}:
+  p_min[r] <= sum{p in people} x[p,r,b] <= p_max[r];
+
+# Ensures bounds on number of times person does a given rotation
+s.t. peopleRotationBounds{p in people, r in rotations}:
+  r_min[p,r] <= sum{b in blocks} x[p,r,b] <= r_max[p,r];
+
+# Ensures that all-year residents must do each must-do rotation
+s.t. allYearResidentsAssignedToEachMustDoRotation{p in allYearResidents, r in mustDo}:
+  sum{b in blocks} x[p,r,b] >= 1;
+
+# Ensures Priority Assignments are fulfilled
+s.t. priorityAssignments{(p,r,b) in priority}: x[p,r,b] = 1;
+
+# Ensures Preference Assignments are fulfilled
+#s.t. preferenceAssignments{(p,r,b) in preference}: x[p,r,b] = 1;
+
+# Ensures rotations that cannot happen, do not happen
+s.t. assignmentsThatCannotHappen{(p,r,b) in impossibleAssignments}: x[p,r,b] = 0;
+
+# Constraint for Gone Rotation
+s.t. goneRotations{r in rotations,(p,b) in goneRotation}: x[p,r,b] = 0;
+
+# Constraint that keeps people from doing certain rotations
+#s.t. impossibleRotationsForCertainPeople{b in blocks, (p,r) in impossibleRotationsForPeople}: x[p,r,b] = 0;
+
+# Constraint that establishes certain rotations impossible within certain blocks
+s.t. impossibleRotationsForCertainBlocks{p in people, (r,b) in impossibleRotationsForBlocks}: x[p,r,b] = 0;
+
+# Vacations and Interviews constraint that prohibits resident from doing a busy rotation during the vacation or interview period
+s.t. vacationsAndInterviewsAllowed{r in busyRotations, (p,b) in vacationAndInterviewScheduled}: x[p,r,b] = 0;
+
+# Defines y
+s.t. ys{p in people, r1 in busyRotations, r2 in busyRotations, b in 1..B-1}:
+  y[p,r1,r2,b] <= (2 - x[p,r1,member(b,blocks)] - x[p,r2,member(b+1,blocks)]);
+
+#########
+# SOLVE #
+#########
+
+solve;
+
+###########
+# DISPLAY #
+###########
+
+# Code below used to display output in two-dimmensional form on the excel sheet
+display {b in blocks}: {p in people, r in rotations} x[p,r,b];
+
+# Variables for each block that store the people and rotations for that block
+var b1{people, rotations} binary ;
+var b2{people, rotations} binary;
+var b3{people, rotations} binary;
+var b4{people, rotations} binary;
+var b5{people, rotations} binary;
+var b6{people, rotations} binary;
+var b7{people, rotations} binary;
+var b8{people, rotations} binary;
+var b9{people, rotations} binary;
+var b10{people, rotations} binary;
+var b11{people, rotations} binary;
+var b12{people, rotations} binary;
+var b13{people, rotations} binary;
+var b14{people, rotations} binary;
+var b15{people, rotations} binary;
+
+# If-then statements used to change the values of the variables above, if the corresponding blocks exist
+
+if B >= 1 then let {p in people, r in rotations} b1[p,r] := x[p,r,1];
+if B >= 2 then let {p in people, r in rotations} b2[p,r] := x[p,r,2];
+if B >= 3 then let {p in people, r in rotations} b3[p,r] := x[p,r,3];
+if B >= 4 then let {p in people, r in rotations} b4[p,r] := x[p,r,4];
+if B >= 5 then let {p in people, r in rotations} b5[p,r] := x[p,r,5];
+if B >= 6 then let {p in people, r in rotations} b6[p,r] := x[p,r,6];
+if B >= 7 then let {p in people, r in rotations} b7[p,r] := x[p,r,7];
+if B >= 8 then let {p in people, r in rotations} b8[p,r] := x[p,r,8];
+if B >= 9 then let {p in people, r in rotations} b9[p,r] := x[p,r,9];
+if B >= 10 then let {p in people, r in rotations} b10[p,r] := x[p,r,10];
+if B >= 11 then let {p in people, r in rotations} b11[p,r] := x[p,r,11];
+if B >= 12 then let {p in people, r in rotations} b12[p,r] := x[p,r,12];
+if B >= 13 then let {p in people, r in rotations} b13[p,r] := x[p,r,13];
+if B >= 14 then let {p in people, r in rotations} b14[p,r] := x[p,r,14];
+if B >= 15 then let {p in people, r in rotations} b15[p,r] := x[p,r,15];
+
+# Display assignments to the excel sheet
+
+display b1 > Sheet;
+display b2 > Sheet;
+display b3 > Sheet;
+display b4 > Sheet;
+display b5 > Sheet;
+display b6 > Sheet;
+display b7 > Sheet;
+display b8 > Sheet;
+display b9 > Sheet;
+display b10 > Sheet;
+display b11 > Sheet;
+display b12 > Sheet;
+display b13 > Sheet;
+display b14 > Sheet;
+display b15 > Sheet;
+
+display objective;
+display solve_result;
