@@ -1,0 +1,17 @@
+Resident,Rotation,Block
+Resident1,Rotation1,3
+Resident1,Rotation2,2
+Resident1,Rotation3,1
+Resident1,Rotation3,4
+Resident2,Rotation1,1
+Resident2,Rotation1,2
+Resident2,Rotation2,4
+Resident2,Rotation3,3
+Resident3,Rotation1,4
+Resident3,Rotation2,1
+Resident3,Rotation3,2
+Resident3,Rotation4,3
+Resident4,Rotation2,3
+Resident4,Rotation3,2
+Resident4,Rotation4,1
+Resident4,Rotation4,4

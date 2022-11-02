@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            .title {
+                margin: 5px;
+            }
+    
+            .content {
+                margin: 5px;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+    
+            .rotationData {
+                flex: 20%;
+                padding: 10px;
+                margin: 5px;
+                background-color: #f3f3f3;
+                inline-size: 100%;
+            }
+    
+            .bio {
+                padding: 10px;
+                margin: 5px;
+                background-color: #ffffff;
+                color: #004835;
+            }
+    
+            .name a {
+                color: #00a36f;
+                text-decoration: none;
+            }
+    
+            nav a {
+                color: #d64161;
+                font-size: 1em;
+                margin-left: 50px;
+                text-decoration: none;
+            }
+        </style>
+      <title>Rotation Scheduling Model</title>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+      <!--Import Bootstrap, which provides a free CSS framework to allow us easily produce more prefessional looking web content  -->
+      </head>
+    <body>
+        <nav>
+            <a href="{{ url_for('index') }}">Resident</a> 
+            <a href="{{ url_for('index2') }}">Rotation</a>
+            <a href="{{ url_for('index3') }}">Preference</a>
+            <a href="{{ url_for('index4') }}">Priority</a>
+            <a href="{{ url_for('index5') }}">Impossible</a>
+            <a href="{{ url_for('index6') }}">Vacation</a>
+            <a href="{{ url_for('myData') }}">Rotation Data</a>
+            <a href="{{ url_for('myData2') }}">Resident Data</a>
+            <a href="{{ url_for('table') }}">Schedule details</a>
+            <a href="{{ url_for('table') }}">Run Model</a>
+        </nav>
+        
+        <div align="center">
+            <table>
+                <h1>
+                <!--Displaying the converted table-->
+                     {% for table in tables %}
+                    <h2>{{titles[loop.index]}}</h2>                            
+                    {{ table|safe }}
+                    {% endfor %}     
+                </h1> 
+            </table>
+        </div>
+    </body>
+</html>
