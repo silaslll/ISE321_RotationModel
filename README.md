@@ -113,5 +113,11 @@ To get a local copy up and running follow these simple example steps.
 
 2. Copy the url that appears in the terminal onto your choice of internet browser
 
+3. Enter all the inputs of your model
+
+4. Press the Run Model button on the right top corner of the screen
+
+5. Press the Schedule details button to see the results of the schedule optimization
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
