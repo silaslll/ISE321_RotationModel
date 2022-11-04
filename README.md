@@ -98,7 +98,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Installation
 1.Fork this repository
-2.. Clone the newly forked repository
+
+2. Clone the newly forked repository
    ```sh
    git clone https://github.com/changwang29/ISE321_RotationModel
    ```
