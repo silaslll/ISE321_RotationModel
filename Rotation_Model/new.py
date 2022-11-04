@@ -83,9 +83,14 @@ def getData(dict,c):
     # Capitalize people
     for p in people:
        p.capitalize()
+    
+    # Replace white spaces in rotation names
+    for r in rotations:
+        r.replace(" ", "")
  
     # Capitalze blocks and check their format
     for b in blocks:
+        b.replace(" ", "")
         b.capitalize()
         str = b[0:5]
         d = b[-1]
