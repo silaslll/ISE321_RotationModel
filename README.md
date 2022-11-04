@@ -47,7 +47,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-## Shopme
+## Hospital Scheduling Tool
 
 The goal of this on-going project is to develop a user-friendly tool for optimizing the call schedule for a set of residents in a large academic hospital. This is a complex scheduling problem and suboptimal rotation scheduling can lead to burnout, unfair distribution of workload, and uneven coverage of needed medical areas. The tool should be understandable and usable by chief residents who are responsible for constructing the call schedules.  It is expected that real data from a large academic hospital can be obtained. 
 
