@@ -2,7 +2,7 @@
 import math
 import gurobipy as gp
 from gurobipy import GRB
-from flask import Flask, render_template, url_for, request, session 
+from flask import Flask, render_template, url_for, request, session ,redirect
 from flask_sqlalchemy import SQLAlchemy  # This module is used for database management 
 import os # set the path of the databse relative to the Flask app
 from datetime import datetime 
@@ -272,6 +272,26 @@ def table():
 def runModel():
   result = model()
   return render_template('runModel.html', result = result)
+
+@app.route('/deleteResident/<int:id>')
+def deleteResident(id):
+  resident_to_delete = Store_Resident_data.query.get_or_404(id);
+  try:
+    db.session.delete(resident_to_delete)
+    db.session.commit()
+    return redirect('/myData2')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deleteRotation/<int:id>')
+def deleteRotation(id):
+  rotation_to_delete = Store_Rotation_data.query.get_or_404(id);
+  try:
+    db.session.delete(rotation_to_delete)
+    db.session.commit()
+    return redirect('/myData')
+  except:
+    return "Deletion Problem"
 
 def calculate(form):
   result = "!"
