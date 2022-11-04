@@ -107,9 +107,11 @@ To get a local copy up and running follow these simple example steps.
    ```sh
     Python main.py
    ```
-4. Follow the instruction on the terminal and visit the port
-5. Start using the tool to make your schedule better!
 
+### Instructions
+1. Inside the project folder run the main.py file
+
+2. Copy the url that appears in the terminal onto your choice of internet browser
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
