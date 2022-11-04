@@ -97,17 +97,17 @@ To get a local copy up and running follow these simple example steps.
 
 
 ### Installation
-
-1. Clone the repo
+1.Fork this repository
+2.. Clone the newly forked repository
    ```sh
    git clone https://github.com/changwang29/ISE321_RotationModel
    ```
-2. Run the command
+3. Run the command
   ```sh
     Python main.py
   ```
-3. Follow the instruction on the terminal and visit the port
-4. Start using the tool to make your schedule better!
+4. Follow the instruction on the terminal and visit the port
+5. Start using the tool to make your schedule better!
 
 
 
