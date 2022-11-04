@@ -107,5 +107,8 @@ To get a local copy up and running follow these simple example steps.
     Python main.py
   ```
 3. Follow the instruction on the terminal and visit the port
+4. Start using the tool to make your schedule better!
+
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
