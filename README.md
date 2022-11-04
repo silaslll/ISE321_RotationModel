@@ -5,7 +5,7 @@
 
 <div align="center">
   <a href="https://github.com/changwang29/ISE321_RotationModel">
-    <img src="" alt="Logo" width="150" height="80">
+    <img src="hospital_tool.jpeg" alt="Logo" width="150" height="80">
   </a>
 
 
