@@ -104,9 +104,9 @@ To get a local copy up and running follow these simple example steps.
    git clone https://github.com/changwang29/ISE321_RotationModel
    ```
 3. Run the command
-  ```sh
+   ```sh
     Python main.py
-  ```
+   ```
 4. Follow the instruction on the terminal and visit the port
 5. Start using the tool to make your schedule better!
 
