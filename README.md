@@ -106,6 +106,6 @@ To get a local copy up and running follow these simple example steps.
   ```sh
     Python main.py
   ```
-3. Follow the instruction on the terminal
+3. Follow the instruction on the terminal and visit the port
 
 <p align="right">(<a href="#top">back to top</a>)</p>
