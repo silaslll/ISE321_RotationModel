@@ -66,7 +66,7 @@ Server : Flask Server
 
 Database : SQLite
 
-Third-Party Integration : Gorubi
+Third-Party Integration : gurobipy, pandas
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
