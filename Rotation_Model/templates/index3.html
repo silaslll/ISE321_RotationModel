@@ -64,15 +64,15 @@
     <!-- Allow user to add input  -->
     <div id="calc" >
       <h1>Rotation Scheduling </h1>
-      <p>Please enter details to run the model:</p>
+      <p> Please enter details to run the model:</p>
  
       <form action="{{ url_for('index3') }}" method="POST">
         
        
-        <label>Enter Preference Set Name:</label>
-        <input type="text" name="pref_people">
-        <input type="text" name="pref_rotation">
-        <input type="text" name="pref_block">
+        <h5> Enter Preference Set Name: </h5>
+        <label> Person: <input type="text" name="pref_people" required></label>
+        <label> Rotation: <input type="text" name="pref_rotation" required></label>
+        <label> Block: <input type="text" name="pref_block" required></label>
         <br><br>
         
 

@@ -62,6 +62,15 @@
       <a href="{{ url_for('table') }}">Schedule details</a>
       <a href="{{ url_for('runModel') }}">Run Model</a>
   </nav>
+
+    {% for message in get_flashed_messages() %}
+    <br>
+    <div class="container text-center">
+      <div class="p-3 mb-2 bg-danger text-white">{{ message }}</div>
+    </div>
+    <br>
+    {% endfor %}
+
     <!-- Allow user to add input  -->
     <div id="calc" >
       <h1>Rotation Scheduling </h1>

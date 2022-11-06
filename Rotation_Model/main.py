@@ -2,18 +2,20 @@
 import math
 import gurobipy as gp
 from gurobipy import GRB
-from flask import Flask, render_template, url_for, request, session ,redirect
+from flask import Flask, render_template, url_for, request, session ,redirect, flash
 from flask_sqlalchemy import SQLAlchemy  # This module is used for database management 
 import os # set the path of the databse relative to the Flask app
 from datetime import datetime 
 import pandas as pd 
 import new
+import sys, traceback
 # from new import model, constraints, solve, getData
 
 
 # Database
 basedir = os.path.abspath(os.path.dirname(__file__)) # Get the path of current file: base directory
 app = Flask(__name__)
+app.secret_key = 'key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.db') # Add databse file 
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True # Set database parameters using the apps configuration 
 db = SQLAlchemy(app) # Bind the databse instance to our application 
@@ -270,7 +272,12 @@ def table():
 
 @app.route('/runModel', methods=['GET', 'POST'])
 def runModel():
-  result = model()
+  try:
+    result = model()
+  except:
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    flash(exc_value)
+    return render_template('index.html')
   return render_template('runModel.html', result = result)
 
 @app.route('/deleteResident/<int:id>')
