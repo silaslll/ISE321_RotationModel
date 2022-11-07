@@ -12,12 +12,12 @@ import re
 def main():
 
     # Connect with Database
-    path = '/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/data.db'
+    path = '/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model_Shutian/data.db'
     con = sqlite3.connect(path)
     con.row_factory = lambda cursor, row: row[0]
     c = con.cursor()
     dict = {}
-    p_min, p_max = getData(dict,c)
+    p_min, p_max,residentInLevel = getData(dict,c)
 
     if(p_min == 1):
         raise Exception('Block format is incorrect.')
@@ -28,63 +28,23 @@ def main():
 
     # Model 
     m = gp.Model("rotation_scheduling")
-    model(m,dict,p_min, p_max)
+    model(m,dict,p_min, p_max,residentInLevel)
     solve(m)
     
 
 def getData(dict,c):
 
-    people = c.execute('SELECT name FROM resident WHERE name IS NOT ""').fetchall()
-    allYearResidents = c.execute('SELECT name FROM resident Where allYear = "y"').fetchall()
-    rotations = c.execute('SELECT Rotation_name FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    mustDo = c.execute('SELECT Rotation_name FROM rotation Where mustDo = "y"').fetchall()
-    busyRotations = c.execute('SELECT Rotation_name FROM rotation Where busy = "y"').fetchall()
     
-    # Add blocks to the model, always choose the latest version of block number 
-    blockNum = c.execute('SELECT Block FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
-    blocks = []
-    for i in range(blockNum[0]):
-        blocks.append("Block" + str(i +1 ))
-    # blocks = ["Block1", "Block2", "Block3", "Block4"...]
-
-    # Need to look for a easier way to input data 
-    priority_p = c.execute('SELECT Resident_name FROM priority').fetchall()
-    priority_r = c.execute('SELECT Rotation_name FROM priority').fetchall()
-    priority_b = c.execute('SELECT Block FROM priority').fetchall()
-    priority = []
-    for i in range(0,len(priority_p)):
-        temp = (priority_p[i],priority_r[i],priority_b[i])
-        priority.append(temp)
-
-    pref_p = c.execute('SELECT Resident_name FROM preference').fetchall()
-    pref_r = c.execute('SELECT Rotation_name FROM preference').fetchall()
-    pref_b = c.execute('SELECT Block FROM preference').fetchall()
-
-    preference = []
-    for i in range(0,len(pref_p)):
-        temp = (pref_p[i],pref_r[i],pref_b[i])
-        preference.append(temp)
-
-    imo_p = c.execute('SELECT Resident_name FROM impossible').fetchall()
-    imo_r = c.execute('SELECT Rotation_name FROM impossible').fetchall()
-    imo_b = c.execute('SELECT Block FROM impossible').fetchall()
-  
-    impossibleAssignments = []
-    for i in range(0,len(imo_p)):
-        temp = (imo_p[i],imo_r[i],imo_b[i])
-        impossibleAssignments.append(temp)
-
-    vac_p = c.execute('SELECT Resident_name FROM vacation').fetchall()
-    vac_b = c.execute('SELECT Block FROM vacation').fetchall()
-    vacation = []
-    for i in range(0,len(vac_p)):
-        temp = (vac_p[i],vac_b[i])
-        vacation.append(temp)
-
-    # priority = [("Resident2", "Rotation1", "Block2")]
-    # preference = [("Resident1", "Rotation2", "Block1")]
-    # impossibleAssignments = [("Resident3", "Rotation1", "Block1")]
-    # vacation = [("Resident1", "Block1"),("Resident1", "Block4"),("Resident2", "Block3")]
+    people = ["Resident1", "Resident2", "Resident3", "Resident4","Resident5","Resident6"]
+    rotations = ["Rotation1", "Rotation2", "Rotation3", "Rotation4"]
+    blocks = ["Block1", "Block2", "Block3", "Block4"]
+    allYearResidents = ["Resident1", "Resident2", "Resident3"]
+    mustDo = ["Rotation1","Rotation2","Rotation3" ]
+    busyRotations = ["Rotation1", "Rotation2"]
+    priority = [("Resident2", "Rotation1", "Block2")]
+    preference = [("Resident1", "Rotation2", "Block1")]
+    impossibleAssignments = [("Resident3", "Rotation1", "Block1")]
+    vacation = [("Resident1", "Block1"),("Resident1", "Block4"),("Resident2", "Block3")]
 
     # Capitalize people
     for p in people:
@@ -159,20 +119,18 @@ def getData(dict,c):
     dict['impossibleAssignments'] = impossibleAssignments
     dict['vacation'] = vacation
 
-    # Add p_min and p_max
-    # We can add another data validation such that the p_min in rotation r is always smaller than p_max for r
-    # Another validation could be that p_min should always smaller than the number of residents 
-    p_min_values = c.execute('SELECT p_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    p_max_values = c.execute('SELECT p_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    p_min = {}
-    p_max = {}
-    for r in range(len(rotations)):
-        p_min[rotations[r]] = p_min_values[r]
-        p_max[rotations[r]] = p_max_values[r]
-    # p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}...
-    # p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}...
-
-    return p_min, p_max
+    # Add Resident working age as "level"
+    level = ["E1","E2"]  
+    residentInLevel = {"E1":["Resident1", "Resident2","Resident5"],"E2": ["Resident3", "Resident4","Resident6"]}
+    e1_p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 0, "Rotation4": 0}
+    e1_p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}
+    e2_p_min = {"Rotation1": 0, "Rotation2": 0, "Rotation3": 1, "Rotation4": 1}
+    e2_p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}
+    
+    p_min = {"E1": e1_p_min,"E2":e2_p_min}
+    p_max = {"E1": e1_p_max,"E2":e2_p_max}
+    
+    return p_min, p_max,residentInLevel
 
 def checkDuplicates(list):
     if len(list) == len(set(list)):
@@ -180,7 +138,7 @@ def checkDuplicates(list):
     else:
         return True
 
-def model(m, dict,p_min, p_max):
+def model(m, dict,p_min, p_max,residentInLevel):
     
     # Decision Variables 
     # Defines the decision variables (x[p,r,b]=1 if person p assigned to rotation r in block b; x[p,r,b]=0 otherwise)
@@ -201,16 +159,23 @@ def model(m, dict,p_min, p_max):
     # CONSTRAINTS #
     ###############
 
-    constraints(m,p_min,p_max,dict,x,y)
+    constraints(m,p_min,p_max,dict,x,y,residentInLevel)
     
-def constraints(m, p_min, p_max, dict,x,y):
+def constraints(m, p_min, p_max, dict,x,y,residentInLevel):
     # Ensures one person cannot be assigned two blocks at once
     m.addConstrs((sum(x[(p,r,b)] for r in dict['rotations']) == 1  for p in dict['people'] for b in dict['blocks']),name = "personOneAssignmentPerBlock")
 
     # Ensures sufficient coverage for each rotation
-    m.addConstrs((p_min[r]  <= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min" )
-    m.addConstrs((p_max[r]  >= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Max" )
-
+    # m.addConstrs((p_min[r]  <= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min" )
+    # m.addConstrs((p_max[r]  >= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Max" )
+    
+    # New
+    m.addConstrs((p_min["E1"][r]  <= sum([x[(p,r,b)] for p in residentInLevel["E1"]]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min_E1" )
+    m.addConstrs((p_min["E2"][r]  <= sum([x[(p,r,b)] for p in residentInLevel["E2"]]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min_E2" )
+    m.addConstrs((p_max["E1"][r]  >= sum([x[(p,r,b)] for p in residentInLevel["E1"]]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min_E1" )
+    m.addConstrs((p_max["E2"][r]  >= sum([x[(p,r,b)] for p in residentInLevel["E2"]]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min_E2" )
+   
+    
     # Ensures that all-year residents must do each must-do rotation
     m.addConstrs((sum(x[(p,r,b)] for b in dict['blocks']) >= 1  for p in dict['allYearResidents'] for r in dict['mustDo']), name = "AllYear_mustdo")
 

@@ -247,7 +247,7 @@ def solve(m):
     # Store everything in a table group by resident name
     num = np.array(output)
     sch = pd.DataFrame(num, columns=['Resident','Rotation','Block'])
-    sch.to_csv('./output.csv', index = False)
+    sch.to_csv('/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/output.csv', index = False)
 
 
 if __name__ == "__main__":
