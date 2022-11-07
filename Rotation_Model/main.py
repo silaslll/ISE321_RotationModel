@@ -56,6 +56,18 @@ class Store_Rotation_data(db.Model):
     self.mustDo = mustDo
     self.busy = busy
 
+class Store_Block_data(db.Model):
+  __tablename__ = 'block'
+  blockId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
+  blockNum= db.Column('blockNum', db.Integer)
+  
+
+  # Initialisation method to allow us to pass values for these fields
+  def __init__(self, blockNum):
+    # self.timestamp = datetime.now()
+    self.blockNum = blockNum
+    
+
 class Store_Pref_data(db.Model):
   __tablename__ = 'preference'
   prefId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
@@ -161,6 +173,27 @@ def index2():
     result = calculate(form)
   # render the index.html file stored in the templates folder
   return render_template('index2.html', result=result)
+
+@app.route('/Block', methods=['GET', 'POST'])
+def block():
+  result = False
+  if not os.path.exists(os.path.join(basedir, 'data.db')):
+    db.create_all()
+  if request.method == 'POST':
+    form = request.form
+
+    # Store data to table
+    blockNum = request.form.get('blockNum', False)
+    
+    # write the input data to the databse
+    
+    db.session.add(Store_Block_data(blockNum))
+    db.session.commit()
+   
+    # render result 
+    result = calculate(form)
+  # render the index.html file stored in the templates folder
+  return render_template('block.html', result=result)
 
 @app.route('/index3', methods=['GET', 'POST'])
 def index3():

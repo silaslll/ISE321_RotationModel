@@ -39,7 +39,8 @@ def getData(dict,c):
     rotations = c.execute('SELECT Rotation_name FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
     mustDo = c.execute('SELECT Rotation_name FROM rotation Where mustDo = "y"').fetchall()
     busyRotations = c.execute('SELECT Rotation_name FROM rotation Where busy = "y"').fetchall()
-    blocks = ["Block1", "Block2", "Block3", "Block4"]
+    blockNum = c.execute('SELECT Block_Num FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
+    # blocks = ["Block1", "Block2", "Block3", "Block4"]
 
     # Need to look for a easier way to input data 
     priority_p = c.execute('SELECT Resident_name FROM priority').fetchall()
