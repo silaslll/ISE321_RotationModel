@@ -12,7 +12,7 @@ import re
 def main():
 
     # Connect with Database
-    path = 'data.db'
+    path = '/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/data.db'
     con = sqlite3.connect(path)
     con.row_factory = lambda cursor, row: row[0]
     c = con.cursor()
@@ -43,8 +43,8 @@ def getData(dict,c):
     # Add blocks to the model, always choose the latest version of block number 
     blockNum = c.execute('SELECT Block FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
     blocks = []
-    for i in range(blockNum):
-        blocks.append("Block" + str(i + 1))
+    for i in range(blockNum[0]):
+        blocks.append("Block" + str(i +1 ))
     # blocks = ["Block1", "Block2", "Block3", "Block4"...]
 
     # Need to look for a easier way to input data 
@@ -98,10 +98,10 @@ def getData(dict,c):
     for b in blocks:
         b.replace(" ", "")
         b.capitalize()
-        str = b[0:5]
+        string = b[0:5]
         d = b[-1]
  
-        if(str != 'Block'):
+        if(string != 'Block'):
             return 1, 0
       
         if(d.isnumeric() == False):
@@ -158,8 +158,19 @@ def getData(dict,c):
     dict['preference'] = preference
     dict['impossibleAssignments'] = impossibleAssignments
     dict['vacation'] = vacation
-    p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}
-    p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}
+
+    # Add p_min and p_max
+    # We can add another data validation such that the p_min in rotation r is always smaller than p_max for r
+    # Another validation could be that p_min should always smaller than the number of residents 
+    p_min_values = c.execute('SELECT p_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
+    p_max_values = c.execute('SELECT p_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
+    p_min = {}
+    p_max = {}
+    for r in range(len(rotations)):
+        p_min[rotations[r]] = p_min_values[r]
+        p_max[rotations[r]] = p_max_values[r]
+    # p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}...
+    # p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}...
 
     return p_min, p_max
 

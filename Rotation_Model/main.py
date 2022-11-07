@@ -259,6 +259,7 @@ def index5():
     imp_rotation = request.form.get('imp_rotation')
     imp_block = request.form.get('imp_block')
     
+
     # write the input data to the databse
     
     db.session.add(Store_Impo_data(imp_people,imp_rotation,imp_block))
@@ -304,7 +305,7 @@ def myData2():
 @app.route('/table')
 def table():
 	# converting csv to html
-	data = pd.read_csv('output.csv')
+	data = pd.read_csv('/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/output.csv')
 	return render_template('table.html', tables=[data.to_html()], titles=[''])
 
 @app.route('/runModel', methods=['GET', 'POST'])
