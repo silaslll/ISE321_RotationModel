@@ -1,121 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <style>
-        .title {
-            margin: 5px;
-        }
+{% extends 'base.html' %}
 
-        .content {
-            margin: 5px;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
+{% block content %}
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Please enter details to run the model:</p>
 
-        .rotationData {
-            flex: 20%;
-            padding: 10px;
-            margin: 5px;
-            background-color: #f3f3f3;
-            inline-size: 100%;
-        }
+  <form action="{{ url_for('index2') }}" method="POST">
+    
+    
+    <label>Enter Rotation Name:</label>
+    <input type="text" name="rotationName">
+    <br><br>
+    <!-- Enter whether busy rotation -->
+    <label>Busy rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
+      <label class="form-check-label" for="busy-option">
+      Busy Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="busy" value="n" id="notBusy-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Busy Rotation 
+      </label>
+    </div>
+    <br>
+    <!-- Enter whether must do rotation -->
+    <label>Must-do rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="mustDo" value="y" id="mustDo-option">
+      <label class="form-check-label" for="busy-option">
+      Must-Do Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="mustDo" value="n" id="notMust-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Must Rotation 
+      </label>
+    </div>
+    <!-- </br><br>
+    <label>Enter :</label>
+    <input type="number" name="c3">
+    <br><br> -->
 
-        .bio {
-            padding: 10px;
-            margin: 5px;
-            background-color: #ffffff;
-            color: #004835;
-        }
+    <input type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Rotation Name has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
 
-        .name a {
-            color: #00a36f;
-            text-decoration: none;
-        }
-
-        nav a {
-            color: #d64161;
-            font-size: 1em;
-            margin-left: 50px;
-            text-decoration: none;
-        }
-    </style>
-  <title>Rotation Scheduling Model</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <!--Import Bootstrap, which provides a free CSS framework to allow us easily produce more prefessional looking web content  -->
-  </head>
-  <body>
-    <nav>
-      <a href="{{ url_for('index') }}">Resident</a> 
-      <a href="{{ url_for('index2') }}">Rotation</a>
-      <a href="{{ url_for('index3') }}">Preference</a>
-      <a href="{{ url_for('index4') }}">Priority</a>
-      <a href="{{ url_for('index5') }}">Impossible</a>
-      <a href="{{ url_for('index6') }}">Vacation</a>
-      <a href="{{ url_for('myData') }}">Rotation Data</a>
-      <a href="{{ url_for('myData2') }}">Resident Data</a>
-      <a href="{{ url_for('table') }}">Schedule details</a>
-      <a href="{{ url_for('runModel') }}">Run Model</a>
-  </nav>
-    <!-- Allow user to add input  -->
-    <div id="calc" >
-      <h1>Rotation Scheduling </h1>
-      <p>Please enter details to run the model:</p>
- 
-      <form action="{{ url_for('index2') }}" method="POST">
-        
-       
-        <label>Enter Rotation Name:</label>
-        <input type="text" name="rotationName">
-        <br><br>
-        <!-- Enter whether busy rotation -->
-        <label>Busy rotation?:</label>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
-          <label class="form-check-label" for="busy-option">
-          Busy Rotation
-        </label>
-        </div>
-        <div class="form-check">
-        <input class="form-check-input" type="radio" name="busy" value="n" id="notBusy-option" checked>
-        <label class="form-check-label" for="notBusy-option">
-            Not Busy Rotation 
-          </label>
-        </div>
-        <br>
-        <!-- Enter whether must do rotation -->
-        <label>Must-do rotation?:</label>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="mustDo" value="y" id="mustDo-option">
-          <label class="form-check-label" for="busy-option">
-          Must-Do Rotation
-        </label>
-        </div>
-        <div class="form-check">
-        <input class="form-check-input" type="radio" name="mustDo" value="n" id="notMust-option" checked>
-        <label class="form-check-label" for="notBusy-option">
-            Not Must Rotation 
-          </label>
-        </div>
-        <!-- </br><br>
-        <label>Enter :</label>
-        <input type="number" name="c3">
-        <br><br> -->
-
-        <input type="submit" name="next" value="Next">
-     </form>
-     <br><br>
-     {% if result %}
-       <h2>Results</h2>
-       <p>The info has successfully stored {{result}}.
-       <br>
-       
-    {% endif %}
-   </div>
- </body>
-</html>
+{% endblock %}
