@@ -46,21 +46,23 @@ class Store_Rotation_data(db.Model):
   # prolonged = db.Column('prolonged', db.String(50))
   mustDo = db.Column('MustDo', db.CHAR)
   busy = db.Column('busy', db.CHAR)
-  # c3= db.Column('c3', db.Integer)
-  # sex = db.Column('sex', db.CHAR)
+  p_min= db.Column('p_min', db.Integer)
+  p_max= db.Column('p_max', db.Integer)
 
   # Initialisation method to allow us to pass values for these fields
-  def __init__(self, rotationName,mustDo,busy):
+  def __init__(self, rotationName,mustDo,busy,p_min,p_max):
     # self.timestamp = datetime.now()
     self.rotationName = rotationName
     self.mustDo = mustDo
     self.busy = busy
+    self.p_min = p_min
+    self.p_max = p_max
+
 
 class Store_Block_data(db.Model):
   __tablename__ = 'block'
-  blockId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  blockNum= db.Column('blockNum', db.Integer)
-  
+  blockId = db.Column('block_id', db.Integer, primary_key = True) # Primary Key 
+  blockNum= db.Column('Block', db.Integer)
 
   # Initialisation method to allow us to pass values for these fields
   def __init__(self, blockNum):
@@ -164,10 +166,12 @@ def index2():
     rotationName = request.form['rotationName']
     mustDo = request.form['mustDo']
     busy = request.form['busy']
+    p_min = request.form['p_min']
+    p_max = request.form['p_max']
     
     # write the input data to the databse
     
-    db.session.add(Store_Rotation_data(rotationName,mustDo, busy))
+    db.session.add(Store_Rotation_data(rotationName,mustDo, busy,p_min, p_max))
     db.session.commit()
     # render result 
     result = calculate(form)
