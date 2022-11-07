@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Please enter details to run the model:</p>
+
+  <form action="{{ url_for('index2') }}" method="POST">
+    
+    
+    <label>Enter Rotation Name:</label>
+    <input type="text" name="rotationName">
+    <br><br>
+    <!-- Enter whether busy rotation -->
+    <label>Busy rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
+      <label class="form-check-label" for="busy-option">
+      Busy Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="busy" value="n" id="notBusy-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Busy Rotation 
+      </label>
+    </div>
+    <br>
+    <!-- Enter whether must do rotation -->
+    <label>Must-do rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="mustDo" value="y" id="mustDo-option">
+      <label class="form-check-label" for="busy-option">
+      Must-Do Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="mustDo" value="n" id="notMust-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Must Rotation 
+    </label>
+    <br><br>
+    <label>Enter Minimum number of people in this rotation:</label>
+    <input type="number" name="p_min">
+    <br><br>
+
+    <label>Enter Maximum number of people in this rotation:</label>
+    <input type="number" name="p_max">
+    <br><br>
+    </div>
+    <!-- </br><br>
+    <label>Enter :</label>
+    <input type="number" name="c3">
+    <br><br> -->
+
+    <input type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Rotation Name has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+
+{% endblock %}

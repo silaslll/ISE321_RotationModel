@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p> Please enter details to run the model:</p>
+
+  <form action="{{ url_for('index3') }}" method="POST">
+    
+    
+    <h5> Enter Preference Set Name: </h5>
+    <label> Person: <input type="text" name="pref_people" required></label>
+    <label> Rotation: <input type="text" name="pref_rotation" required></label>
+    <label> Block: <input type="text" name="pref_block" required></label>
+    <br><br>
+    
+
+
+    <input type="submit" name="next" value="Next">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Preference Set has successfully been stored {{result}}</h3>
+    <br>
+
+{% endif %}
+</div>
+
+{% endblock %}

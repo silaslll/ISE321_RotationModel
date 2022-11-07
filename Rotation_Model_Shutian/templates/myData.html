@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content">
+    <h1 class="title">{% block title %} rotationDatas {% endblock %}</h1>
+<div class="content">
+    {% for rotationData in rotationDatas %}
+        <div class="rotationDatas">
+            <p><b>#{{ rotationData.rotationId }}</b></p>
+            <p>{{ rotationData.rotationName }}</p>
+            <p>{{ rotationData.mustDo }}</p>
+            <p>{{ rotationData.busy }}</p>
+            <p>{{ rotationData.p_min }}</p>
+            <p>{{ rotationData.p_max }}</p>
+            <a href = "/deleteRotation/{{rotationData.rotationId}}"> Delete </a>
+                <!--<p>Joined: {{ rotationData.created_at }}</p>
+            <div class="bio">
+                <h4>Bio</h4>
+                <p>{{ rotationData.bio }}</p>-->
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
