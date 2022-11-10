@@ -91,12 +91,11 @@ def getData(dict,c):
        p.capitalize()
     
     # Replace white spaces in rotation names
-    for r in rotations:
-        r.replace(" ", "")
+    rotations.replace(" ", "")
  
     # Capitalze blocks and check their format
+    blocks.replace(" ", "")
     for b in blocks:
-        b.replace(" ", "")
         b.capitalize()
         string = b[0:5]
         d = b[-1]
