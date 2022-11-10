@@ -8,23 +8,24 @@ from numpy import nan
 import sqlite3
 from pandas import read_sql_table, read_sql_query
 import re
+import datavalidation
 
 def main():
 
     # Connect with Database
-    path = '/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/data.db'
+    path = './data.db'
     con = sqlite3.connect(path)
     con.row_factory = lambda cursor, row: row[0]
     c = con.cursor()
     dict = {}
     p_min, p_max = getData(dict,c)
 
-    if(p_min == 1):
-        raise Exception('Block format is incorrect.')
-    if(p_min == 2):
-        raise Exception('There are duplicate variables.')
-    if(p_min == 3):
-        raise Exception('Variable missing in the database.')
+    error = ""
+    error = datavalidation.dataValidation(dict)
+
+    # Check whether there is an error
+    if(error != ""):
+        raise Exception(error)
 
     # Model 
     m = gp.Model("rotation_scheduling")
@@ -81,71 +82,82 @@ def getData(dict,c):
         temp = (vac_p[i],vac_b[i])
         vacation.append(temp)
 
+    # Add p_min and p_max
+    # We can add another data validation such that the p_min in rotation r is always smaller than p_max for r
+    # Another validation could be that p_min should always smaller than the number of residents 
+    p_min_values = c.execute('SELECT p_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
+    p_max_values = c.execute('SELECT p_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
+    p_min = {}
+    p_max = {}
+    for r in range(len(rotations)):
+        p_min[rotations[r]] = p_min_values[r]
+        p_max[rotations[r]] = p_max_values[r]
+
     # priority = [("Resident2", "Rotation1", "Block2")]
     # preference = [("Resident1", "Rotation2", "Block1")]
     # impossibleAssignments = [("Resident3", "Rotation1", "Block1")]
     # vacation = [("Resident1", "Block1"),("Resident1", "Block4"),("Resident2", "Block3")]
 
-    # Capitalize people
-    for p in people:
-       p.capitalize()
+    # # Capitalize people
+    # for p in people:
+    #     p.capitalize()
     
-    # Replace white spaces in rotation names
-    rotations.replace(" ", "")
+    # # Replace white spaces in rotation names
+    # rotations.replace(" ", "")
  
-    # Capitalze blocks and check their format
-    blocks.replace(" ", "")
-    for b in blocks:
-        b.capitalize()
-        string = b[0:5]
-        d = b[-1]
+    # # Capitalze blocks and check their format
+    # blocks.replace(" ", "")
+    # for b in blocks:
+    #     b.capitalize()
+    #     string = b[0:5]
+    #     d = b[-1]
  
-        if(string != 'Block'):
-            return 1, 0
+    #     if(string != 'Block'):
+    #         return 1, 0
       
-        if(d.isnumeric() == False):
-            return 1, 0
+    #     if(d.isnumeric() == False):
+    #         return 1, 0
     
-    # Check for duplicates
-    if checkDuplicates(people):
-        return 2, 0
+    # # Check for duplicates
+    # if checkDuplicates(people):
+    #     return 2, 0
  
-    if checkDuplicates(rotations):
-        return 2, 0
+    # if checkDuplicates(rotations):
+    #     return 2, 0
  
-    if checkDuplicates(blocks):
-        return 2, 0
+    # if checkDuplicates(blocks):
+    #     return 2, 0
   
-    # Check whether variables exist in the database
-    for p in priority:
-        if p[0] not in people:
-            return 3, 0
-        if p[1] not in rotations:
-            return 3, 0
-        if p[2] not in blocks:
-            return 3, 0
+    # # Check whether variables exist in the database
+    # for p in priority:
+    #     if p[0] not in people:
+    #         return 3, 0
+    #     if p[1] not in rotations:
+    #         return 3, 0
+    #     if p[2] not in blocks:
+    #         return 3, 0
 
-    for p in preference:
-        if p[0] not in people:
-            return 3, 0
-        if p[1] not in rotations:
-            return 3, 0
-        if p[2] not in blocks:
-            return 3, 0
+    # for p in preference:
+    #     if p[0] not in people:
+    #         return 3, 0
+    #     if p[1] not in rotations:
+    #         return 3, 0
+    #     if p[2] not in blocks:
+    #         return 3, 0
  
-    for i in impossibleAssignments:
-        if i[0] not in people:
-            return 3, 0
-        if i[1] not in rotations:
-            return 3, 0
-        if i[2] not in blocks:
-            return 3, 0
+    # for i in impossibleAssignments:
+    #     if i[0] not in people:
+    #         return 3, 0
+    #     if i[1] not in rotations:
+    #         return 3, 0
+    #     if i[2] not in blocks:
+    #         return 3, 0
             
-    for v in vacation:
-        if v[0] not in people:
-            return 3, 0
-        if v[1] not in blocks:
-            return 3, 0
+    # for v in vacation:
+    #     if v[0] not in people:
+    #         return 3, 0
+    #     if v[1] not in blocks:
+    #         return 3, 0
 
     dict['people'] = people
     dict['allYearResidents'] = allYearResidents
@@ -158,16 +170,6 @@ def getData(dict,c):
     dict['impossibleAssignments'] = impossibleAssignments
     dict['vacation'] = vacation
 
-    # Add p_min and p_max
-    # We can add another data validation such that the p_min in rotation r is always smaller than p_max for r
-    # Another validation could be that p_min should always smaller than the number of residents 
-    p_min_values = c.execute('SELECT p_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    p_max_values = c.execute('SELECT p_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    p_min = {}
-    p_max = {}
-    for r in range(len(rotations)):
-        p_min[rotations[r]] = p_min_values[r]
-        p_max[rotations[r]] = p_max_values[r]
     # p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}...
     # p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}...
 

@@ -305,7 +305,7 @@ def myData2():
 @app.route('/table')
 def table():
 	# converting csv to html
-	data = pd.read_csv('/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/output.csv')
+	data = pd.read_csv('./output.csv')
 	return render_template('table.html', tables=[data.to_html()], titles=[''])
 
 @app.route('/runModel', methods=['GET', 'POST'])
@@ -320,7 +320,7 @@ def runModel():
 
 @app.route('/deleteResident/<int:id>')
 def deleteResident(id):
-  resident_to_delete = Store_Resident_data.query.get_or_404(id);
+  resident_to_delete = Store_Resident_data.query.get_or_404(id)
   try:
     db.session.delete(resident_to_delete)
     db.session.commit()
@@ -330,7 +330,7 @@ def deleteResident(id):
 
 @app.route('/deleteRotation/<int:id>')
 def deleteRotation(id):
-  rotation_to_delete = Store_Rotation_data.query.get_or_404(id);
+  rotation_to_delete = Store_Rotation_data.query.get_or_404(id)
   try:
     db.session.delete(rotation_to_delete)
     db.session.commit()
