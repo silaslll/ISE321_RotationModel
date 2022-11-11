@@ -1,3 +1,7 @@
+
+# Data Validation method
+# Takes in a dictionary that contains all the sets and applies data validation where it applicable
+# Returns a string with all the collected error messages
 def dataValidation(dict):
 
     people = dict['people']
@@ -7,6 +11,8 @@ def dataValidation(dict):
     preference = dict['preference']
     impossibleAssignments = dict['impossibleAssignments']
     vacation = dict['vacation']
+    p_min = dict['p_min']
+    p_max = dict['p_max']
 
     # Error string
     error = ""
@@ -43,6 +49,8 @@ def dataValidation(dict):
         error += "There are duplicate variables in the block set.\n"
   
     # Check whether variables exist in the database
+
+    # Check the priority set
     for p in priority:
         if p[0] not in people:
             error += "In the Priority set: " + f'{p}' + ", \'" + p[0] + "\' is not registered in the People set.\n"
@@ -51,6 +59,7 @@ def dataValidation(dict):
         if p[2] not in blocks:
             error += "In the Priority set: " + f'{p}' + ", \'" + p[2] + "\' is not registered in the Block set.\n"
 
+    # Check the preference set
     for p in preference:
         if p[0] not in people:
             # error += "In the Preference set " + "".join(p) + ", \'" + p[0] + "\' is not registered in the People set.\n"
@@ -60,6 +69,7 @@ def dataValidation(dict):
         if p[2] not in blocks:
             error += "In the Preference set: " + f'{p}' + ", \'" + p[2] + "\' is not registered in the Block set.\n"
  
+    # Check the impossible assignments set
     for i in impossibleAssignments:
         if i[0] not in people:
             error += "In the Impossible Assignments set: " +  f'{i}' + ", \'" + i[0] + "\' is not registered in the People set.\n"
@@ -67,14 +77,21 @@ def dataValidation(dict):
             error += "In the Impossible Assignments set: " + f'{i}' + ", \'" + i[1] + "\' is not registered in the Rotations set.\n"
         if i[2] not in blocks:
             error += "In the Impossible Assignments set: " + f'{i}' + ", \'" + i[2] + "\' is not registered in the Block set.\n"
-            
+
+    # Check the vacation set   
     for v in vacation:
         if v[0] not in people:
             error += "In the Vacation set: " + f'{v}' + ", \'" + v[0] + "\' is not registered in the People set.\n"
         if v[1] not in blocks:
             error += "In the Vacation set: " + f'{v}' + ", \'" + v[1] + "\' is not registered in the Block set.\n"
 
-    
+    # Check that the p_min in rotation r is always smaller than p_max for r
+    # Check that p_min is smaller than the number of residents 
+    for r in range(len(rotations)):
+        if (p_min[rotations[r]] > p_max[rotations[r]]):
+            error += f'{p_min[rotations]}' + " larger than " + f'{p_max[rotations]}' + "."
+        if (p_min[rotations[r]] > len(people)):
+            error += f'{p_min[rotations]}' + "cannot be greater than the number of residents (" + len(people) + ")."
     return error
 
 def checkDuplicates(list):

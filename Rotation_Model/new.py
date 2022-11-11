@@ -20,7 +20,6 @@ def main():
     dict = {}
     p_min, p_max = getData(dict,c)
 
-    error = ""
     error = datavalidation.dataValidation(dict)
 
     # Check whether there is an error
@@ -46,7 +45,6 @@ def getData(dict,c):
     blocks = []
     for i in range(blockNum[0]):
         blocks.append("Block" + str(i +1 ))
-    # blocks = ["Block1", "Block2", "Block3", "Block4"...]
 
     # Need to look for a easier way to input data 
     priority_p = c.execute('SELECT Resident_name FROM priority').fetchall()
@@ -83,8 +81,6 @@ def getData(dict,c):
         vacation.append(temp)
 
     # Add p_min and p_max
-    # We can add another data validation such that the p_min in rotation r is always smaller than p_max for r
-    # Another validation could be that p_min should always smaller than the number of residents 
     p_min_values = c.execute('SELECT p_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
     p_max_values = c.execute('SELECT p_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
     p_min = {}
@@ -92,72 +88,6 @@ def getData(dict,c):
     for r in range(len(rotations)):
         p_min[rotations[r]] = p_min_values[r]
         p_max[rotations[r]] = p_max_values[r]
-
-    # priority = [("Resident2", "Rotation1", "Block2")]
-    # preference = [("Resident1", "Rotation2", "Block1")]
-    # impossibleAssignments = [("Resident3", "Rotation1", "Block1")]
-    # vacation = [("Resident1", "Block1"),("Resident1", "Block4"),("Resident2", "Block3")]
-
-    # # Capitalize people
-    # for p in people:
-    #     p.capitalize()
-    
-    # # Replace white spaces in rotation names
-    # rotations.replace(" ", "")
- 
-    # # Capitalze blocks and check their format
-    # blocks.replace(" ", "")
-    # for b in blocks:
-    #     b.capitalize()
-    #     string = b[0:5]
-    #     d = b[-1]
- 
-    #     if(string != 'Block'):
-    #         return 1, 0
-      
-    #     if(d.isnumeric() == False):
-    #         return 1, 0
-    
-    # # Check for duplicates
-    # if checkDuplicates(people):
-    #     return 2, 0
- 
-    # if checkDuplicates(rotations):
-    #     return 2, 0
- 
-    # if checkDuplicates(blocks):
-    #     return 2, 0
-  
-    # # Check whether variables exist in the database
-    # for p in priority:
-    #     if p[0] not in people:
-    #         return 3, 0
-    #     if p[1] not in rotations:
-    #         return 3, 0
-    #     if p[2] not in blocks:
-    #         return 3, 0
-
-    # for p in preference:
-    #     if p[0] not in people:
-    #         return 3, 0
-    #     if p[1] not in rotations:
-    #         return 3, 0
-    #     if p[2] not in blocks:
-    #         return 3, 0
- 
-    # for i in impossibleAssignments:
-    #     if i[0] not in people:
-    #         return 3, 0
-    #     if i[1] not in rotations:
-    #         return 3, 0
-    #     if i[2] not in blocks:
-    #         return 3, 0
-            
-    # for v in vacation:
-    #     if v[0] not in people:
-    #         return 3, 0
-    #     if v[1] not in blocks:
-    #         return 3, 0
 
     dict['people'] = people
     dict['allYearResidents'] = allYearResidents
@@ -169,6 +99,8 @@ def getData(dict,c):
     dict['preference'] = preference
     dict['impossibleAssignments'] = impossibleAssignments
     dict['vacation'] = vacation
+    dict['p_min'] = p_min
+    dict['p_max'] = p_max
 
     # p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}...
     # p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}...
@@ -231,7 +163,10 @@ def constraints(m, p_min, p_max, dict,x,y):
 def solve(m):
     m.optimize()
     a = m.getObjective()
-    
+
+    # Check if model is infeasible
+    if m.status == GRB.Status.INFEASIBLE :
+        raise Exception("Model is infeasible")
     
     # output list is where we store the list of x variables when it's equal to 1
     output = []
@@ -248,7 +183,7 @@ def solve(m):
     # Store everything in a table group by resident name
     num = np.array(output)
     sch = pd.DataFrame(num, columns=['Resident','Rotation','Block'])
-    sch.to_csv('/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/output.csv', index = False)
+    sch.to_csv('./output.csv', index = False)
 
 
 if __name__ == "__main__":
