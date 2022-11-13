@@ -1,0 +1,15 @@
+﻿Department,PGY3-Min,PGY3-Max,PGY4-Min,PGY4-Max,PGY5-Min,PGY5-Max
+Allen,0,0,0,1,0,0
+Vascular,0,1,0,1,0,0
+Renal,0,1,0,0,0,1
+Lap,0,1,0,0,0,1
+Breast,0,1,0,0,0,0
+Thoracic,0,2,0,0,0,0
+HPB,0,0,0,1,0,1
+Overlook,0,1,0,1,0,0
+CR,0,1,0,0,0,1
+ACS,0,0,0,1,0,0
+Trauma,0,1,0,0,0,0
+Nights,0,0,1,1,1,1
+Elective,0,0,0,1,0,1
+HPB-Chabot,0,0,0,0,1,1
