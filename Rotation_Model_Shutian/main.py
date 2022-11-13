@@ -133,7 +133,7 @@ def create_tables():
     db.create_all()  
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
+def resident():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -152,10 +152,10 @@ def index():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index.html', result=result)
+  return render_template('resident.html', result=result)
 
-@app.route('/index2', methods=['GET', 'POST'])
-def index2():
+@app.route('/rotation', methods=['GET', 'POST'])
+def rotation():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -176,7 +176,7 @@ def index2():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index2.html', result=result)
+  return render_template('rotation.html', result=result)
 
 @app.route('/Block', methods=['GET', 'POST'])
 def block():
@@ -199,8 +199,8 @@ def block():
   # render the index.html file stored in the templates folder
   return render_template('block.html', result=result)
 
-@app.route('/index3', methods=['GET', 'POST'])
-def index3():
+@app.route('/preference', methods=['GET', 'POST'])
+def preference():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -220,11 +220,11 @@ def index3():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index3.html', result=result)
+  return render_template('preference.html', result=result)
 
 
-@app.route('/index4', methods=['GET', 'POST'])
-def index4():
+@app.route('/priority', methods=['GET', 'POST'])
+def priority():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -244,10 +244,10 @@ def index4():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index4.html', result=result)
+  return render_template('priority.html', result=result)
   
-@app.route('/index5', methods=['GET', 'POST'])
-def index5():
+@app.route('/impossible', methods=['GET', 'POST'])
+def impossible():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -268,11 +268,11 @@ def index5():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index5.html', result=result)
+  return render_template('impossible.html', result=result)
 
 
-@app.route('/index6', methods=['GET', 'POST'])
-def index6():
+@app.route('/vacation', methods=['GET', 'POST'])
+def vacation():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -290,7 +290,7 @@ def index6():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('index6.html', result=result)
+  return render_template('vacation.html', result=result)
 
 @app.route('/myData', methods=['GET'])
 def myData():
@@ -305,7 +305,7 @@ def myData2():
 @app.route('/table')
 def table():
 	# converting csv to html
-	data = pd.read_csv('/Users/chang/Desktop/School/Fall2022/ISE321_updated/ISE321_RotationModel/Rotation_Model/output.csv')
+	data = pd.read_csv('./output.csv')
 	return render_template('table.html', tables=[data.to_html()], titles=[''])
 
 @app.route('/runModel', methods=['GET', 'POST'])
@@ -315,12 +315,12 @@ def runModel():
   except:
     exc_type, exc_value, exc_traceback = sys.exc_info()
     flash(exc_value)
-    return render_template('index.html')
+    return render_template('resident.html')
   return render_template('runModel.html', result = result)
 
 @app.route('/deleteResident/<int:id>')
 def deleteResident(id):
-  resident_to_delete = Store_Resident_data.query.get_or_404(id);
+  resident_to_delete = Store_Resident_data.query.get_or_404(id)
   try:
     db.session.delete(resident_to_delete)
     db.session.commit()
@@ -330,7 +330,7 @@ def deleteResident(id):
 
 @app.route('/deleteRotation/<int:id>')
 def deleteRotation(id):
-  rotation_to_delete = Store_Rotation_data.query.get_or_404(id);
+  rotation_to_delete = Store_Rotation_data.query.get_or_404(id)
   try:
     db.session.delete(rotation_to_delete)
     db.session.commit()
