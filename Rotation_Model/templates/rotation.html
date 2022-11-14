@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
-<!-- Allow user to add input  -->
+<style type="text/css">
+  .left{
+  width: 1200px;
+  height: 600px;
+  background-color: rgb(0, 255, 247);
+  float: left;
+  }
+  .main{
+  height: 6000px;
+  background-color: #fbfb0b;
+  margin-left: 1200px;
+  }
+  </style>
+  <div class="left">
+    <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Rotation Scheduling </h1>
   <p>Please enter details to run the model:</p>
@@ -63,5 +78,27 @@
     
 {% endif %}
 </div>
+
+  </div>
+  <div class="main">
+    
+      {% for rotationData in rotationDatas %}
+          <div class="rotationDatas">
+              <p><b>#{{ rotationData.rotationId }}</b></p>
+              <p>rotation name: {{ rotationData.rotationName }}</p>
+              <p>mustDo: {{ rotationData.mustDo }}</p>
+              <p>busy: {{ rotationData.busy }}</p>
+              <p>p_min: {{ rotationData.p_min }}</p>
+              <p>p_max: {{ rotationData.p_max }}</p>
+              <a href = "/deleteRotation/{{rotationData.rotationId}}"> Delete </a>
+              
+          </div>
+      {% endfor %}
+    
+    
+
+  </div>
+
+
 
 {% endblock %}

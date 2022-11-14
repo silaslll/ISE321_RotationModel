@@ -175,8 +175,10 @@ def rotation():
     db.session.commit()
     # render result 
     result = calculate(form)
+
+  rotationDatas = Store_Rotation_data.query.all()
   # render the index.html file stored in the templates folder
-  return render_template('rotation.html', result=result)
+  return render_template('rotation.html', result=result, rotationDatas=rotationDatas)
 
 @app.route('/Block', methods=['GET', 'POST'])
 def block():
