@@ -329,8 +329,10 @@ def runModel():
     return render_template('resident.html')
   return render_template('runModel.html', result = result)
 
+#delete the resident information and redirect to the same page 
 @app.route('/deleteResident/<int:id>')
 def deleteResident(id):
+  # get the line of data by querying its id
   resident_to_delete = Store_Resident_data.query.get_or_404(id)
   try:
     db.session.delete(resident_to_delete)
@@ -339,8 +341,10 @@ def deleteResident(id):
   except:
     return "Deletion Problem"
 
+#delete the rotation information and redirect to the same page 
 @app.route('/deleteRotation/<int:id>')
 def deleteRotation(id):
+  # get the line of data by querying its id
   rotation_to_delete = Store_Rotation_data.query.get_or_404(id)
   try:
     db.session.delete(rotation_to_delete)
@@ -349,9 +353,12 @@ def deleteRotation(id):
   except:
     return "Deletion Problem"
 
+#delete the block information and redirect to the same page 
 @app.route('/deleteBlock/<int:id>')
 def deleteBlock(id):
+  # get the line of data by querying its id
   block_to_delete = Store_Block_data.query.get_or_404(id)
+  #try to delete the data
   try:
     db.session.delete(block_to_delete)
     db.session.commit()
@@ -359,9 +366,12 @@ def deleteBlock(id):
   except:
     return "Deletion Problem"
 
+#delete the preference information and redirect to the same page 
 @app.route('/deletePref/<int:id>')
 def deletePref(id):
+  # get the line of data by querying its id
   pref_to_delete = Store_Pref_data.query.get_or_404(id)
+  #try to delete the data
   try:
     db.session.delete(pref_to_delete)
     db.session.commit()
@@ -369,9 +379,12 @@ def deletePref(id):
   except:
     return "Deletion Problem"
 
+#delete the priority information and redirect to the same page 
 @app.route('/deletePriority/<int:id>')
 def deletePriority(id):
+  # get the line of data by querying its id
   priority_to_delete = Store_Priority_data.query.get_or_404(id)
+  #try to delete the data
   try:
     db.session.delete(priority_to_delete)
     db.session.commit()
@@ -379,9 +392,12 @@ def deletePriority(id):
   except:
     return "Deletion Problem"
 
+#delete the vacation information and redirect to the same page 
 @app.route('/deleteVacation/<int:id>')
 def deleteVacation(id):
+  # get the line of data by querying its id
   vacation_to_delete = Store_Vacation_data.query.get_or_404(id)
+  #try to delete the data
   try:
     db.session.delete(vacation_to_delete)
     db.session.commit()
@@ -389,9 +405,12 @@ def deleteVacation(id):
   except:
     return "Deletion Problem"
 
+#delete the impossible assignment information and redirect to the same page 
 @app.route('/deleteImpo/<int:id>')
 def deleteImpo(id):
+  # get the line of data by querying its id
   impo_to_delete = Store_Impo_data.query.get_or_404(id)
+  #try to delete the data
   try:
     db.session.delete(impo_to_delete)
     db.session.commit()
