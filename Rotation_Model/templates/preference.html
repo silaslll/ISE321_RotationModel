@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
+<style type="text/css">
+  .left{
+  width: 1200px;
+  height: 600px;
+  background-color: rgb(0, 255, 247);
+  float: left;
+  }
+  .main{
+  height: 6000px;
+  background-color: #fbfb0b;
+  margin-left: 1200px;
+  }
+  </style>
+  <div class="left">
 <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Rotation Scheduling </h1>
@@ -26,5 +41,24 @@
 
 {% endif %}
 </div>
+</div>
 
+  <div class="main">
+    
+    
+      {% for prefData in prefDatas %}
+          <div class="prefDatas">
+              <p><b>#{{ prefData.prefId }}</b></p>
+              <p>residentname: {{ prefData.residentname }}</p>
+              <p>rotationName: {{ prefData.rotationName }}</p>
+              <p>block: {{ prefData.block }}</p>
+              <a href = "/deletePref/{{prefData.prefId}}"> Delete </a>
+          </div>
+      {% endfor %}
+    
+
+  </div>
 {% endblock %}
+
+
+

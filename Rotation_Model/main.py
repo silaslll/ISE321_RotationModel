@@ -151,8 +151,9 @@ def resident():
     
     # render result 
     result = calculate(form)
+  residentDatas = Store_Resident_data.query.all()
   # render the index.html file stored in the templates folder
-  return render_template('resident.html', result=result)
+  return render_template('resident.html', result=result, residentDatas=residentDatas)
 
 @app.route('/rotation', methods=['GET', 'POST'])
 def rotation():
@@ -198,8 +199,9 @@ def block():
    
     # render result 
     result = calculate(form)
+  blockDatas = Store_Block_data.query.all()
   # render the index.html file stored in the templates folder
-  return render_template('block.html', result=result)
+  return render_template('block.html', result=result, blockDatas=blockDatas)
 
 @app.route('/preference', methods=['GET', 'POST'])
 def preference():
@@ -221,8 +223,10 @@ def preference():
    
     # render result 
     result = calculate(form)
+  prefDatas = Store_Pref_data.query.all()
+    
   # render the index.html file stored in the templates folder
-  return render_template('preference.html', result=result)
+  return render_template('preference.html', result=result, prefDatas=prefDatas)
 
 
 @app.route('/priority', methods=['GET', 'POST'])
@@ -246,7 +250,8 @@ def priority():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('priority.html', result=result)
+  prifDatas = Store_Priority_data.query.all()
+  return render_template('priority.html', result=result, prifDatas=prifDatas)
   
 @app.route('/impossible', methods=['GET', 'POST'])
 def impossible():
@@ -270,7 +275,8 @@ def impossible():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('impossible.html', result=result)
+  impoDatas = Store_Impo_data.query.all()
+  return render_template('impossible.html', result=result, impoDatas=impoDatas)
 
 
 @app.route('/vacation', methods=['GET', 'POST'])
@@ -292,7 +298,9 @@ def vacation():
     # render result 
     result = calculate(form)
   # render the index.html file stored in the templates folder
-  return render_template('vacation.html', result=result)
+  vacDatas = Store_Vacation_data.query.all()
+  
+  return render_template('vacation.html', result=result,vacDatas=vacDatas)
 
 @app.route('/myData', methods=['GET'])
 def myData():
@@ -326,7 +334,7 @@ def deleteResident(id):
   try:
     db.session.delete(resident_to_delete)
     db.session.commit()
-    return redirect('/myData2')
+    return redirect('/')
   except:
     return "Deletion Problem"
 
@@ -336,7 +344,57 @@ def deleteRotation(id):
   try:
     db.session.delete(rotation_to_delete)
     db.session.commit()
-    return redirect('/myData')
+    return redirect('/rotation')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deleteBlock/<int:id>')
+def deleteBlock(id):
+  block_to_delete = Store_Block_data.query.get_or_404(id)
+  try:
+    db.session.delete(block_to_delete)
+    db.session.commit()
+    return redirect('/Block')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deletePref/<int:id>')
+def deletePref(id):
+  pref_to_delete = Store_Pref_data.query.get_or_404(id)
+  try:
+    db.session.delete(pref_to_delete)
+    db.session.commit()
+    return redirect('/preference')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deletePriority/<int:id>')
+def deletePriority(id):
+  priority_to_delete = Store_Priority_data.query.get_or_404(id)
+  try:
+    db.session.delete(priority_to_delete)
+    db.session.commit()
+    return redirect('/priority')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deleteVacation/<int:id>')
+def deleteVacation(id):
+  vacation_to_delete = Store_Vacation_data.query.get_or_404(id)
+  try:
+    db.session.delete(vacation_to_delete)
+    db.session.commit()
+    return redirect('/vacation')
+  except:
+    return "Deletion Problem"
+
+@app.route('/deleteImpo/<int:id>')
+def deleteImpo(id):
+  impo_to_delete = Store_Impo_data.query.get_or_404(id)
+  try:
+    db.session.delete(impo_to_delete)
+    db.session.commit()
+    return redirect('/impossible')
   except:
     return "Deletion Problem"
 
