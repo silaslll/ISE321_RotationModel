@@ -318,6 +318,7 @@ def table():
 	data = pd.read_csv('./output.csv')
 	return render_template('table.html', tables=[data.to_html()], titles=[''])
 
+# call the model and then redirected to the result page 
 @app.route('/runModel', methods=['GET', 'POST'])
 def runModel():
   try:
