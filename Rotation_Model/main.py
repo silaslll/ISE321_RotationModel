@@ -1,14 +1,13 @@
 # Import packages 
-import math
+
 import gurobipy as gp
 from gurobipy import GRB
 from flask import Flask, render_template, url_for, request, session ,redirect, flash
 from flask_sqlalchemy import SQLAlchemy  # This module is used for database management 
 import os # set the path of the databse relative to the Flask app
-from datetime import datetime 
 import pandas as pd 
-import new
-import sys, traceback
+import rmodel
+import sys
 # from new import model, constraints, solve, getData
 
 
@@ -423,7 +422,7 @@ def calculate(form):
   return result 
   
 def model():
-  new.main()
+  rmodel.main()
   return "function works"
   
 

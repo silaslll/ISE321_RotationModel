@@ -63,10 +63,11 @@
       <a href="{{ url_for('priority') }}">Priority</a>
       <a href="{{ url_for('impossible') }}">Impossible</a>
       <a href="{{ url_for('vacation') }}">Vacation</a>
-      <a href="{{ url_for('myData') }}">Rotation Data</a>
-      <a href="{{ url_for('myData2') }}">Resident Data</a>
-      <a href="{{ url_for('table') }}">Schedule details</a>
+      <!-- <a href="{{ url_for('myData') }}">Rotation Data</a>
+      <a href="{{ url_for('myData2') }}">Resident Data</a> -->
       <a href="{{ url_for('runModel') }}">Run Model</a>
+      <a href="{{ url_for('table') }}">Schedule details</a>
+      
   </nav>
 
     {% for message in get_flashed_messages() %}

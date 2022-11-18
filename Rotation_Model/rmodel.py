@@ -49,7 +49,10 @@ def getData(dict,c):
     # Need to look for a easier way to input data 
     priority_p = c.execute('SELECT Resident_name FROM priority').fetchall()
     priority_r = c.execute('SELECT Rotation_name FROM priority').fetchall()
-    priority_b = c.execute('SELECT Block FROM priority').fetchall()
+    priority_block = c.execute('SELECT Block FROM priority').fetchall()
+    priority_b = []
+    for b in priority_block:
+        priority_b.append("Block" + str(b)) 
     priority = []
     for i in range(0,len(priority_p)):
         temp = (priority_p[i],priority_r[i],priority_b[i])
@@ -57,8 +60,10 @@ def getData(dict,c):
 
     pref_p = c.execute('SELECT Resident_name FROM preference').fetchall()
     pref_r = c.execute('SELECT Rotation_name FROM preference').fetchall()
-    pref_b = c.execute('SELECT Block FROM preference').fetchall()
-
+    pref_block = c.execute('SELECT Block FROM preference').fetchall()
+    pref_b = []
+    for b in pref_block:
+        pref_b.append("Block" + str(b)) 
     preference = []
     for i in range(0,len(pref_p)):
         temp = (pref_p[i],pref_r[i],pref_b[i])
@@ -66,15 +71,20 @@ def getData(dict,c):
 
     imo_p = c.execute('SELECT Resident_name FROM impossible').fetchall()
     imo_r = c.execute('SELECT Rotation_name FROM impossible').fetchall()
-    imo_b = c.execute('SELECT Block FROM impossible').fetchall()
-  
+    imo_block = c.execute('SELECT Block FROM impossible').fetchall()
+    imo_b = []
+    for b in imo_block:
+        imo_b.append("Block" + str(b)) 
     impossibleAssignments = []
     for i in range(0,len(imo_p)):
         temp = (imo_p[i],imo_r[i],imo_b[i])
         impossibleAssignments.append(temp)
 
     vac_p = c.execute('SELECT Resident_name FROM vacation').fetchall()
-    vac_b = c.execute('SELECT Block FROM vacation').fetchall()
+    vac_block = c.execute('SELECT Block FROM vacation').fetchall()
+    vac_b = []
+    for b in vac_block:
+        vac_b.append("Block" + str(b)) 
     vacation = []
     for i in range(0,len(vac_p)):
         temp = (vac_p[i],vac_b[i])
@@ -165,8 +175,8 @@ def solve(m):
     a = m.getObjective()
 
     # Check if model is infeasible
-    if m.status == GRB.Status.INFEASIBLE :
-        raise Exception("Model is infeasible")
+    # if m.status == GRB.Status.INFEASIBLE :
+    #     raise Exception("Model is infeasible")
     
     # output list is where we store the list of x variables when it's equal to 1
     output = []
