@@ -89,7 +89,9 @@ To get a local copy up and running follow these simple example steps.
   ```sh
   pip install -U Flask
   ```
-  
+  ```sh
+  pip3 install Flask-SQLAlchemy
+   ```
 * Install Pandas
   ```sh
   pip install pandas
