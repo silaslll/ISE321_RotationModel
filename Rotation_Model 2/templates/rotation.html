@@ -1,0 +1,96 @@
+
+<!--This file allows user to input, view and delete rotation information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Please enter details to run the model:</p>
+
+  <form action="{{ url_for('rotation') }}" method="POST">
+    
+    
+    <label>Enter Rotation Name:</label>
+    <input type="text" name="rotationName">
+    <br><br>
+    <!-- Enter whether busy rotation -->
+    <label>Busy rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
+      <label class="form-check-label" for="busy-option">
+      Busy Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="busy" value="n" id="notBusy-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Busy Rotation 
+      </label>
+    </div>
+    <br>
+    <!-- Enter whether must do rotation -->
+    <label>Must-do rotation?:</label>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="mustDo" value="y" id="mustDo-option">
+      <label class="form-check-label" for="busy-option">
+      Must-Do Rotation
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="mustDo" value="n" id="notMust-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+        Not Must Rotation 
+    </label>
+    <br><br>
+    <label>Enter Minimum number of people in this rotation:</label>
+    <input type="number" name="p_min" min="0">
+    <br><br>
+
+    <label>Enter Maximum number of people in this rotation:</label>
+    <input type="number" name="p_max" min="0">
+    <br><br>
+    </div>
+    <input type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Rotation Name has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Rotation Name</th>
+      <th scope="col" class="tcolumn">Must-Do</th>
+      <th scope="col" class="tcolumn">P_min</th>
+      <th scope="col" class="tcolumn">P_max</th>
+      <th scope="col" class="tcolumn">Action</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+    {% for rotationData in rotationDatas %}
+              <!-- update this onclick getElementById with respective field -->
+              <tr class="list-item" >
+                <th scope="row">#{{ rotationData.rotationId }}</th>
+                <td style="text-align: right;">{{ rotationData.rotationName }}</td>
+                <td style="text-align: center;">{{ rotationData.mustDo }}</td>
+                <td style="text-align: center;">{{ rotationData.p_min }}</td>
+                <td style="text-align: center;">{{ rotationData.p_max }}</td>
+                <td><a href = "/deleteRotation/{{rotationData.rotationId}}"> Delete </a></td>
+              </tr>
+      {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,65 @@
+
+<!--This file allows user to input, view and delete impossible assignment information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Please enter details to run the model:</p>
+
+  <form action="{{ url_for('impossible') }}" method="POST">
+    
+    
+    <h5> Enter Impossible Assignment Set Name: </h5>
+    <label> Person: <input type="text" name="imp_people" required></label>
+    <label> Rotation <input type="text" name="imp_rotation" required> </label>
+    <label> Block: <input type="number" name="imp_block" min="1" required></label>
+    <br><br>
+    
+
+
+    <input type="submit" name="next" value="Next">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Impossible Assignment Set has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Resident</th>
+      <th scope="col" class="tcolumn">Rotation</th>
+      <th scope="col" class="tcolumn">Block</th>
+      <th scope="col" class="tcolumn">Action</th>
+    </tr>
+  </thead>
+  
+  <tbody class="tbody">
+    {% for impoData in impoDatas %}
+    <!-- update this onclick getElementById with respective field -->
+    <tr class="list-item" >
+      <th scope="row">#{{ impoData.impoId }}</th>
+      <td style="text-align: center;">{{ impoData.residentname }}</td>
+      <td style="text-align: center;">{{ impoData.rotationName }}</td>
+      <td style="text-align: center;">{{ impoData.block }}</td>
+      <td><a href = "/deleteImpo/{{impoData.impoId}}"> Delete </a></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+
+
+  
+

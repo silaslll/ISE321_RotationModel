@@ -1,0 +1,69 @@
+
+<!--This file allows user to input, view and delete resident information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Please enter details to run the model:</p>
+
+  <form action="{{ url_for('resident') }}" method="POST">
+    
+    <br>
+    <label>Enter Resident Name:</label>
+    <input type="text" name="residentName" id = "res_name">
+    <br><br>
+    <!-- Enter whether all year resident -->
+    <label>Are you an all-year resident:</label>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="allYear" value="y" id="allYear-option">
+    <label class="form-check-label" for="allyear-option">
+      All-Year resident
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="allYear" value="n" id="notAllYear-option" checked>
+    <label class="form-check-label" for="notAllYear-option">
+      Not All-Year resident
+    </label>
+      </div>
+    <br>
+  
+
+    <input type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Resident Name has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Resident</th>
+      <th scope="col" class="tcolumn">Action</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+    {% for residentData in residentDatas %}
+    <tr class="list-item">
+      <th scope="row">#{{ residentData.residentId }}</th>
+      <td style="text-align: right;">{{ residentData.name }}</td>
+      <td><a href = "/deleteResident/{{residentData.residentId}}"> Delete </a></td>
+    </div>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+

@@ -1,0 +1,26 @@
+
+<!--This file allows user to run the model-->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Rotation Scheduling </h1>
+  <p>Once all the data are entered, click the button below to run the model:</p>
+
+  <form action="{{ url_for('runModel') }}" method="POST">
+    
+
+    <input type="submit" name="Run Model" value="Next">
+  </form>
+  <br><br>
+  {% if result %}
+    <h2>Results</h2>
+    <p>The info has successfully stored {{result}}.
+    <br>
+    
+{% endif %}
+</div>
+
+{% endblock %}
