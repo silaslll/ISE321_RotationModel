@@ -8,6 +8,7 @@ import os # set the path of the databse relative to the Flask app
 import pandas as pd 
 import rmodel
 import sys
+import sqlite3
 # from new import model, constraints, solve, getData
 
 
@@ -332,11 +333,38 @@ def myData2():
   residentDatas = Store_Resident_data.query.all()
   return render_template('myData2.html', residentDatas=residentDatas)
 
+# db.Column('Block', db.Integer)
 @app.route('/table')
 def table():
-	# converting csv to html
-	data = pd.read_csv('./output.csv')
-	return render_template('table.html', tables=[data.to_html()], titles=[''])
+  # converting csv to html
+  data = pd.read_csv('./output.csv')
+
+  # Connect with Database
+  path = './data.db'
+  con = sqlite3.connect(path)
+  con.row_factory = lambda cursor, row: row[0]
+  c = con.cursor()
+
+  people = c.execute('SELECT name FROM resident WHERE name IS NOT ""').fetchall()
+
+  blockNum = c.execute('SELECT Block FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
+  blockNumber = blockNum[0] + 1
+  blocks = list(range(1, blockNumber)) # 1 to 4
+  blockx = list(range(0, blockNum[0])) # 0 to 3
+
+  rows = list(range(0, len(data.index))) # 0 to 15
+
+  scheduleByBlock = [ [ 0 for i in range(blockNum[0]) ] for j in range(len(people)) ]
+
+  for row in rows:
+    for block in blockx:
+      if data.loc[row].at["Block"][-1] == str((block+1)):
+        scheduleByBlock[row//blockNum[0]][block] = data.loc[row].at["Rotation"]
+
+  df = pd.DataFrame(scheduleByBlock, index=people ,columns=blocks)
+  df.style.set_properties(**{'text-align': 'right'})
+
+  return render_template('table.html', tables=[df.to_html(header="true", table_id="table")], titles=[''])
 
 # call the model and then redirected to the result page 
 @app.route('/runModel', methods=['GET', 'POST'])

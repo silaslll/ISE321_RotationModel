@@ -24,6 +24,16 @@ def dataValidation(dict):
     # Replace white spaces in rotation names
     for r in rotations:
         r.replace(" ", "")
+
+    # Check whether the people, rotations or blocks sets are empty
+    if len(people) == 0:
+        return "The people set is empty. Please input a person."
+
+    if len(rotations) == 0:
+        return "The rotation set is empty. Please input a rotation."
+
+    if len(blocks) == 0:
+        return "The block set is empty. Please input a block."
  
     # Capitalze blocks and check their format
     for b in blocks:

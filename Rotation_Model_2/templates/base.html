@@ -233,9 +233,6 @@
           background-color: rgba(120,202,210,0.8);
         }
 
-        table {
-          border-collapse: collapse;
-        }
         .list-header {
           color: var(--fg);
           text-align: center;
@@ -261,8 +258,21 @@
         tbody tr:nth-child(even) {
           background-color: rgba(255, 255, 255, 0.1);
         }
+
+        table {
+          table-layout: fixed;
+          width: 100%;
+          border-collapse: collapse;
+          border: 3px solid rgba(1,196,191,0.7);
+        } 
+
+        table thead th {
+          text-align: left;
+        }
+
     </style>
   <title>Rotation Scheduling Model</title>
+  <!-- <link rel="icon" type="image/x-icon" href="favicon.ico" class="external"> -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 

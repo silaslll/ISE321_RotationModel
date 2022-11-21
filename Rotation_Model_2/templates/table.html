@@ -1,18 +1,20 @@
-
 <!--This file allows user to view table-->
 
-{% extends 'base-full.html' %}
+{% extends 'base.html' %}
+
 
 {% block content %}
 <div align="center">
+    <h1>Optimal Schedule</h1>
+    <h3>Schedule by Block</h3>
     <table>
-        <h1>
-        <!--Displaying the converted table-->
-                {% for table in tables %}
-            <h2>{{titles[loop.index]}}</h2>                            
-            {{ table|safe }}
-            {% endfor %}     
-        </h1> 
+        <tr align="center">
+            <th>Block</th>
+            {% for table in tables %}
+                <h2>{{titles[loop.index]}}</h2>                            
+                {{ table|safe }}
+            {% endfor %}   
+        </tr>
     </table>
 </div>
 
