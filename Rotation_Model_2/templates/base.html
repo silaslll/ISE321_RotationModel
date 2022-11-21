@@ -315,9 +315,10 @@
     </div>
     {% for message in get_flashed_messages() %}
     <br>
-    <div class="container text-center" style = "z-index:1000;position:fixed; background-color: red; text-align: center;">
+    <div class="container text-center" style = "z-index:1000;position:fixed; background-color: rgb(220, 20, 60); text-align: center;">
       <div class="p-3 mb-2 bg-danger text-white">{{ message }}</div>
     </div>
+    </br>
     {% endfor %}
   </body>
 </html>
