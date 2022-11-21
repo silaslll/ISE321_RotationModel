@@ -14,8 +14,21 @@
     
     
     <h5>Enter Priority Set Name:</h5>
-    <label> Person: <input type="text" name="pri_people" required></label>
-    <label> Rotation: <input type="text" name="pri_rotation" required></label>
+    <!-- 1st: Resident Name -->
+    <label> Person:</label>
+    <select name="pri_people" id="pri_people" required>
+      {% for resData in data.resDatas %}
+        <option value="{{ resData.name }}">{{ resData.name }}</option>
+      {% endfor %}
+    </select>
+    <!-- 2nd: Rotation Name -->
+    <label> Rotation: </label>
+    <select name="pri_rotation" id="pri_rotation" required>
+      {% for rotData in data.rotDatas %}
+        <option value="{{ rotData.rotationName }}">{{ rotData.rotationName }}</option>
+      {% endfor %}
+    </select>
+    <!-- 3rd: Block Number  -->
     <label> Block: <input type="number" name="pri_block" min="1" required></label>
     <br><br>
     
@@ -46,7 +59,7 @@
   </thead>
   
   <tbody class="tbody">
-    {% for prifData in prifDatas %}
+    {% for prifData in data.prifDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
       <th scope="row">#{{ prifData.prifId }}</th>

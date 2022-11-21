@@ -13,7 +13,12 @@
         
         
         <h5>Enter Vacation Set Name:</h5>
-        <label> Person: <input type="text" name="vac_people" required></label>
+        <label> Person:</label>
+          <select name="vac_people" id="vac_people" required>
+            {% for resData in data.resDatas %}
+              <option value="{{ resData.name }}">{{ resData.name }}</option>
+            {% endfor %}
+          </select>
         <label> Block: <input type="number" name="vac_block" min="1" required></label>
         <br><br>
         
@@ -44,7 +49,7 @@
   </thead>
   
   <tbody class="tbody">
-    {% for vacData in vacDatas %}
+    {% for vacData in data.vacDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
       <th scope="row">#{{ vacData.vacId }}</th>

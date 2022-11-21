@@ -14,11 +14,23 @@
     
     
     <h5> Enter Impossible Assignment Set Name: </h5>
-    <label> Person: <input type="text" name="imp_people" required></label>
-    <label> Rotation <input type="text" name="imp_rotation" required> </label>
+    <!-- 1st: Resident Name -->
+    <label> Person:</label>
+    <select name="imp_people" id="imp_people" required>
+      {% for resData in data.resDatas %}
+        <option value="{{ resData.name }}">{{ resData.name }}</option>
+      {% endfor %}
+    </select>
+    <!-- 2nd: Rotation Name -->
+    <label> Rotation: </label>
+    <select name="imp_rotation" id="imp_rotation" required>
+      {% for rotData in data.rotDatas %}
+        <option value="{{ rotData.rotationName }}">{{ rotData.rotationName }}</option>
+      {% endfor %}
+    </select>
+    <!-- 3rd: Block Number  -->
     <label> Block: <input type="number" name="imp_block" min="1" required></label>
     <br><br>
-    
 
 
     <input type="submit" name="next" value="Next">
@@ -44,7 +56,7 @@
   </thead>
   
   <tbody class="tbody">
-    {% for impoData in impoDatas %}
+    {% for impoData in data.impoDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
       <th scope="row">#{{ impoData.impoId }}</th>

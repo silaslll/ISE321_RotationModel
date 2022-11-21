@@ -15,8 +15,22 @@
     
     
     <h5> Enter Preference Set Name: </h5>
-    <label> Person: <input type="text" name="pref_people" required></label>
-    <label> Rotation: <input type="text" name="pref_rotation" required></label>
+    <!-- Enter based on input resident name -->
+    <label> Person:</label>
+    <select name="pref_people" id="pref_people" required>
+      {% for resData in data.resDatas %}
+        <option value="{{ resData.name }}">{{ resData.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label> Rotation: </label>
+    <select name="pref_rotation" id="pref_rotation" required>
+      {% for rotData in data.rotDatas %}
+        <option value="{{ rotData.rotationName }}">{{ rotData.rotationName }}</option>
+      {% endfor %}
+    </select>
+
+
     <label> Block: <input type="number" name="pref_block" min="1" required></label>
     <br><br>
     
@@ -46,7 +60,7 @@
   </thead>
   
   <tbody class="tbody">
-    {% for prefData in prefDatas %}
+    {% for prefData in data.prefDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
       <th scope="row">#{{ prefData.prefId }}</th>

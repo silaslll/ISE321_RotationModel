@@ -151,7 +151,7 @@ def resident():
     # render result 
     result = calculate(form)
   residentDatas = Store_Resident_data.query.all()
-  
+
   # render the index.html file stored in the templates folder
   return render_template('resident.html', result=result, residentDatas=residentDatas)
 
@@ -224,9 +224,14 @@ def preference():
     # render result 
     result = calculate(form)
   prefDatas = Store_Pref_data.query.all()
-    
+  resDatas =  Store_Resident_data.query.all()
+  rotDatas = Store_Rotation_data.query.all()
+  data = {}
+  data["prefDatas"] = prefDatas
+  data["resDatas"] = resDatas
+  data["rotDatas"] = rotDatas
   # render the index.html file stored in the templates folder
-  return render_template('preference.html', result=result, prefDatas=prefDatas)
+  return render_template('preference.html', result=result, data = data)
 
 
 @app.route('/priority', methods=['GET', 'POST'])
@@ -251,7 +256,13 @@ def priority():
     result = calculate(form)
   # render the index.html file stored in the templates folder
   prifDatas = Store_Priority_data.query.all()
-  return render_template('priority.html', result=result, prifDatas=prifDatas)
+  resDatas =  Store_Resident_data.query.all()
+  rotDatas = Store_Rotation_data.query.all()
+  data = {}
+  data["prifDatas"] = prifDatas
+  data["resDatas"] = resDatas
+  data["rotDatas"] = rotDatas
+  return render_template('priority.html', result=result, data = data)
   
 @app.route('/impossible', methods=['GET', 'POST'])
 def impossible():
@@ -276,7 +287,13 @@ def impossible():
     result = calculate(form)
   # render the index.html file stored in the templates folder
   impoDatas = Store_Impo_data.query.all()
-  return render_template('impossible.html', result=result, impoDatas=impoDatas)
+  resDatas =  Store_Resident_data.query.all()
+  rotDatas = Store_Rotation_data.query.all()
+  data = {}
+  data["impoDatas"] = impoDatas
+  data["resDatas"] = resDatas
+  data["rotDatas"] = rotDatas
+  return render_template('impossible.html', result=result, data = data)
 
 
 @app.route('/vacation', methods=['GET', 'POST'])
@@ -299,8 +316,11 @@ def vacation():
     result = calculate(form)
   # render the index.html file stored in the templates folder
   vacDatas = Store_Vacation_data.query.all()
-  
-  return render_template('vacation.html', result=result,vacDatas=vacDatas)
+  resDatas =  Store_Resident_data.query.all()
+  data = {}
+  data["vacDatas"] = vacDatas
+  data["resDatas"] = resDatas
+  return render_template('vacation.html', result=result, data = data)
 
 @app.route('/myData', methods=['GET'])
 def myData():
