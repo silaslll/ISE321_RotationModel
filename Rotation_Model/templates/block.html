@@ -26,15 +26,8 @@
 
   <form action="{{ url_for('block') }}" method="POST">
     
-    <br>
     <label>Enter The Number of Blocks:</label>
     <input type="number" name="blockNum" min="1">
-    <br><br>
-    
-      </div>
-    <br>
-  
-
     <input type="submit" name="Submit" value="Submit">
   </form>
   <br><br>
@@ -54,6 +47,7 @@
               <p><b>#{{ blockData.blockId }}</b></p>
               <p>Block Num: {{ blockData.blockNum }}</p>
               <a href = "/deleteBlock/{{blockData.blockId}}"> Delete </a>
+              <a href = "/updateBlock/{{blockData.blockId}}"> Update </a>
           </div>
       {% endfor %}
     

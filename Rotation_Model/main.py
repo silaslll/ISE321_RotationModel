@@ -417,6 +417,135 @@ def deleteImpo(id):
   except:
     return "Deletion Problem"
 
+
+
+#update 
+@app.route('/updateResident/<int:id>', methods=['GET', 'POST'])
+def updateResident(id):
+  resident_to_update = Store_Resident_data.query.get_or_404(id)
+  if request.method == 'POST':
+    # Store data to table
+    resident_to_update.name = request.form.get('residentName',False)
+    resident_to_update.allYear = request.form.get('allYear',False)
+    try:
+      db.session.commit()
+      return redirect("/")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updateResident.html', resident_to_update=resident_to_update)
+
+
+#update 
+@app.route('/updateRotation/<int:id>', methods=['GET', 'POST'])
+def updateRotation(id):
+  rotation_to_update = Store_Rotation_data.query.get_or_404(id)
+  if request.method == 'POST':
+    form = request.form
+    # Store data to table
+    rotation_to_update.rotationName = request.form['rotationName']
+    rotation_to_update.mustDo = request.form['mustDo']
+    rotation_to_update.busy = request.form['busy']
+    rotation_to_update.p_min = request.form['p_min']
+    rotation_to_update.p_max = request.form['p_max']
+    try:
+      db.session.commit()
+      return redirect("/rotation")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updateRotation.html', rotation_to_update=rotation_to_update)
+
+
+#update 
+@app.route('/updateBlock/<int:id>', methods=['GET', 'POST'])
+def updateBlock(id):
+  block_to_update = Store_Block_data.query.get_or_404(id)
+  if request.method == 'POST':
+    form = request.form
+    # Store data to table
+    block_to_update.blockNum = request.form.get('blockNum', False)
+    try:
+      db.session.commit()
+      return redirect("/Block")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updateBlock.html', block_to_update=block_to_update)
+
+
+
+#update 
+@app.route('/updatePreference/<int:id>', methods=['GET', 'POST'])
+def updatePreference(id):
+  preference_to_update = Store_Pref_data.query.get_or_404(id)
+  if request.method == 'POST':
+    # Store data to table
+    preference_to_update.residentname = request.form.get('pref_people', False)
+    preference_to_update.rotationName = request.form.get('pref_rotation', False)
+    preference_to_update.block = request.form.get('pref_block', False)
+    try:
+      db.session.commit()
+      return redirect("/preference")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updatePreference.html', preference_to_update=preference_to_update)
+
+
+#update 
+@app.route('/updatePriority/<int:id>', methods=['GET', 'POST'])
+def updatePriority(id):
+  priority_to_update = Store_Priority_data.query.get_or_404(id)
+  if request.method == 'POST':
+    # Store data to table
+    priority_to_update.residentname = request.form.get('pri_people', False)
+    priority_to_update.rotationName = request.form.get('pri_rotation', False)
+    priority_to_update.block = request.form.get('pri_block', False)
+    try:
+      db.session.commit()
+      return redirect("/priority")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updatePriority.html', priority_to_update=priority_to_update)
+
+
+#update 
+@app.route('/updateImpo/<int:id>', methods=['GET', 'POST'])
+def updateImpo(id):
+  impossible_to_update = Store_Impo_data.query.get_or_404(id)
+  if request.method == 'POST':
+    # Store data to table
+    impossible_to_update.residentname = request.form.get('imp_people', False)
+    impossible_to_update.rotationName = request.form.get('imp_rotation', False)
+    impossible_to_update.block = request.form.get('imp_block', False)
+    try:
+      db.session.commit()
+      return redirect("/impossible")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updateImpo.html', impossible_to_update=impossible_to_update)
+
+#update 
+@app.route('/updateVacation/<int:id>', methods=['GET', 'POST'])
+def updateVacation(id):
+  vacation_to_update = Store_Vacation_data.query.get_or_404(id)
+  if request.method == 'POST':
+    # Store data to table
+    vacation_to_update.residentname = request.form.get('vac_people', False)
+    vacation_to_update.block = request.form.get('vac_block', False)
+    try:
+      db.session.commit()
+      return redirect("/vacation")
+    except:
+      return "There is a problem"
+  else:
+    return render_template('updateVacation.html', vacation_to_update=vacation_to_update)
+
+
+
 def calculate(form):
   result = "!"
   return result 
