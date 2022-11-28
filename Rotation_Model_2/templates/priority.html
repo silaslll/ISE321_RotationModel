@@ -8,12 +8,12 @@
 <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Priority Set </h1>
-  <p>Please enter details to run the model:</p> 
+  <!-- <p>Please enter details to run the model:</p>  -->
 
   <form action="{{ url_for('priority') }}" method="POST">
     
     
-    <h5>Enter Priority Set Name:</h5>
+    <!-- <h5>Enter Priority Set Name:</h5> -->
     <!-- 1st: Resident Name -->
     <label> Person:</label>
     <select name="pri_people" id="pri_people" required>
@@ -30,6 +30,8 @@
     </select>
     <!-- 3rd: Block Number  -->
     <label> Block: <input type="number" name="pri_block" min="1" required></label>
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *List of priority assignments (person, rotation, block): These are assignments that MUST happen. </p>
     <br><br>
     
 

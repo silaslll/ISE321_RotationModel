@@ -7,7 +7,7 @@
 {% block content %}
 <div id="calc" >
   <h1>Rotation  </h1>
-  <p>Please enter details to run the model:</p> 
+  <!-- <p>Please enter details to run the model:</p>  -->
 
   <form action="{{ url_for('rotation') }}" method="POST">
     
@@ -29,6 +29,10 @@
         Not Busy Rotation 
       </label>
     </div>
+    <!-- Explain Busy -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *These designated rotations are those that are deemed harder or more intensive, 
+      where it is not desirable to have a resident take vacation or schedule interviews during these rotations.  </p>
     <br>
     <!-- Enter whether must do rotation -->
     <label>Must-do rotation?:</label>
@@ -43,20 +47,32 @@
     <label class="form-check-label" for="notBusy-option">
         Not Must Rotation 
     </label>
+    <!-- Explain Must-Do -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *Specific list of rotations for the "All Year Residents" with general requirements  </p>
+    
+    <!-- p_min -->
     <br><br>
     <label>Enter Minimum number of people in this rotation:</label>
     <input type="number" name="p_min" min="0">
+    <!-- Explain p_min -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *For a given rotation, this number is the absolute smallest number of residents needed </p>
     <br><br>
-
     <label>Enter Maximum number of people in this rotation:</label>
     <input type="number" name="p_max" min="0">
+    <!-- Explain p_max -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *For a given rotation, this is the largest number of residents needed </p>
     <br><br>
     </div>
     <input class="button" type="submit" name="Submit" value="Submit">
   </form>
+  
   <br><br>
+
   {% if result %}
-    <h3>The Rotation Name has successfully been stored {{result}}</h3>
+    <h3>The Rotation has successfully been stored {{result}}</h3>
     <br>
     
 {% endif %}
@@ -68,8 +84,8 @@
     <tr class="list-header">
       <th scope="col" class="tcolumn">Rotation Name</th>
       <th scope="col" class="tcolumn">Must-Do</th>
-      <th scope="col" class="tcolumn">P_min</th>
-      <th scope="col" class="tcolumn">P_max</th>
+      <th scope="col" class="tcolumn">Min</th>
+      <th scope="col" class="tcolumn">Max</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Upadte</th>
     </tr>

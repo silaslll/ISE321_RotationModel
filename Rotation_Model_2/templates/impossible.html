@@ -13,7 +13,7 @@
   <form action="{{ url_for('impossible') }}" method="POST">
     
     
-    <h5> Enter Impossible Assignment Set Name: </h5>
+    <!-- <h5> Enter Impossible Assignment Set Name: </h5> -->
     <!-- 1st: Resident Name -->
     <label> Person:</label>
     <select name="imp_people" id="imp_people" required>
@@ -30,6 +30,8 @@
     </select>
     <!-- 3rd: Block Number  -->
     <label> Block: <input type="number" name="imp_block" min="1" required></label>
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *List of assignments (person, rotation, and block) that cannot happen </p>
     <br><br>
 
 

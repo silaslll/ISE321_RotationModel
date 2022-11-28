@@ -7,12 +7,12 @@
 {% block content %}
     <div id="calc" >
       <h1>Vacation Set </h1>
-      <p>Please enter details to run the model:</p> 
+      <!-- <p>Please enter details to run the model:</p>  -->
     
       <form action="{{ url_for('vacation') }}" method="POST">
         
         
-        <h5>Enter Vacation Set Name:</h5>
+        <!-- <h5>Enter Vacation Set Name:</h5> -->
         <label> Person:</label>
           <select name="vac_people" id="vac_people" required>
             {% for resData in data.resDatas %}
@@ -20,6 +20,10 @@
             {% endfor %}
           </select>
         <label> Block: <input type="number" name="vac_block" min="1" required></label>
+        <p style="color:rgb(32, 135, 144);font-size:14px;">
+          *List the blocks for each person where a vacation or interview is desired/scheduled. 
+          With this information, the model will attempt to schedule such that the residents will 
+          not do the busy rotations when vacations or interviews are scheduled.  </p>
         <br><br>
         
     
