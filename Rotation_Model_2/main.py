@@ -232,7 +232,7 @@ def preference():
   data["resDatas"] = resDatas
   data["rotDatas"] = rotDatas
   # render the index.html file stored in the templates folder
-  return render_template('preference.html', result=result, data = data)
+  return render_template('preference.html', result=result, data=data, blockNum=db.Column('Block', db.Integer))
 
 
 @app.route('/priority', methods=['GET', 'POST'])
@@ -364,7 +364,7 @@ def table():
   df = pd.DataFrame(scheduleByBlock, index=people ,columns=blocks)
   df.style.set_properties(**{'text-align': 'right'})
 
-  return render_template('table.html', tables=[df.to_html(header="true", table_id="table")], titles=[''])
+  return render_template('runModel.html', tables=[df.to_html(header="true", table_id="table")], titles=[''])
 
 # call the model and then redirected to the result page 
 @app.route('/runModel', methods=['GET', 'POST'])
@@ -375,7 +375,37 @@ def runModel():
     exc_type, exc_value, exc_traceback = sys.exc_info()
     flash(exc_value)
     return render_template('resident.html')
-  return render_template('runModel.html', result = result)
+
+  # converting csv to html
+  data = pd.read_csv('./output.csv')
+
+  # Connect with Database
+  path = './data.db'
+  con = sqlite3.connect(path)
+  con.row_factory = lambda cursor, row: row[0]
+  c = con.cursor()
+
+  people = c.execute('SELECT name FROM resident WHERE name IS NOT ""').fetchall()
+
+  blockNum = c.execute('SELECT Block FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
+  blockNumber = blockNum[0] + 1
+  blocks = list(range(1, blockNumber)) # 1 to 4
+  blockx = list(range(0, blockNum[0])) # 0 to 3
+
+  rows = list(range(0, len(data.index))) # 0 to 15
+
+  scheduleByBlock = [ [ 0 for i in range(blockNum[0]) ] for j in range(len(people)) ]
+
+  for row in rows:
+    for block in blockx:
+      if data.loc[row].at["Block"][-1] == str((block+1)):
+        scheduleByBlock[row//blockNum[0]][block] = data.loc[row].at["Rotation"]
+
+  df = pd.DataFrame(scheduleByBlock, index=people ,columns=blocks)
+  df.style.set_properties(**{'text-align': 'right'})
+
+  return render_template('runModel.html', tables=[df.to_html(header="true", table_id="table")], titles=[''])
+  # return render_template('runModel.html', result = result)
 
 #delete the resident information and redirect to the same page 
 @app.route('/deleteResident/<int:id>')

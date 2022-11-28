@@ -175,8 +175,8 @@ def solve(m):
     a = m.getObjective()
 
     # Check if model is infeasible
-    # if m.status == GRB.Status.INFEASIBLE :
-    #     raise Exception("Model is infeasible")
+    if m.status == GRB.Status.INFEASIBLE :
+        raise Exception("Model is infeasible")
     
     # output list is where we store the list of x variables when it's equal to 1
     output = []

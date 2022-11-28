@@ -1,33 +1,25 @@
 Resident,Rotation,Block
-Resident1,Rotation1,Block3
+Resident1,Rotation1,Block4
 Resident1,Rotation2,Block1
-Resident1,Rotation3,Block4
+Resident1,Rotation3,Block3
 Resident1,Rotation4,Block2
 Resident2,Rotation1,Block2
 Resident2,Rotation2,Block4
 Resident2,Rotation3,Block1
-Resident2,Rotation3,Block3
-Resident3,Rotation2,Block2
+Resident2,Rotation4,Block3
+Resident3,Rotation3,Block1
+Resident3,Rotation3,Block2
 Resident3,Rotation3,Block3
-Resident3,Rotation4,Block1
-Resident3,Rotation4,Block4
+Resident3,Rotation3,Block4
 Resident4,Rotation1,Block3
-Resident4,Rotation3,Block1
-Resident4,Rotation4,Block2
+Resident4,Rotation3,Block2
+Resident4,Rotation4,Block1
 Resident4,Rotation4,Block4
 Resident5,Rotation1,Block4
-Resident5,Rotation3,Block2
 Resident5,Rotation4,Block1
+Resident5,Rotation4,Block2
 Resident5,Rotation4,Block3
-Resident7,Rotation1,Block1
-Resident7,Rotation2,Block3
-Resident7,Rotation3,Block2
-Resident7,Rotation3,Block4
-Resident6,Rotation1,Block2
+Resident6,Rotation2,Block2
 Resident6,Rotation3,Block1
 Resident6,Rotation3,Block3
-Resident6,Rotation3,Block4
-Chang Wang,Rotation1,Block1
-Chang Wang,Rotation1,Block4
-Chang Wang,Rotation3,Block2
-Chang Wang,Rotation4,Block3
+Resident6,Rotation4,Block4
