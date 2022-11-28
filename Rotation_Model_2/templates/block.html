@@ -34,8 +34,7 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">ID</th>
-      <th scope="col" class="tcolumn">Block #</th>
+      <th scope="col" class="tcolumn">Number of Blocks</th>
       <th scope="col" class="tcolumn">Action</th>
     </tr>
   </thead>
@@ -43,7 +42,6 @@
       {% for blockData in blockDatas %}
               <!-- update this onclick getElementById with respective field -->
               <tr class="list-item" onclick="document.getElementById('block_input').value = '{{ blockData.blockNum }}'">
-                <th scope="row">#{{ blockData.blockId }}</th>
                 <td style="text-align: center;">{{ blockData.blockNum }}</td>
                 <td><a href = "/deleteBlock/{{blockData.blockId}}"> Delete </a></td>
               </tr>

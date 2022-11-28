@@ -18,7 +18,15 @@ def main():
     con.row_factory = lambda cursor, row: row[0]
     c = con.cursor()
     dict = {}
-    p_min, p_max = getData(dict,c)
+
+    # Get access to input data
+    try: 
+        p_min, p_max = getData(dict,c,con)
+    except sqlite3.connector.Error as error:
+        print("Failed to delete record from table: {}".format(error))
+    finally:
+        c.close()
+        con.close()
 
     error = datavalidation.dataValidation(dict)
 
@@ -32,14 +40,19 @@ def main():
     solve(m)
     
 
-def getData(dict,c):
+def getData(dict,c,con):
 
     people = c.execute('SELECT name FROM resident WHERE name IS NOT ""').fetchall()
     allYearResidents = c.execute('SELECT name FROM resident Where allYear = "y"').fetchall()
     rotations = c.execute('SELECT Rotation_name FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
     mustDo = c.execute('SELECT Rotation_name FROM rotation Where mustDo = "y"').fetchall()
     busyRotations = c.execute('SELECT Rotation_name FROM rotation Where busy = "y"').fetchall()
-    
+
+
+    delete_previous_block = """DELETE FROM block  WHERE EXISTS 
+	                        ( SELECT * FROM block ex WHERE ex.block_id > block.block_id)"""
+    c.execute(delete_previous_block)
+    con.commit()
     # Add blocks to the model, always choose the latest version of block number 
     blockNum = c.execute('SELECT Block FROM block Where block_id = (SELECT max(block_id) FROM block) ').fetchall()
     blocks = []

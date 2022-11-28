@@ -24,12 +24,8 @@ db = SQLAlchemy(app) # Bind the databse instance to our application
 class Store_Resident_data(db.Model):
   __tablename__ = 'resident'
   residentId = db.Column('Resident_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
   name = db.Column('name', db.String(50))
-  # prolonged = db.Column('prolonged', db.String(50))
   allYear = db.Column('allYear', db.CHAR)
-  # c3= db.Column('c3', db.Integer)
-  # sex = db.Column('sex', db.CHAR)
 
   # Initialisation method to allow us to pass values for these fields
   def __init__(self, name,allYear):
@@ -41,9 +37,7 @@ class Store_Resident_data(db.Model):
 class Store_Rotation_data(db.Model):
   __tablename__ = 'rotation'
   rotationId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
   rotationName = db.Column('Rotation_name', db.String(50))
-  # prolonged = db.Column('prolonged', db.String(50))
   mustDo = db.Column('MustDo', db.CHAR)
   busy = db.Column('busy', db.CHAR)
   p_min= db.Column('p_min', db.Integer)
@@ -128,6 +122,18 @@ class Store_Vacation_data(db.Model):
     self.residentname = residentname
     self.block = block
 
+def refreshBlock():
+  path = './data.db'
+  con = sqlite3.connect(path)
+  con.row_factory = lambda cursor, row: row[0]
+  c = con.cursor()
+
+  delete_previous_block = """DELETE FROM block  WHERE EXISTS 
+	                        ( SELECT * FROM block ex WHERE ex.block_id > block.block_id)"""
+  c.execute(delete_previous_block)
+  con.commit()
+
+
 @app.before_first_request
 def create_tables():
     db.create_all()  
@@ -197,6 +203,8 @@ def block():
     
     db.session.add(Store_Block_data(blockNum))
     db.session.commit()
+    # Always make sure only 1 block number is stored in the dataset
+    refreshBlock()
    
     # render result 
     result = calculate(form)
