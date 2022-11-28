@@ -5,7 +5,7 @@
 
 {% block content %}
 <!-- Allow user to add input  -->
-<div id="calc" >
+<!-- <div id="calc" >
   <h1>Rotation Scheduling </h1>
   <p>Once all the data are entered, click the button below to run the model:</p>
 
@@ -21,6 +21,22 @@
     <br>
     
 {% endif %}
+</div> -->
+
+<div align="center">
+    <h1>Optimal Schedule</h1>
+    <h3>Schedule by Block</h3>
+    <table>
+        <tr align="center">
+            <th>Block</th>
+            {% for table in tables %}
+                <h2>{{titles[loop.index]}}</h2>                            
+                {{ table|safe }}
+            {% endfor %}   
+        </tr>
+    </table>
 </div>
 
+
 {% endblock %}
+

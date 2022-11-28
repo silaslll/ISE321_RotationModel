@@ -19,7 +19,6 @@
   }
   </style>
   <div class="left">
-    <!-- Allow user to add input  -->
 <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Rotation Scheduling </h1>
@@ -67,6 +66,7 @@
         <p>resident name: {{ residentData.name }}</p>
         <p>allYear: {{ residentData.allYear }}</p>
         <a href = "/deleteResident/{{residentData.residentId}}"> Delete </a>
+        <a href = "/updateResident/{{residentData.residentId}}"> Update </a>
     </div>
   {% endfor %}
   
