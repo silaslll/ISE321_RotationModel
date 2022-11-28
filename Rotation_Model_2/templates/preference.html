@@ -8,8 +8,8 @@
 
 <!-- Allow user to add input  -->
 <div id="calc" >
-  <!-- <h1>Rotation Scheduling </h1>
-  <p> Please enter details to run the model:</p> -->
+  <h1>Preference Set</h1>
+  <p> Please enter details to run the model:</p> 
 
   <form action="{{ url_for('preference') }}" method="POST">
     
@@ -51,11 +51,12 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">ID</th>
+    
       <th scope="col" class="tcolumn">Resident</th>
       <th scope="col" class="tcolumn">Rotation</th>
       <th scope="col" class="tcolumn">Block</th>
       <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   
@@ -63,7 +64,7 @@
     {% for prefData in data.prefDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
-      <th scope="row">#{{ prefData.prefId }}</th>
+      
       <td style="text-align: center;">{{ prefData.residentname }}</td>
       <td style="text-align: center;">{{ prefData.rotationName }}</td>
       <td style="text-align: center;">{{ prefData.block }}</td>

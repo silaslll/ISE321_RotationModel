@@ -341,6 +341,10 @@ def myData2():
   residentDatas = Store_Resident_data.query.all()
   return render_template('myData2.html', residentDatas=residentDatas)
 
+@app.route('/guide')
+def guide():
+  return render_template('guide.html')
+
 # db.Column('Block', db.Integer)
 @app.route('/table')
 def table():

@@ -6,8 +6,8 @@
 
 {% block content %}
 <div id="calc" >
-  <!-- <h1>Rotation Scheduling </h1>
-  <p>Please enter details to run the model:</p> -->
+  <h1>Rotation  </h1>
+  <p>Please enter details to run the model:</p> 
 
   <form action="{{ url_for('rotation') }}" method="POST">
     
@@ -66,19 +66,18 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">ID</th>
       <th scope="col" class="tcolumn">Rotation Name</th>
       <th scope="col" class="tcolumn">Must-Do</th>
       <th scope="col" class="tcolumn">P_min</th>
       <th scope="col" class="tcolumn">P_max</th>
       <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Upadte</th>
     </tr>
   </thead>
   <tbody class="tbody">
     {% for rotationData in rotationDatas %}
               <!-- update this onclick getElementById with respective field -->
               <tr class="list-item" >
-                <th scope="row">#{{ rotationData.rotationId }}</th>
                 <td style="text-align: right;">{{ rotationData.rotationName }}</td>
                 <td style="text-align: center;">{{ rotationData.mustDo }}</td>
                 <td style="text-align: center;">{{ rotationData.p_min }}</td>

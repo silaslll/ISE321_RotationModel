@@ -8,8 +8,8 @@
 
 <!-- Allow user to add input  -->
 <div id="calc" >
-  <!-- <h1>Rotation Scheduling </h1>
-  <p>Please enter details to run the model:</p> -->
+  <h1>Resident </h1>
+  <p>Please enter details to run the model:</p> 
 
   <form action="{{ url_for('resident') }}" method="POST">
     
@@ -48,16 +48,15 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">ID</th>
       <th scope="col" class="tcolumn">Resident</th>
       <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   <tbody class="tbody">
 
     {% for residentData in residentDatas %}
     <tr class="list-item">
-      <th scope="row">#{{ residentData.residentId }}</th>
       <td style="text-align: center;">{{ residentData.name }}</td>
       <td><a href = "/deleteResident/{{residentData.residentId}}"> Delete </a></td>
       <td><a href = "/updateResident/{{residentData.residentId}}"> Update </a></td>

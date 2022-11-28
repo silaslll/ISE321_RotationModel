@@ -6,8 +6,8 @@
 
 {% block content %}
     <div id="calc" >
-      <!-- <h1>Rotation Scheduling </h1>
-      <p>Please enter details to run the model:</p> -->
+      <h1>Vacation Set </h1>
+      <p>Please enter details to run the model:</p> 
     
       <form action="{{ url_for('vacation') }}" method="POST">
         
@@ -41,10 +41,11 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">ID</th>
+      
       <th scope="col" class="tcolumn">Resident</th>
       <th scope="col" class="tcolumn">Block</th>
       <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   
@@ -52,7 +53,7 @@
     {% for vacData in data.vacDatas %}
     <!-- update this onclick getElementById with respective field -->
     <tr class="list-item" >
-      <th scope="row">#{{ vacData.vacId }}</th>
+      
       <td style="text-align: center;">{{ vacData.residentname }}</td>
       <td style="text-align: center;">{{ vacData.block }}</td>
       <td><a href = "/deleteVacation/{{vacData.vacId}}"> Delete </a></td>
