@@ -44,6 +44,7 @@
               <tr class="list-item" onclick="document.getElementById('block_input').value = '{{ blockData.blockNum }}'">
                 <td style="text-align: center;">{{ blockData.blockNum }}</td>
                 <td><a href = "/deleteBlock/{{blockData.blockId}}"> Delete </a></td>
+                <td><a href = "/updateBlock/{{blockData.blockId}}"> Update </a></td>
               </tr>
       {% endfor %}
   </tbody>
