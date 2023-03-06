@@ -1,0 +1,38 @@
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+    <h1>Update </h1>
+    <p>Please enter details to run the model:</p>
+  
+    <form action="/updateResident/{{resident_to_update.residentId}}" method="POST">
+      
+      <br>
+      <label>Enter Resident Name:</label>
+      <input type="text" name="residentName" value = {{resident_to_update.name}}>
+      <br><br>
+      <!-- Enter whether all year resident -->
+      <label>Are you an all-year resident:</label>
+      <div class="form-check">
+      <input class="form-check-input" type="radio" name="allYear" value="y" id="allYear-option">
+      <label class="form-check-label" for="allyear-option">
+        All-Year resident
+      </label>
+      </div>
+      <div class="form-check">
+      <input class="form-check-input" type="radio" name="allYear" value="n" id="notAllYear-option" checked>
+      <label class="form-check-label" for="notAllYear-option">
+        Not All-Year resident
+      </label>
+        </div>
+      <br>
+    
+  
+      <input type="submit" name="Update" value="Update">
+    </form>
+    <br><br>
+    {% if result %}
+      <h3>The Resident Name has successfully been stored {{result}}</h3>
+      <br>
+      
+  {% endif %}
+  </div>

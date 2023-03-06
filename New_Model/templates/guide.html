@@ -1,0 +1,46 @@
+
+<!--This file allows user to input, view and delete vacation information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div id="calc" >
+      <h1>Guide to Rotation Scheduling Tool </h1>
+      <h2>- Data Input Includes: </h2> 
+      <p>
+        Resident <br>
+        Rotation <br>
+        Block<br>
+        Priority Assignments <br>
+        Preference Assignments<br>
+        Impossible Assignments <br>
+        Vacations or Interview Scheduled <br>
+      </p>
+
+      <h2>- How to use: </h2> 
+      <a href="https://docs.google.com/document/d/1mF8-PAuD8n74qNV9seD1k2EKx4kwzpTfkeOZOrmIqyY/edit">Detailed Guidance</a>
+      <p>
+      <ol type="1"> 
+        <li>Successively click "Resident," "Rotation", and "Block" to add inputs first<br>
+            These will be <b>Prerequisites</b> for further inputs </li>
+        <li>The right-side table is to display all recorded data. You can delete and update all inputs</li>
+        <li>Once finish adding the info above, add assignment sets one by one.</li>
+        <li>Click "Run Model" in the navigator to run the rotation scheduling model</li>
+        <li>If error messages pop out, delete conflicts in input interfaces, and try run model again.</li>
+        <li>If there's no conflicts, a rotation schedule will display in the window.</li>
+      </ol> 
+      </p>
+      
+      <br><br>
+      {% if result %}
+        <h3>The Vacation Set has successfully been stored {{result}}</h3>
+        <br>
+        
+    {% endif %}
+</div>
+
+
+
+{% endblock %}
+

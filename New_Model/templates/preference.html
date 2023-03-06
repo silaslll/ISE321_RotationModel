@@ -1,0 +1,81 @@
+
+<!--This file allows user to input, view and delete preference information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Preference Set</h1>
+  <!-- <p> Please enter details to run the model:</p>  -->
+
+  <form action="{{ url_for('preference') }}" method="POST">
+    
+    
+    <!-- <h5> Enter Preference Set Name: </h5> -->
+    <!-- Enter based on input resident name -->
+    <label> Person:</label>
+    <select name="pref_people" id="pref_people" required>
+      {% for resData in data.resDatas %}
+        <option value="{{ resData.name }}">{{ resData.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label> Rotation: </label>
+    <select name="pref_rotation" id="pref_rotation" required>
+      {% for rotData in data.rotDatas %}
+        <option value="{{ rotData.rotationName }}">{{ rotData.rotationName }}</option>
+      {% endfor %}
+    </select>
+
+    <label> Block: <input type="number" name="pref_block" min="1" required></label>
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *preference assignment (person, rotation, block): These are not as important as priority.
+       If the model becomes infeasible, this should be the inputs where constraints are deleted first.  </p>
+    <br><br>
+    
+
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Preference Set has successfully been stored {{result}}</h3>
+    <br>
+
+{% endif %}
+</div>
+
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+    
+      <th scope="col" class="tcolumn">Resident</th>
+      <th scope="col" class="tcolumn">Rotation</th>
+      <th scope="col" class="tcolumn">Block</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  
+  <tbody class="tbody">
+    {% for prefData in data.prefDatas %}
+    <!-- update this onclick getElementById with respective field -->
+    <tr class="list-item" >
+      
+      <td style="text-align: center;">{{ prefData.residentname }}</td>
+      <td style="text-align: center;">{{ prefData.rotationName }}</td>
+      <td style="text-align: center;">{{ prefData.block }}</td>
+      <td><a href = "/deletePref/{{prefData.prefId}}"> Delete </a></td>
+      <td><a href = "/updatePreference/{{prefData.prefId}}"> Update </a></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+

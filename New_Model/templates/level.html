@@ -1,0 +1,63 @@
+
+<!--This file allows user to input, view and delete level information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Level </h1>
+  <!-- <p>Please enter details to run the model:</p>  -->
+
+  <form action="{{ url_for('level') }}" method="POST">
+    
+    <br>
+    <label>Enter Level:</label>
+    <input type="number" name="level" id = "res_level">
+
+    <label>Enter Block:</label>
+    <input type="number" name="block" id = "res_block">
+
+    <!-- Annotation -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+     empty </p>
+    <br>
+  
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Level has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">Level</th>
+      <th scope="col" class="tcolumn">Block</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+    {% for levelData in levelDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ levelData.level }}</td> 
+      <td style="text-align: center;">{{ levelData.block }}</td> 
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+

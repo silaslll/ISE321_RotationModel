@@ -1,0 +1,17 @@
+<div id="calc" >
+    <h1>Rotation Scheduling </h1>
+    <p>Please enter details to run the model:</p>
+  
+    <form action="/updateBlock/{{block_to_update.blockId}}" method="POST">
+      
+      <label>Enter The Number of Blocks:</label>
+      <input type="number" name="blockNum" min="1" value = {{block_to_update.blockNum}}>
+      <input type="submit" name="Update" value="Update">
+    </form>
+    <br><br>
+    {% if result %}
+      <h3>The block number has successfully been stored {{result}}</h3>
+      <br>
+      
+  {% endif %}
+  </div>
