@@ -1,0 +1,58 @@
+
+<!--This file allows user to input, view and delete block information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div id="calc" >
+  <h1>Block Number </h1>
+  <!-- <p>Please enter details to run the model:</p>  -->
+
+  <form action="{{ url_for('block') }}" method="POST">
+    
+    <br>
+    <label>Enter The Number of Blocks:</label>
+    <input type="number" id="block_input" name="blockNum" min="1">
+   
+    <!-- Explain Block Number -->
+    <p style="color:rgb(32, 135, 144);font-size:14px;">
+      *The number of blocks for the specific group/year of residents being scheduled  </p>
+    <br><br>
+    <br>
+  
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  {% if result %}
+    <br><br>
+    <h3>The block number has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+
+  </div>
+  {% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">Number of Blocks</th>
+      <th scope="col" class="tcolumn">Action</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+      {% for blockData in blockDatas %}
+              <!-- update this onclick getElementById with respective field -->
+              <tr class="list-item" onclick="document.getElementById('block_input').value = '{{ blockData.blockNum }}'">
+                <td style="text-align: center;">{{ blockData.blockNum }}</td>
+                <td><a href = "/deleteBlock/{{blockData.blockId}}"> Delete </a></td>
+                <td><a href = "/updateBlock/{{blockData.blockId}}"> Update </a></td>
+              </tr>
+      {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+
