@@ -21,143 +21,89 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True # Set database parameters usi
 db = SQLAlchemy(app) # Bind the databse instance to our application 
 
 
+class Store_Metadata_data(db.Model):
+  __tablename__ = 'metadata'
+  metadataId = db.Column('metadata_id', db.Integer, primary_key = True) # Primary Key 
+  startDate = db.Column('startDate', db.String(50))
+  weeks = db.Column("weeks",db.Integer)
+
+  # Initialisation method to allow us to pass values for these fields
+  def __init__(self, startDate, weeks):
+    # self.timestamp = datetime.now()
+    self.startDate = startDate
+    self.weeks = weeks
+
+
+
 # Define variables that relate to the column names in the table 
 class Store_Resident_data(db.Model):
   __tablename__ = 'resident'
-  residentId = db.Column('Resident_id', db.Integer, primary_key = True) # Primary Key 
+  residentId = db.Column('resident_id', db.Integer, primary_key = True) # Primary Key 
   name = db.Column('name', db.String(50))
-  level = db.Column("level",db.Integer)
-  allYear = db.Column('allYear', db.CHAR)
-  impossible_working_department = ('impossible_working_department', db.String(50))
-  required_working_department = ('required_working_department', db.String(50))
-  impossible_working_blocks = ('impossible_working_blocks', db.String(50))
+  residentClass = db.Column("class",db.String(50))
+  vacationRequest_1 = db.Column("vacationRequest_1",db.String(50))
+  vacationRequest_2 = db.Column("vacationRequest_2",db.String(50))
+  vacationRequest_3 = db.Column("vacationRequest_3",db.String(50))
+  impossible_working_blocks = ('impossible_working_blocks', db.Integer)
 
   # Initialisation method to allow us to pass values for these fields
-  def __init__(self, name,level,allYear, impossible_working_department, required_working_department, impossible_working_blocks):
+  def __init__(self, name,residentClass, vacationRequest_1, vacationRequest_2, vacationRequest_3, impossible_working_blocks):
     # self.timestamp = datetime.now()
     self.name = name
-    self.level = level
-    self.allYear = allYear
-    self.impossible_working_department = impossible_working_department
-    self.required_working_department = required_working_department
+    self.residentClass = residentClass
+    self.vacationRequest_1 = vacationRequest_1
+    self.vacationRequest_2 = vacationRequest_2
+    self.vacationRequest_3 = vacationRequest_3
     self.impossible_working_blocks = impossible_working_blocks
 
-class Store_Rotation_data(db.Model):
-  __tablename__ = 'rotation'
-  rotationId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  rotationName = db.Column('Rotation_name', db.String(50))
-  mustDo = db.Column('MustDo', db.CHAR)
-  busy = db.Column('busy', db.CHAR)
-  p_min= db.Column('p_min', db.Integer)
-  p_max= db.Column('p_max', db.Integer)
+# Define variables that relate to the column names in the table 
+class Store_Department_data(db.Model):
+  __tablename__ = 'department'
+  departmentId = db.Column('department_id', db.Integer, primary_key = True) # Primary Key 
+  name = db.Column('name', db.String(50))
+  busy = db.Column("busy",db.CHAR)
+  minClass_1 = db.Column("minClass_1",db.Integer)
+  minClass_2 = db.Column("minClass_2",db.Integer)
+  minClass_3 = db.Column("minClass_3",db.Integer)
+  maxClass_1 = db.Column("maxClass_1",db.Integer)
+  maxClass_2 = db.Column("maxClass_2",db.Integer)
+  maxClass_3 = db.Column("maxClass_3",db.Integer)
+  max_res_vacation = ('max_res_vacation', db.Integer)
 
   # Initialisation method to allow us to pass values for these fields
-  def __init__(self, rotationName,mustDo,busy,p_min,p_max):
+  def __init__(self, name,busy, minClass_1, minClass_2, minClass_3, maxClass_1, maxClass_2, maxClass_3, max_res_vacation):
     # self.timestamp = datetime.now()
-    self.rotationName = rotationName
-    self.mustDo = mustDo
+    self.name = name
     self.busy = busy
-    self.p_min = p_min
-    self.p_max = p_max
+    self.minClass_1 = minClass_1
+    self.minClass_2 = minClass_2
+    self.minClass_3 = minClass_3
+    self.maxClass_1 = maxClass_1
+    self.maxClass_2 = maxClass_2
+    self.maxClass_3 = maxClass_3
+    self.max_res_vacation = max_res_vacation
 
-
-class Store_Block_data(db.Model):
-  __tablename__ = 'block'
-  blockId = db.Column('block_id', db.Integer, primary_key = True) # Primary Key 
-  blockNum= db.Column('Block', db.Integer)
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self, blockNum):
-    # self.timestamp = datetime.now()
-    self.blockNum = blockNum
-    
-
-class Store_Pref_data(db.Model):
-  __tablename__ = 'preference'
-  prefId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
-  residentname = db.Column('Resident_name', db.String(50))
-  rotationName = db.Column('Rotation_name', db.String(50))
-  block = db.Column('Block', db.String(50))
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self, residentname,rotationName,block):
-    # self.timestamp = datetime.now()
-    self.residentname = residentname
-    self.rotationName = rotationName
-    self.block = block
-
-class Store_Priority_data(db.Model):
-  __tablename__ = 'priority'
-  prifId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
-  residentname = db.Column('Resident_name', db.String(50))
-  rotationName = db.Column('Rotation_name', db.String(50))
-  block = db.Column('Block', db.String(50))
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self, residentname,rotationName,block):
-    # self.timestamp = datetime.now()
-    self.residentname = residentname
-    self.rotationName = rotationName
-    self.block = block
-
-class Store_Impo_data(db.Model):
-  __tablename__ = 'impossible'
-  impoId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
-  residentname = db.Column('Resident_name', db.String(50))
-  rotationName = db.Column('Rotation_name', db.String(50))
-  block = db.Column('Block', db.String(50))
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self, residentname,rotationName,block):
-    # self.timestamp = datetime.now()
-    self.residentname = residentname
-    self.rotationName = rotationName
-    self.block = block
-
-class Store_Vacation_data(db.Model):
-  __tablename__ = 'vacation'
-  vacId = db.Column('Rotation_id', db.Integer, primary_key = True) # Primary Key 
-  # timestamp = db.Column('timestamp', db.DateTime)
-  residentname = db.Column('Resident_name', db.String(50))
-  block = db.Column('Block', db.String(50))
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self, residentname,block):
-    # self.timestamp = datetime.now()
-    self.residentname = residentname
-    self.block = block
 
 # Define variables that relate to the column names in the table 
-class Store_Level_data(db.Model):
-  __tablename__ = 'Level'
-  levelId = db.Column('Level_id', db.Integer, primary_key = True) # Primary Key 
-  level = db.Column("level",db.Integer)
-  block = db.Column("block",db.Integer)
+class Store_Class_data(db.Model):
+  __tablename__ = 'class'
+  classId = db.Column('classId', db.Integer, primary_key = True) # Primary Key 
+  name = db.Column('name', db.String(50))
+  block = db.Column("numBlocks",db.Integer)
+  requiredDepartments = db.Column("requiredDepartments",db.String(150))
+  impossibleDepartments = db.Column("impossibleDepartments",db.String(150))
+  deptMin = db.Column("deptMin",db.Integer)
+  deptMax = db.Column("deptMax",db.Integer)
 
   # Initialisation method to allow us to pass values for these fields
-  def __init__(self,level,block):
-    self.level = level
+  def __init__(self, name,block,requiredDepartments,impossibleDepartments,deptMin,deptMax):
+    # self.timestamp = datetime.now()
+    self.name = name
     self.block = block
-
-class Store_Week_data(db.Model):
-  __tablename__ = 'Week'
-  weekId = db.Column('Level_id', db.Integer, primary_key = True) # Primary Key 
-  week = db.Column("week",db.String(50))
-  block = db.Column("block",db.Integer)
-  resident = db.Column("resident",db.String(50))
-  level = db.Column("level",db.Integer)
-  
-
-  # Initialisation method to allow us to pass values for these fields
-  def __init__(self,week, block, resident, level):
-    self.week = week
-    self.resident = resident
-    self.level = level
-    self.block = block
-
+    self.requiredDepartments = requiredDepartments
+    self.impossibleDepartments = impossibleDepartments
+    self.deptMin = deptMin
+    self.deptMax = deptMax
 
 
 def refreshBlock():
@@ -176,7 +122,32 @@ def refreshBlock():
 def create_tables():
     db.create_all()  
 
+
 @app.route('/', methods=['GET', 'POST'])
+def metadata():
+  result = False
+  if not os.path.exists(os.path.join(basedir, 'data.db')):
+    db.create_all()
+  if request.method == 'POST':
+    form = request.form
+
+    # Store data to table
+    startDate = request.form.get('startDate',False)
+    weeks = request.form.get('weeks',False)
+
+    # write the input data to the databse
+    db.session.add(Store_Metadata_data(startDate, weeks))
+    db.session.commit()
+    
+    # render result 
+    result = calculate(form)
+  metadataDatas = Store_Metadata_data.query.all()
+
+  # render the index.html file stored in the templates folder
+  return render_template('metadata.html', result=result, metadataDatas=metadataDatas)
+
+
+@app.route('/resident', methods=['GET', 'POST'])
 def resident():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
@@ -185,14 +156,14 @@ def resident():
     form = request.form
 
     # Store data to table
-    residentName = request.form.get('residentName',False)
-    level = request.form.get('level',False)
-    allYear = request.form.get('allYear',False)
-    impossible_working_department = request.form.get('impossible_working_department',False)
-    required_working_department = request.form.get('required_working_department',False)
+    name = request.form.get('name',False)
+    residentClass = request.form.get('residentClass',False)
+    vacationRequest_1 = request.form.get('vacationRequest_1',False)
+    vacationRequest_2 = request.form.get('vacationRequest_2',False)
+    vacationRequest_3 = request.form.get('vacationRequest_3',False)
     impossible_working_blocks = request.form.get('impossible_working_blocks',False)
     # write the input data to the databse
-    db.session.add(Store_Resident_data(residentName,level, allYear, impossible_working_department, required_working_department, impossible_working_blocks))
+    db.session.add(Store_Resident_data(name,residentClass, vacationRequest_1, vacationRequest_2, vacationRequest_3, impossible_working_blocks))
     db.session.commit()
     
     # render result 
@@ -202,33 +173,41 @@ def resident():
   # render the index.html file stored in the templates folder
   return render_template('resident.html', result=result, residentDatas=residentDatas)
 
-@app.route('/rotation', methods=['GET', 'POST'])
-def rotation():
+
+
+@app.route('/department', methods=['GET', 'POST'])
+def department():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
   if request.method == 'POST':
     form = request.form
+
     # Store data to table
-    rotationName = request.form['rotationName']
-    mustDo = request.form['mustDo']
-    busy = request.form['busy']
-    p_min = request.form['p_min']
-    p_max = request.form['p_max']
-    
+    name = request.form.get('name',False)
+    busy = request.form.get('busy',False)
+    minClass_1 = request.form.get('minClass_1',False)
+    minClass_2 = request.form.get('minClass_2',False)
+    minClass_3 = request.form.get('minClass_3',False)
+    maxClass_1 = request.form.get('maxClass_1',False)
+    maxClass_2 = request.form.get('maxClass_2',False)
+    maxClass_3 = request.form.get('maxClass_3',False)
+    max_res_vacation = request.form.get('max_res_vacation',False)
     # write the input data to the databse
-    
-    db.session.add(Store_Rotation_data(rotationName,mustDo, busy,p_min, p_max))
+    db.session.add(Store_Department_data(name,busy, minClass_1, minClass_2, minClass_3,maxClass_1,maxClass_2,maxClass_3,max_res_vacation ))
     db.session.commit()
+    
     # render result 
     result = calculate(form)
+  departmentDatas = Store_Department_data.query.all()
 
-  rotationDatas = Store_Rotation_data.query.all()
   # render the index.html file stored in the templates folder
-  return render_template('rotation.html', result=result, rotationDatas=rotationDatas)
+  return render_template('department.html', result=result, departmentDatas=departmentDatas)
 
-@app.route('/Block', methods=['GET', 'POST'])
-def block():
+
+
+@app.route('/myClass', methods=['GET', 'POST'])
+def myClass():
   result = False
   if not os.path.exists(os.path.join(basedir, 'data.db')):
     db.create_all()
@@ -236,203 +215,32 @@ def block():
     form = request.form
 
     # Store data to table
-    blockNum = request.form.get('blockNum', False)
-    
-    # write the input data to the databse
-    
-    db.session.add(Store_Block_data(blockNum))
-    db.session.commit()
-    # Always make sure only 1 block number is stored in the dataset
-    refreshBlock()
-   
-    # render result 
-    result = calculate(form)
-  blockDatas = Store_Block_data.query.all()
-  # render the index.html file stored in the templates folder
-  return render_template('block.html', result=result, blockDatas=blockDatas)
-
-@app.route('/preference', methods=['GET', 'POST'])
-def preference():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    pref_people = request.form.get('pref_people', False)
-    pref_rotation = request.form.get('pref_rotation', False)
-    pref_block = request.form.get('pref_block', False)
-    
-    # write the input data to the databse
-    
-    db.session.add(Store_Pref_data(pref_people,pref_rotation,pref_block))
-    db.session.commit()
-   
-    # render result 
-    result = calculate(form)
-  prefDatas = Store_Pref_data.query.all()
-  resDatas =  Store_Resident_data.query.all()
-  rotDatas = Store_Rotation_data.query.all()
-  data = {}
-  data["prefDatas"] = prefDatas
-  data["resDatas"] = resDatas
-  data["rotDatas"] = rotDatas
-  # render the index.html file stored in the templates folder
-  return render_template('preference.html', result=result, data=data, blockNum=db.Column('Block', db.Integer))
-
-
-@app.route('/priority', methods=['GET', 'POST'])
-def priority():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    pri_people = request.form['pri_people']
-    pri_rotation = request.form['pri_rotation']
-    pri_block = request.form['pri_block']
-    
-    # write the input data to the databse
-    
-    db.session.add(Store_Priority_data(pri_people,pri_rotation,pri_block))
-    db.session.commit()
-   
-    # render result 
-    result = calculate(form)
-  # render the index.html file stored in the templates folder
-  prifDatas = Store_Priority_data.query.all()
-  resDatas =  Store_Resident_data.query.all()
-  rotDatas = Store_Rotation_data.query.all()
-  data = {}
-  data["prifDatas"] = prifDatas
-  data["resDatas"] = resDatas
-  data["rotDatas"] = rotDatas
-  return render_template('priority.html', result=result, data = data)
-  
-@app.route('/impossible', methods=['GET', 'POST'])
-def impossible():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    imp_people = request.form.get('imp_people')
-    imp_rotation = request.form.get('imp_rotation')
-    imp_block = request.form.get('imp_block')
-    
-
-    # write the input data to the databse
-    
-    db.session.add(Store_Impo_data(imp_people,imp_rotation,imp_block))
-    db.session.commit()
-   
-    # render result 
-    result = calculate(form)
-  # render the index.html file stored in the templates folder
-  impoDatas = Store_Impo_data.query.all()
-  resDatas =  Store_Resident_data.query.all()
-  rotDatas = Store_Rotation_data.query.all()
-  data = {}
-  data["impoDatas"] = impoDatas
-  data["resDatas"] = resDatas
-  data["rotDatas"] = rotDatas
-  return render_template('impossible.html', result=result, data = data)
-
-
-@app.route('/vacation', methods=['GET', 'POST'])
-def vacation():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    vac_people = request.form['vac_people']
-    vac_block = request.form['vac_block']
-    
-    # write the input data to the databse
-    db.session.add(Store_Vacation_data(vac_people,vac_block))
-    db.session.commit()
-   
-    # render result 
-    result = calculate(form)
-  # render the index.html file stored in the templates folder
-  vacDatas = Store_Vacation_data.query.all()
-  resDatas =  Store_Resident_data.query.all()
-  data = {}
-  data["vacDatas"] = vacDatas
-  data["resDatas"] = resDatas
-  return render_template('vacation.html', result=result, data = data)
-
-
-@app.route('/level', methods=['GET', 'POST'])
-def level():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    level = request.form.get('level',False)
+    name = request.form.get('name',False)
     block = request.form.get('block',False)
-   
-    
+    requiredDepartments = request.form.get('requiredDepartments',False)
+    impossibleDepartments = request.form.get('impossibleDepartments',False)
+    deptMin = request.form.get('deptMin',False)
+    deptMax = request.form.get('deptMax',False)
     # write the input data to the databse
-    db.session.add(Store_Level_data(level, block))
+    db.session.add(Store_Class_data(name,block, requiredDepartments, impossibleDepartments, deptMin,deptMax))
     db.session.commit()
     
     # render result 
     result = calculate(form)
-  levelDatas = Store_Level_data.query.all()
+  classDatas = Store_Class_data.query.all()
 
   # render the index.html file stored in the templates folder
-  return render_template('level.html', result=result, levelDatas=levelDatas)
+  return render_template('class.html', result=result, classDatas=classDatas)
 
+# @app.route('/myData', methods=['GET'])
+# def myData():
+#   rotationDatas = Store_Rotation_data.query.all()
+#   return render_template('myData.html', rotationDatas=rotationDatas)
 
-@app.route('/week', methods=['GET', 'POST'])
-def week():
-  result = False
-  if not os.path.exists(os.path.join(basedir, 'data.db')):
-    db.create_all()
-  if request.method == 'POST':
-    form = request.form
-
-    # Store data to table
-    week = request.form.get('week',False)
-    block = request.form.get('block',False)
-    level = request.form.get('level',False)
-    resident = request.form.get('resident',False)
-   
-    
-    # write the input data to the databse
-    db.session.add(Store_Week_data(week, block, resident, level))
-    db.session.commit()
-    
-    # render result 
-    result = calculate(form)
-  weekDatas = Store_Week_data.query.all()
-
-  # render the index.html file stored in the templates folder
-  return render_template('week.html', result=result, weekDatas=weekDatas)
-
-
-
-@app.route('/myData', methods=['GET'])
-def myData():
-  rotationDatas = Store_Rotation_data.query.all()
-  return render_template('myData.html', rotationDatas=rotationDatas)
-
-@app.route('/myData2', methods=['GET'])
-def myData2():
-  residentDatas = Store_Resident_data.query.all()
-  return render_template('myData2.html', residentDatas=residentDatas)
+# @app.route('/myData2', methods=['GET'])
+# def myData2():
+#   residentDatas = Store_Resident_data.query.all()
+#   return render_template('myData2.html', residentDatas=residentDatas)
 
 @app.route('/guide')
 def guide():
@@ -520,87 +328,9 @@ def deleteResident(id):
   try:
     db.session.delete(resident_to_delete)
     db.session.commit()
-    return redirect('/')
+    return redirect('/resident')
   except:
     return "Deletion Problem"
-
-#delete the rotation information and redirect to the same page 
-@app.route('/deleteRotation/<int:id>')
-def deleteRotation(id):
-  # get the line of data by querying its id
-  rotation_to_delete = Store_Rotation_data.query.get_or_404(id)
-  try:
-    db.session.delete(rotation_to_delete)
-    db.session.commit()
-    return redirect('/rotation')
-  except:
-    return "Deletion Problem"
-
-#delete the block information and redirect to the same page 
-@app.route('/deleteBlock/<int:id>')
-def deleteBlock(id):
-  # get the line of data by querying its id
-  block_to_delete = Store_Block_data.query.get_or_404(id)
-  #try to delete the data
-  try:
-    db.session.delete(block_to_delete)
-    db.session.commit()
-    return redirect('/Block')
-  except:
-    return "Deletion Problem"
-
-#delete the preference information and redirect to the same page 
-@app.route('/deletePref/<int:id>')
-def deletePref(id):
-  # get the line of data by querying its id
-  pref_to_delete = Store_Pref_data.query.get_or_404(id)
-  #try to delete the data
-  try:
-    db.session.delete(pref_to_delete)
-    db.session.commit()
-    return redirect('/preference')
-  except:
-    return "Deletion Problem"
-
-#delete the priority information and redirect to the same page 
-@app.route('/deletePriority/<int:id>')
-def deletePriority(id):
-  # get the line of data by querying its id
-  priority_to_delete = Store_Priority_data.query.get_or_404(id)
-  #try to delete the data
-  try:
-    db.session.delete(priority_to_delete)
-    db.session.commit()
-    return redirect('/priority')
-  except:
-    return "Deletion Problem"
-
-#delete the vacation information and redirect to the same page 
-@app.route('/deleteVacation/<int:id>')
-def deleteVacation(id):
-  # get the line of data by querying its id
-  vacation_to_delete = Store_Vacation_data.query.get_or_404(id)
-  #try to delete the data
-  try:
-    db.session.delete(vacation_to_delete)
-    db.session.commit()
-    return redirect('/vacation')
-  except:
-    return "Deletion Problem"
-
-#delete the impossible assignment information and redirect to the same page 
-@app.route('/deleteImpo/<int:id>')
-def deleteImpo(id):
-  # get the line of data by querying its id
-  impo_to_delete = Store_Impo_data.query.get_or_404(id)
-  #try to delete the data
-  try:
-    db.session.delete(impo_to_delete)
-    db.session.commit()
-    return redirect('/impossible')
-  except:
-    return "Deletion Problem"
-
 
 
 #update 
@@ -618,116 +348,6 @@ def updateResident(id):
       return "There is a problem"
   else:
     return render_template('updateResident.html', resident_to_update=resident_to_update)
-
-
-#update 
-@app.route('/updateRotation/<int:id>', methods=['GET', 'POST'])
-def updateRotation(id):
-  rotation_to_update = Store_Rotation_data.query.get_or_404(id)
-  if request.method == 'POST':
-    form = request.form
-    # Store data to table
-    rotation_to_update.rotationName = request.form['rotationName']
-    rotation_to_update.mustDo = request.form['mustDo']
-    rotation_to_update.busy = request.form['busy']
-    rotation_to_update.p_min = request.form['p_min']
-    rotation_to_update.p_max = request.form['p_max']
-    try:
-      db.session.commit()
-      return redirect("/rotation")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updateRotation.html', rotation_to_update=rotation_to_update)
-
-
-#update 
-@app.route('/updateBlock/<int:id>', methods=['GET', 'POST'])
-def updateBlock(id):
-  block_to_update = Store_Block_data.query.get_or_404(id)
-  if request.method == 'POST':
-    form = request.form
-    # Store data to table
-    block_to_update.blockNum = request.form.get('blockNum', False)
-    try:
-      db.session.commit()
-      return redirect("/Block")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updateBlock.html', block_to_update=block_to_update)
-
-
-
-#update 
-@app.route('/updatePreference/<int:id>', methods=['GET', 'POST'])
-def updatePreference(id):
-  preference_to_update = Store_Pref_data.query.get_or_404(id)
-  if request.method == 'POST':
-    # Store data to table
-    preference_to_update.residentname = request.form.get('pref_people', False)
-    preference_to_update.rotationName = request.form.get('pref_rotation', False)
-    preference_to_update.block = request.form.get('pref_block', False)
-    try:
-      db.session.commit()
-      return redirect("/preference")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updatePreference.html', preference_to_update=preference_to_update)
-
-
-#update 
-@app.route('/updatePriority/<int:id>', methods=['GET', 'POST'])
-def updatePriority(id):
-  priority_to_update = Store_Priority_data.query.get_or_404(id)
-  if request.method == 'POST':
-    # Store data to table
-    priority_to_update.residentname = request.form.get('pri_people', False)
-    priority_to_update.rotationName = request.form.get('pri_rotation', False)
-    priority_to_update.block = request.form.get('pri_block', False)
-    try:
-      db.session.commit()
-      return redirect("/priority")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updatePriority.html', priority_to_update=priority_to_update)
-
-
-#update 
-@app.route('/updateImpo/<int:id>', methods=['GET', 'POST'])
-def updateImpo(id):
-  impossible_to_update = Store_Impo_data.query.get_or_404(id)
-  if request.method == 'POST':
-    # Store data to table
-    impossible_to_update.residentname = request.form.get('imp_people', False)
-    impossible_to_update.rotationName = request.form.get('imp_rotation', False)
-    impossible_to_update.block = request.form.get('imp_block', False)
-    try:
-      db.session.commit()
-      return redirect("/impossible")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updateImpo.html', impossible_to_update=impossible_to_update)
-
-#update 
-@app.route('/updateVacation/<int:id>', methods=['GET', 'POST'])
-def updateVacation(id):
-  vacation_to_update = Store_Vacation_data.query.get_or_404(id)
-  if request.method == 'POST':
-    # Store data to table
-    vacation_to_update.residentname = request.form.get('vac_people', False)
-    vacation_to_update.block = request.form.get('vac_block', False)
-    try:
-      db.session.commit()
-      return redirect("/vacation")
-    except:
-      return "There is a problem"
-  else:
-    return render_template('updateVacation.html', vacation_to_update=vacation_to_update)
-
 
 def calculate(form):
   result = "!"

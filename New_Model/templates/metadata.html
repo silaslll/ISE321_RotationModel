@@ -8,36 +8,27 @@
 
 <!-- Allow user to add input  -->
 <div id="calc" >
-  <h1>Week </h1>
+  <h1>Metadata </h1>
   <!-- <p>Please enter details to run the model:</p>  -->
 
-  <form action="{{ url_for('week') }}" method="POST">
+  <form action="{{ url_for('metadata') }}" method="POST">
     
-    <br>
-    <label>Enter week:</label>
-    <input type="text" name="week" id = "res_name">
-    <br>
-    <label>Enter Block:</label>
-    <input type="number" name="block" id = "res_block">
-    <br>
-    <label>Enter Resident:</label>
-    <input type="text" name="resident" id = "res_name">
-    <br>
-    <label>Enter Level:</label>
-    <input type="number" name="level" id = "res_level">
-
-    <!-- Annotation -->
+    <label>Enter the start date for the model:</label>
+    <input type="text" name="startDate" id = "res_startDate">
+    <label>Enter the number of weeks for the year:    </label>
+    <input type="number" name="weeks" id = "res_week">
+    <!-- Annotation
     <p style="color:rgb(32, 135, 144);font-size:14px;">
       *The people not included in the "All Year Residents" are those that do not follow the general 
       requirements for example the cardiothoracic or partial year residents </p>
     <br>
-  
+   -->
 
     <input class="button" type="submit" name="Submit" value="Submit">
   </form>
   <br><br>
   {% if result %}
-    <h3>The week has successfully been stored {{result}}</h3>
+    <h3>The Metadata has successfully been stored {{result}}</h3>
     <br>
     
 {% endif %}
@@ -47,24 +38,18 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-    <th scope="col" class="tcolumn">Week</th>
-    <th scope="col" class="tcolumn">Block</th>
-      <th scope="col" class="tcolumn">Resident</th>
-      <th scope="col" class="tcolumn">Level</th>
-      
+      <th scope="col" class="tcolumn">Start Date</th>
+      <th scope="col" class="tcolumn">Weeks</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   <tbody class="tbody">
 
-    {% for weekData in weekDatas %}
+    {% for metadataData in metadataDatas %}
     <tr class="list-item">
-      <td style="text-align: center;">{{ weekData.week }}</td>
-      <td style="text-align: center;">{{ weekData.block }}</td>
-      <td style="text-align: center;">{{ weekData.resident }}</td>
-      <td style="text-align: center;">{{ weekData.level }}</td>
-          
+      <td style="text-align: center;">{{ metadataData.startDate }}</td>
+      <td style="text-align: center;">{{ metadataData.weeks }}</td>
       <td><a href = ""> Delete </a></td>
       <td><a href = ""> Update </a></td>
     </div>

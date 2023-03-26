@@ -1,0 +1,104 @@
+
+<!--This file allows user to input, view and delete resident information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Department </h1>
+  <!-- <p>Please enter details to run the model:</p>  -->
+
+  <form action="{{ url_for('department') }}" method="POST">
+    
+    <label>Enter Department Name:</label>
+    <input type="text" name="name" id = "res_name">
+
+    <!-- Enter whether all year resident -->
+    <label>Is this a busy department?:</label>
+    
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
+    <label class="form-check-label" for="busy-option">
+      Busy
+    </label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="busy" value="n" id="notBusy-option" checked>
+    <label class="form-check-label" for="notBusy-option">
+      Not Busy
+    </label>
+      </div>
+
+    <label>Enter Min number of class1:</label>
+    <input type="number" name="minClass_1" id = "res_minClass_1">
+
+    <label>Enter Min number of class2:</label>
+    <input type="number" name="minClass_2" id = "res_minClass_2">
+
+    <label>Enter Min number of class3:</label>
+    <input type="number" name="minClass_3" id = "res_minClass_3">
+
+    <label>Enter Max number of class1:</label>
+    <input type="number" name="maxClass_1" id = "res_maxClass_1">
+
+    <label>Enter Max number of class2:</label>
+    <input type="number" name="maxClass_2" id = "res_maxClass_2">
+
+    <label>Enter Max number of class3:</label>
+    <input type="number" name="maxClass_3" id = "res_maxClass_3">
+
+    <label>Enter Max number of residents on vacation:</label>
+    <input type="number" name="max_res_vacation" id = "res_max_res_vacation">
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The department has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">Department</th>
+      <th scope="col" class="tcolumn">busy</th>
+      <th scope="col" class="tcolumn">minClass_1</th>
+      <th scope="col" class="tcolumn">minClass_2</th>
+      <th scope="col" class="tcolumn">minClass_3</th>
+      <th scope="col" class="tcolumn">maxClass_1</th>
+      <th scope="col" class="tcolumn">maxClass_2</th>
+      <th scope="col" class="tcolumn">maxClass_3</th>
+      <th scope="col" class="tcolumn">Max number of residents on vacation</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+    {% for departmentData in departmentDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ departmentData.name }}</td>
+      <td style="text-align: center;">{{ departmentData.busy }}</td>
+      <td style="text-align: center;">{{ departmentData.minClass_1 }}</td>
+      <td style="text-align: center;">{{ departmentData.minClass_2 }}</td>
+      <td style="text-align: center;">{{ departmentData.minClass_3 }}</td>
+      <td style="text-align: center;">{{ departmentData.maxClass_1 }}</td>
+      <td style="text-align: center;">{{ departmentData.maxClass_2 }}</td>
+      <td style="text-align: center;">{{ departmentData.maxClass_3 }}</td>
+      <td style="text-align: center;">{{ departmentData.max_res_vacation }}</td>
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+

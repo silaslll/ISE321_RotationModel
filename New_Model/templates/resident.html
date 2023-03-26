@@ -13,37 +13,19 @@
 
   <form action="{{ url_for('resident') }}" method="POST">
     
-    <br>
     <label>Enter Resident Name:</label>
-    <input type="text" name="residentName" id = "res_name">
-    <br>
-    <label>Enter Resident Level:</label>
-    <input type="number" name="level" id = "res_level">
+    <input type="text" name="name" id = "res_name">
+    <label>Enter Resident Class:</label>
+    <input type="text" name="residentClass" id = "res_residentClass">
 
     
-    <br>
-    <!-- Enter whether all year resident -->
-    <label>Is this an all-year resident:</label>
-    
-    <div class="form-check">
-    <input class="form-check-input" type="radio" name="allYear" value="y" id="allYear-option">
-    <label class="form-check-label" for="allyear-option">
-      All-Year resident
-    </label>
-    </div>
-    <div class="form-check">
-    <input class="form-check-input" type="radio" name="allYear" value="n" id="notAllYear-option" checked>
-    <label class="form-check-label" for="notAllYear-option">
-      Not All-Year resident
-    </label>
-      </div>
+    <label>Enter Vacation Request 1:</label>
+    <input type="text" name="vacationRequest_1" id = "res_vacationRequest_1">
+    <label>Enter Vacation Request 2:</label>
+    <input type="text" name="vacationRequest_2" id = "res_vacationRequest_2">
+    <label>Enter Vacation Request 3:</label>
+    <input type="text" name="vacationRequest_3" id = "res_vacationRequest_3">
 
-    <label>Enter impossible working department:</label>
-    <input type="text" name="impossible_working_department" id = "res_impossible_working_department">
-
-    <label>Enter required working department:</label>
-    <input type="text" name="required_working_department" id = "res_required_working_department">
-    
     <label>Enter impossible working blocks:</label>
     <input type="text" name="impossible_working_blocks" id = "res_impossible_working_blocks"> 
 
@@ -69,10 +51,10 @@
   <thead class="thead">
     <tr class="list-header">
       <th scope="col" class="tcolumn">Resident</th>
-      <th scope="col" class="tcolumn">Level</th>
-      <th scope="col" class="tcolumn">All-Year</th>
-      <th scope="col" class="tcolumn">Impossible Working Department</th>
-      <th scope="col" class="tcolumn">Required Working Department</th>
+      <th scope="col" class="tcolumn">Class</th>
+      <th scope="col" class="tcolumn">Vacation Request 1</th>
+      <th scope="col" class="tcolumn">Vacation Request 2</th>
+      <th scope="col" class="tcolumn">Vacation Request 3</th>
       <th scope="col" class="tcolumn">Impossible Working Blocks</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
@@ -83,10 +65,10 @@
     {% for residentData in residentDatas %}
     <tr class="list-item">
       <td style="text-align: center;">{{ residentData.name }}</td>
-      <td style="text-align: center;">{{ residentData.level }}</td>
-      <td style="text-align: center;">{{ residentData.allYear }}</td> 
-      <td style="text-align: center;">{{ residentData.impossible_working_department }}</td>
-      <td style="text-align: center;">{{ residentData.required_working_department }}</td>  
+      <td style="text-align: center;">{{ residentData.residentClass }}</td>
+      <td style="text-align: center;">{{ residentData.vacationRequest_1 }}</td> 
+      <td style="text-align: center;">{{ residentData.vacationRequest_2 }}</td>
+      <td style="text-align: center;">{{ residentData.vacationRequest_3 }}</td>  
       <td style="text-align: center;">{{ residentData.impossible_working_blocks}}</td>    
       <td><a href = "/deleteResident/{{residentData.residentId}}"> Delete </a></td>
       <td><a href = "/updateResident/{{residentData.residentId}}"> Update </a></td>

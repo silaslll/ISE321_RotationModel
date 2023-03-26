@@ -1,0 +1,79 @@
+
+<!--This file allows user to input, view and delete resident information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Class </h1>
+  <!-- <p>Please enter details to run the model:</p>  -->
+
+  <form action="{{ url_for('myClass') }}" method="POST">
+    
+
+    <label>Enter class name:</label>
+    <input type="text" name="name" id = "res_name">
+
+    <label>Enter number of block:</label>
+    <input type="number" name="block" id = "res_block">
+
+    <label>Enter required departments:</label>
+    <input type="text" name="requiredDepartments" id = "res_requiredDepartments">
+
+    <label>Enter impossible departments:</label>
+    <input type="text" name="impossibleDepartments" id = "res_impossibleDepartments">
+
+    <label>Enter Department min:</label>
+    <input type="text" name="deptMin" id = "res_deptMin">
+
+    <label>Enter Department max:</label>
+    <input type="text" name="deptMax" id = "res_deptMax">
+
+  
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The class has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">name</th>
+      <th scope="col" class="tcolumn">block</th>
+      <th scope="col" class="tcolumn">requiredDepartments</th>
+      <th scope="col" class="tcolumn">impossibleDepartments</th>
+      <th scope="col" class="tcolumn">deptMin</th>
+      <th scope="col" class="tcolumn">deptMax</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+    {% for classData in classDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ classData.name }}</td>
+      <td style="text-align: center;">{{ classData.block }}</td>
+      <td style="text-align: center;">{{ classData.requiredDepartments }}</td>
+      <td style="text-align: center;">{{ classData.impossibleDepartments }}</td>
+      <td style="text-align: center;">{{ classData.deptMin }}</td>
+      <td style="text-align: center;">{{ classData.deptMax }}</td>
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+
