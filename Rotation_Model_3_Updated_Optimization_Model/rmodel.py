@@ -2,6 +2,7 @@ import sys
 from operator import truediv
 import gurobipy as gp
 from gurobipy import GRB
+from gurobipy import quicksum
 import pandas as pd
 import numpy as np
 from numpy import nan
@@ -40,17 +41,199 @@ def main():
     solve(m)
     
 
-def getData(dict,c,con):
+def getData(dict,c,con):    
+    #Get number of classes of residents
+    num_classes = 5 #c.execute('SELECT number FROM class WHERE number IS NOT ""')
+    classes = []
+    classes = {'1', '2', '3', '4', '5'}
+    ##E set, the set of residents levels
+    # for n in range(num_classes):
+    #     classes.append("PGY{}".format(n+1))  #create the E set, (PGY1-5)
+    # print(classes)
+    ##Re set, the set of residents in level e of set E 
+    residentsE = {}
+    residentsE[1] = {"Sarah", "Kennedy", "Jackson"} #PGY1
+    residentsE[2] = {"Jeff", "Anna", "Fran"}
+    residentsE[3] = {"Brianna", "Aditi", "Clara"}
+    residentsE[4] = {"Prav", "Shayne", "Sam", "Safia"}
+    residentsE[5] = {"Sydney", "Tim", "Amanda"} #PGY5
+    # for e in classes:
+    #     residentsE[e] = c.execute('SELECT resident_name FROM residents WHERE class = ?', (e,)).fetchall()
+    ##R the set of all residents
+#     residents = c.execute('SELECT resident_name FROM residents').fetchall() 
+    residents = {"Sarah", "Kennedy", "Jackson", "Jeff", "Anna", "Fran", "Brianna", "Aditi", "Clara", "Prav", "Shayne", "Sam", "Safia", "Sydney", "Tim", "Amanda"}
+    ##Be the set of blocks for residents in level e
+    blocksE = {}
+    blocksE[0] = {1,2,3,4,5,6,7,8,9,10,11,12}
+    blocksE[1] = {1,2,3,4,5,6,7,8} ##currently hardcoded, would be created by app based on number given by user (count up to number of blocks specified for year)
+    blocksE[2] = {1,2,3,4,5,6,7,8,9} ##currently hardcoded, would be created by app based on number given by user (count up to number of blocks specified for year)
+    blocksE[3] = {1,2,3,4,5,6,7} ##currently hardcoded, would be created by app based on number given by user (count up to number of blocks specified for year)
+    blocksE[4] = {1,2,3,4,5,6}
+#   for e in classes:
+#        blocksE[e] = c.execute('SELECT number_of_blocks FROM classes WHERE class = ?', (e)).fetchall()     
+    ##gets the max number of blocks 
+    max = blocksE[0]
+    maxIndex = 0
+    print(len(blocksE[0]))
+    for e in range(num_classes):
+        # print(max)
+        if e == num_classes: 
+            break
+        print(len(blocksE[e]))
+        if len(blocksE[e]) > len(max):
+            max = blocksE[e] #the set for the largest set of blocks
+            maxIndex = e #the number of blocks in the largest set of blocks
+      ##Total number of weeks in planning horizon
+    weeks = {}
+    weeks = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52}
+    #   weeks = c.execute('SELECT total_weeks FROM weeks')
+#     ##Wbe the set of weeks in each block b of residents in level e
+    weeksBE = {}
+#     # for e in classes:
+#     #     for b in blocksE
+#     #         weeksBE = c.execute('SELECT weeks FROM blocks WHERE class = ?')
+    ##figure out how many weeks per block:
+    # for e in range(num_classes):
+    #     print(len(weeks))
+    #     print(len(blocksE[e]))
+    #     weekPerBlock = len(weeks)/len(blocksE[e])
+    #     print(weekPerBlock)
+#######QUESTION:::How do we specify which blocks are longer and which are shorter?
+    # for e in range(num_classes):
+    #     for b in blocksE[e]:
+    #         weeksBE['{}'.format(e),b] = np.arange(1,6) ##need to adjust so it actually changes
+    #         print("weeksBE: {} {} : ".format(b,e+1), weeksBE['{}'.format(e),b])
+##this is hardcoded below until we can figure out how to adjust it to what blocks are longer vs shorter above
+    weeksBE['1',1] = np.arange(1,6)
+    weeksBE['1',2]=np.arange(6,10)##figure out how to input the given values, likely through a loop
+    weeksBE['1',3]=np.arange(10,15)
+    weeksBE['1',4]=np.arange(15,19)
+    weeksBE['1',5]=np.arange(19,24)	
+    weeksBE['1',6]=np.arange(24,28)
+    weeksBE['1',7]=np.arange(28,33)
+    weeksBE['1',8]=np.arange(33,36)
+    weeksBE['1',9]=np.arange(36,39)
+    weeksBE['1',10]=np.arange(39,45)
+    weeksBE['1',11]=np.arange(45,49)
+    weeksBE['1',12]=np.arange(49,54)
+    #Define weeks in blocks for year 2
+    weeksBE['2',1]=np.arange(1,8)
+    weeksBE['2',2]=np.arange(8,14)
+    weeksBE['2',3]=np.arange(14,20)
+    weeksBE['2',4]=np.arange(20,27)
+    weeksBE['2',5]=np.arange(27,34)
+    weeksBE['2',6]=np.arange(34,40)
+    weeksBE['2',7]=np.arange(41,47)
+    weeksBE['2',8]=np.arange(47,54)
+    #Define weeks in blocks for year 3
+    weeksBE['3',1]=np.arange(1,7)
+    weeksBE['3',2]=np.arange(7,13)
+    weeksBE['3',3]=np.arange(13,18)
+    weeksBE['3',4]=np.arange(18,24)
+    weeksBE['3',5]=np.arange(24,30)
+    weeksBE['3',6]=np.arange(30,36)
+    weeksBE['3',7]=np.arange(36,42)
+    weeksBE['3',8]=np.arange(42,48)
+    weeksBE['3',9]=np.arange(48,54)
+    #Define weeks in blocks for year 4
+    weeksBE['4',1]=np.arange(1,9)
+    weeksBE['4',2]=np.arange(9,16)
+    weeksBE['4',3]=np.arange(16,23)
+    weeksBE['4',4]=np.arange(24,31)
+    weeksBE['4',5]=np.arange(31,38)
+    weeksBE['4',6]=np.arange(38,46)
+    weeksBE['4',7]=np.arange(46,54)
+    #Define weeks in blocks for year 5
+    weeksBE['5',1]=np.arange(1,10)
+    weeksBE['5',2]=np.arange(10,19)
+    weeksBE['5',3]=np.arange(19,28)
+    weeksBE['5',4]=np.arange(28,37)
+    weeksBE['5',5]=np.arange(37,46)
+    weeksBE['5',6]=np.arange(46,54)
 
+
+
+    departments = {}
+    departments = {"heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"}
+    ##set Dimp,r = the set of class e's impossible working departments
+    departmentsImp = {}
+    # for e in range(num_classes):
+    #    departmentsImp[e] = {"input from database"}
+    departmentsImp[1]={"heart", "brain"}
+    departmentsImp[2]={"stomach"}
+    departmentsImp[3]={"ER", "ortho"}
+    departmentsImp[4]={"heart"}
+    departmentsImp[5]={"brain"}
+
+    ##set Dreq,r = the set of class e's required working departments
+    departmentsReq = {}
+    # for e in range(num_classes):
+    #     departmentsReq[e] = {"input from database"}
+    departmentsReq[1]={"stomach", "ER"}
+    departmentsReq[2]={"plastic"}
+    departmentsReq[3]={"ear", "heart"}
+    departmentsReq[4]={"brain"}
+    departmentsReq[5]={"stomach"}
+
+    ##Dbusy, the set of busy departments
+    departmentsBusy = {}
+    # departmentsBusy = c.execute("SELECT busy_departments FROM departments")
+    departmentsBusy = {"heart", "ER", "brain"}
+    ##Bimp,r the set of residents r's impossible working blocks
+    blocksImp = {}
+    # for r in residents:
+        # blocksImp[r] = {"input from database"}
+    blocksImp["Sarah"] = {1,14}
+    blocksImp["Jackson"] = {2,18}
+    blocksImp["Fran"] = {7,20}
+    blocksImp["Aditi"] = {16,35}
+    # residents = {"Sarah", "Kennedy", "Jackson", "Jeff", "Anna", "Fran", "Brianna", "Aditi", "Clara", "Prav", "Shayne", "Sam", "Safia", "Sydney", "Tim", "Amanda"}
+
+    ##Wvac,r the set of weeks that resident r requests for vacations
+    weeksVac = {}
+    # for r in residents:
+    #     weeksVac[r] = {"input from database"}
+    weeksVac["Kennedy"] = {12,19}
+    weeksVac["Jeff"] = {13,45}
+    weeksVac["Anna"] = {22,36}
+    weeksVac["Aditi"] = {2,48}
+    
+
+
+    dict["classes"] = classes
+    print("length", len(dict["classes"]))
+    dict["residentsE"] = residentsE
+    dict["residents"] = residents
+    dict["blocksE"] = blocksE
+    dict["departments"] = departments
+    dict["departmentsImp"] = departmentsImp
+    #Block_Range=np.arange(1,13) 
+    Block_Range = max
+    dict["block_range"] = Block_Range
+    dict["weeks"] = weeks
+    dict["weeksBE"] = weeksBE
+    dict["departmentsImp"] = departmentsImp
+    dict["departmentsReq"] = departmentsReq
+    dict["departmentsBusy"] = departmentsBusy
+    dict["blocksImp"] = blocksImp
+    dict["weeksVac"] = weeksVac
+    print(dict["residents"])
+
+
+    ###Try to print
+    # for e in range(1,len(dict["residents"])+1):
+    #     print("e: ", e, "in range (len(dict[residents])): ", len(dict["residents"]))
+    print("classes: ", classes)
+    print("residentsE: ", residentsE[4])
+    for e in classes:
+        print("E: ", e)
+        print("residentsE: ", residentsE[3])
+        for r in residentsE[e]:
+            print("hello")
+        #     print("Residents[1]", residentsE[e])
+                        
     people = c.execute('SELECT name FROM resident WHERE name IS NOT ""').fetchall()
-    # firstYears =
-    # secondYears =
-    # thirdYears =
-    # fourthYears = 
-    # fifthYears = s
-    # yearResidents = c.execute('SELECT name FROM resident Where year = "y"').fetchall() ##allYear = "y"').fetchall()
-    ## get an input that gives the resident Type & year and how long the blocks are for that year/how many blocks in the time period
-    ##impBlock[residents] = list of impossible blocks for each resident
+    allYearResidents = c.execute('SELECT name FROM resident Where allYear = "y"').fetchall()
     rotations = c.execute('SELECT Rotation_name FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
     mustDo = c.execute('SELECT Rotation_name FROM rotation Where mustDo = "y"').fetchall()
     busyRotations = c.execute('SELECT Rotation_name FROM rotation Where busy = "y"').fetchall()
@@ -118,19 +301,10 @@ def getData(dict,c,con):
     for r in range(len(rotations)):
         p_min[rotations[r]] = p_min_values[r]
         p_max[rotations[r]] = p_max_values[r]
- ## Add t_min and t_max
-    t_min_values = c.execute('SELECT t_min FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    t_max_values = c.execute('SELECT t_max FROM rotation WHERE Rotation_name IS NOT ""').fetchall()
-    t_min = {}
-    t_max = {}
-    for r in range(len(rotations)):
-        t_min[rotations[r]] = t_min_values[r]
-        t_max[rotations[r]] = t_max_values[r]
 
     dict['people'] = people
-    ##change^ to dict['residents'] = residents
+    dict['allYearResidents'] = allYearResidents
     dict['rotations'] = rotations
-    ##change^ to dict['departments'] = departments ?
     dict['mustDo'] = mustDo
     dict['busyRotations'] = busyRotations 
     dict['blocks'] = blocks
@@ -140,97 +314,6 @@ def getData(dict,c,con):
     dict['vacation'] = vacation
     dict['p_min'] = p_min
     dict['p_max'] = p_max
-
-    ##updated models sets: ############
-    # residents = {             ##set Re,    ex. residents['1'] = list of all residents in year 1 names
-    # '1' = firstYears, #residents level(year) 1
-    # '2' = secondYears, #residents level(year) 2
-    # '3' = thirdYears, #residents level(year) 3
-    # '4' = fourthYears, #residents level(year) 4
-    # '5' = fifthYears #residents level(year) 5
-    # }
-    # # combine the levels into a single Residents set
-    # dict['allResidents'] = residents['1']+residents['2']+residents['3']+residents['4']+residents['5']     #set R
-
-    # dict['levels'] = [1,2,3,4,5] #set E, set of residents levels
-    
-    #Define weeks in blocks for year 1, Wbe set
-    ##once I have this working, adjust so that it can change for different week values 
-    # Wblock['1',1]=np.arange(1,6) #weeks in block for year 1, block 1, (weeks 1-5)
-	# Wblock['1',2]=np.arange(6,10) ##figure out how to input the given values, likely through a loop
-	# Wblock['1',3]=np.arange(10,15)
-	# Wblock['1',4]=np.arange(15,19)
-	# Wblock['1',5]=np.arange(19,24)
-	# Wblock['1',6]=np.arange(24,28)
-	# Wblock['1',7]=np.arange(28,33)
-	# Wblock['1',8]=np.arange(33,36)
-	# Wblock['1',9]=np.arange(36,39)
-	# Wblock['1',10]=np.arange(39,45)
-	# Wblock['1',11]=np.arange(45,49)
-	# Wblock['1',12]=np.arange(49,54)
-    #Define weeks in blocks for year 2
-	# Wblock['2',1]=np.arange(1,8)
-	# Wblock['2',2]=np.arange(8,14)
-	# Wblock['2',3]=np.arange(14,20)
-	# Wblock['2',4]=np.arange(20,27)
-	# Wblock['2',5]=np.arange(27,34)
-	# Wblock['2',6]=np.arange(34,40)
-	# Wblock['2',7]=np.arange(41,47)
-	# Wblock['2',8]=np.arange(47,54)
-    #Define weeks in blocks for year 3
-	# Wblock['3',1]=np.arange(1,7)
-	# Wblock['3',2]=np.arange(7,13)
-	# Wblock['3',3]=np.arange(13,18)
-	# Wblock['3',4]=np.arange(18,24)
-	# Wblock['3',5]=np.arange(24,30)
-	# Wblock['3',6]=np.arange(30,36)
-	# Wblock['3',7]=np.arange(36,42)
-	# Wblock['3',8]=np.arange(42,48)
-	# Wblock['3',9]=np.arange(48,54)
-    #Define weeks in blocks for year 4
-	# Wblock['4',1]=np.arange(1,9)
-	# Wblock['4',2]=np.arange(9,16)
-	# Wblock['4',3]=np.arange(16,23)
-	# Wblock['4',4]=np.arange(24,31)
-	# Wblock['4',5]=np.arange(31,38)
-	# Wblock['4',6]=np.arange(38,46)
-	# Wblock['4',7]=np.arange(46,54)
-    #Define weeks in blocks for year 5
-	# Wblock['5',1]=np.arange(1,10)
-	# Wblock['5',2]=np.arange(10,19)
-	# Wblock['5',3]=np.arange(19,28)
-	# Wblock['5',4]=np.arange(28,37)
-	# Wblock['5',5]=np.arange(37,46)
-	# Wblock['5',6]=np.arange(46,54)
-
-    #combine the weeks
-    # dict['weeks'] = weeks #set W, set of weeks in the planning horizon, (Wbe for all e in E and all b)
-    
-    
-    # dict['impDeptR'] = {
-    # '1' = #impossible depts for year 1 residents
-    # '2' = 
-    # '3' = 
-    # '4' = 
-    # '5' =
-    # }
-    # impDeptR #set DimpR, the set of resident R's impossible working departments
-    
-    # dict['reqDeptR'] = reqDeptR #set DreqR, the set of resident R's required working departments
-    # dict['busyDept'] = busyDept #set Dbusy, the set of busy departments
-    # dict['impBlocksR'] = impBlocksR #set BimpR, the set of resident R's impossible working departments
-    # dict['vacWeeksR'] = vacWeeksR #set WvacR, the set of weeks that resident r requests for vacation
-    
-    ##Parameters:
-    # dict['TminRD'] = SELECT: TminRD #TminRD, resident r's minimum required working time (in blocks) in department d
-    # dict['TmaxRD'] = TmaxRD #TmaxRD, resident r's maximum required working time (in blocks) in department d
-    # dict['RminEDB'] = RminEDB #RminEDB, minimum number of year e's residents required in department d in block b of Be
-    # dict['RmaxEDB'] = RmaxEDB #RmaxEDB, maximum number of year e's residents required in department d in block b of Be
-    # dict['TvacR'] = TvacR #TvacR, resident r's required weeks of vacation
-    # dict['DvacDW'] = DvacDW #DvacDW, max number of year e's residents in vacation in department d in week W
-    # dict['RvacRB'] - RvacRB #RvacRB, max number of resident r's vacations allowed in block b
-    #############
-
 
     # p_min = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 1, "Rotation4": 0}...
     # p_max = {"Rotation1": 1, "Rotation2": 1, "Rotation3": 2, "Rotation4": 2}...
@@ -244,58 +327,56 @@ def checkDuplicates(list):
         return True
 
 def model(m, dict,p_min, p_max):
-    
+
+    ##New Decision Variables
+    # z = m.addVars(dict["residentsE"], dict["departments"], dict["blocksE"] ) ##If we use the levels, can we make sure they match?
+    z = m.addVars(dict["residents"],dict["departments"],dict["block_range"],vtype=GRB.BINARY,name='z')
+    # x = m.addVars(dict["residents"],dict["departments"],dict["weeks"],vtype = GRB.BINARY, name='x')
+    v = m.addVars(dict["residents"],dict["departments"],dict["weeks"],vtype=GRB.BINARY,name='v')
+	# m.update() ##what does this do?
+
+    # print("blocks")
+    # print(dict["blocksE"])
+    # print("blocks2")
+    # print(dict["blocksE"][0])
+
+    ######
     # Decision Variables 
     # Defines the decision variables (x[p,r,b]=1 if person p assigned to rotation r in block b; x[p,r,b]=0 otherwise)
-    x = m.addVars(dict['people'], dict['rotations'], dict['blocks'], vtype=GRB.BINARY, name = "x") ##probably should add year to decision variables
-    
-    # ##new decision variables
-    # #defines the decision variable (x[r,d,w]=1, if person/resident r is assigned to rotation/department d, in week w; x[r,d,w]=0 otherwise)
-    # x = m.addVars(dict['residents'], dict['departments'], dict['week'], vtype=GRB.BINARY, name="x")
-    # # defines the decision variable (v[r,d,v]=1 if person/resident r has a vacation in week w of rotation/department d; v[r,d,w]=0 otherwise)
-    # v = m.addVars(dict['residents'], dict['departments'], dict['vacation'], vtype=GRB.BINARY, name="v") ##is this how you would do this?
-    # defines the decision variable (z[r,d,b]=1, if person/resident r is assigned to rotation/department d, in block b; z[r,d,b]=0 otherwise)
-    # z = m.addVars(dict['residents'], dict['departments'], dict['blocks'])
+    x = m.addVars(dict['people'], dict['rotations'], dict['blocks'], vtype=GRB.BINARY, name = "x")
 
     # Defines variables for consecutive busy rotations
-    ##Remove the following variable in new one?
     y = m.addVars(dict['people'], dict['busyRotations'], dict['busyRotations'], dict['blocks'], vtype=GRB.BINARY, name = "y")
 
-    #############
-    # OBJECTIVE #
-    #############
-    
-
     m.setObjective(
-        sum(1 - y[(p,r1,r2,b)] for p in dict['people'] for r1 in dict['busyRotations'] for r2 in dict['busyRotations'] for b in dict['blocks']) - sum(x[(p, r, b)] for (p,r,b) in dict['preference']), sense = GRB.MINIMIZE
-        ##would I have anything in our set objective? currently ours is listed as 0...
-        ##or are we adding different options for the objective like Shutian mentioned in her paper?
-    )
-    ###############
-    # CONSTRAINTS #
-    ###############
-
-    constraints(m,p_min,p_max,dict,x,y) 
-    ##constraints(m,p_min,p_max,dict,x,y,z)
+        # sum(1 - y[(p,r1,r2,b)] for p in dict['people'] for r1 in dict['busyRotations'] for r2 in dict['busyRotations'] for b in dict['blocks']) - sum(x[(p, r, b)] for (p,r,b) in dict['preference']), sense = GRB.MINIMIZE)
+    	quicksum(v[r,d,w] for e in range(1,len(dict["classes"])+1) for r in dict["residentsE"][e] for d in dict["departments"] if d not in dict["departmentsImp"][e] for w in dict["weeksVac"][r]),GRB.MAXIMIZE)
     
-def constraints(m, p_min, p_max, dict,x,y): 
-    ##def constraints(m,p_min,p_max,dict,x,y,z):
+    # for e in range(1,len(dict["residents"])+1):
+    #     print("e: ", e, "in range (len(dict[residents])): ", len(dict["residents"]))
+
+
+
+    constraints(m,p_min,p_max,dict,x,y,z)
+    
+def constraints(m, p_min, p_max, dict,x,y,z):
+    ##New Constraints: 
+   
+    for e in range(len(dict["classes"])):
+        con_preass_1= m.addConstrs(z[r,d,b]==0 for d in dict["departments"] if d in dict["departments"] 
+							for r in dict["residentsE"][e] for b in dict["block_range"] if b not in dict["blocksE"][e])
+        
+
 
     # Ensures one person cannot be assigned two blocks at once
     m.addConstrs((sum(x[(p,r,b)] for r in dict['rotations']) == 1  for p in dict['people'] for b in dict['blocks']),name = "personOneAssignmentPerBlock")
-    ##^replace
-    ##m.addConstrs((sum(z[r,d,b] for d in dict['departments']) <= 1 for e in dict['year'] for r in dict['residents']['levels'] for b in dict['blocks']['levels'])) #constraint 1b
-
-    ##Ensures each resident is assigned once to every department
-    # m.addConstrs((sum(z[r,d,b]) for b in dict['blocks']['levels'] == 1 for e in dict['year'] for r in dict['residents']['levels'] for d in dict['departments']))
 
     # Ensures sufficient coverage for each rotation
     m.addConstrs((p_min[r]  <= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Min" )
     m.addConstrs((p_max[r]  >= sum([x[(p,r,b)] for p in dict['people']]) for r in dict['rotations'] for b in dict['blocks']), name = "rotationCoverage_Max" )
-    ##replace^
-    ##m.addConstrs(())
+
     # Ensures that all-year residents must do each must-do rotation
-    m.addConstrs((sum(x[(p,r,b)] for b in dict['blocks']) >= 1  for p in dict['yearResidents'] for r in dict['mustDo']), name = "year_mustdo") #"AllYear_mustdo")
+    m.addConstrs((sum(x[(p,r,b)] for b in dict['blocks']) >= 1  for p in dict['allYearResidents'] for r in dict['mustDo']), name = "AllYear_mustdo")
 
     # Ensures Priority Assignments are fulfilled
     m.addConstrs((x[(p,r,b)] == 1 for (p,r,b) in dict['priority']), name = "priority")  
@@ -332,7 +413,7 @@ def solve(m):
 
     # Store everything in a table group by resident name
     num = np.array(output)
-    sch = pd.DataFrame(num, columns=['Resident', 'Year', 'Rotation','Block'])
+    sch = pd.DataFrame(num, columns=['Resident','Rotation','Block'])
     sch.to_csv('./output.csv', index = False)
 
 
