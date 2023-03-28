@@ -1,0 +1,24 @@
+<div id="calc" >
+    <h1>Rotation Scheduling </h1>
+    <p> Please enter details to run the model:</p>
+  
+    <form action="/updatePreference/{{preference_to_update.prefId}}" method="POST">
+      
+      
+      <h5> Enter Preference Set Name: </h5>
+      <label> Person: <input type="text" name="pref_people" required  value = {{preference_to_update.residentname}}></label>
+      <label> Rotation: <input type="text" name="pref_rotation" required  value = {{preference_to_update.rotationName}}></label>
+      <label> Block: <input type="number" name="pref_block" min="1" required  value = {{preference_to_update.block}}></label>
+      <br><br>
+      
+  
+  
+      <input type="submit" name="Update" value="Update">
+    </form>
+    <br><br>
+    {% if result %}
+      <h3>The Preference Set has successfully been stored {{result}}</h3>
+      <br>
+  
+  {% endif %}
+  </div>

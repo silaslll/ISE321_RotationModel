@@ -1,0 +1,28 @@
+
+Gurobi 10.0.1 (win64, gurobi_cl) logging started Tue Mar 28 11:24:45 2023
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2024-03-19
+Using license file C:\Users\Josie\gurobi.lic
+
+Gurobi Optimizer version 10.0.1 build v10.0.1rc0 (win64)
+Copyright (c) 2023, Gurobi Optimization, LLC
+
+
+Error 10003: Unable to open file 'model.lp' for input
+
+
+Gurobi 10.0.1 (win64, gurobi_cl) logging started Tue Mar 28 11:25:09 2023
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2024-03-19
+Using license file C:\Users\Josie\gurobi.lic
+
+Gurobi Optimizer version 10.0.1 build v10.0.1rc0 (win64)
+Copyright (c) 2023, Gurobi Optimization, LLC
+
+
+Error 10012: Unknown file type for file 'rmodel.py'
+
