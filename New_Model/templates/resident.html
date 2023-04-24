@@ -9,25 +9,31 @@
 <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Resident </h1>
-  <!-- <p>Please enter details to run the model:</p>  -->
+  <!-- <p>Please details to run the model:</p>  -->
 
   <form action="{{ url_for('resident') }}" method="POST">
+
+    <label>Residency year:</label>
+    <select name="year" id="years" required>
+
+      {% for x in range(1, (yearInfo.years+1)) %}
+        <option value="{{ x }}">{{ x }}</option>
+      {% endfor %}
+    </select>
     
-    <label>Enter Resident Name:</label>
+    <label>Resident Name:</label>
     <input type="text" name="name" id = "res_name">
-    <label>Enter Resident Class:</label>
-    <input type="text" name="residentClass" id = "res_residentClass">
 
     
-    <label>Enter Vacation Request 1:</label>
-    <input type="text" name="vacationRequest_1" id = "res_vacationRequest_1">
-    <label>Enter Vacation Request 2:</label>
-    <input type="text" name="vacationRequest_2" id = "res_vacationRequest_2">
-    <label>Enter Vacation Request 3:</label>
-    <input type="text" name="vacationRequest_3" id = "res_vacationRequest_3">
-
-    <label>Enter impossible working blocks:</label>
+    <label>impossible working blocks:</label>
     <input type="text" name="impossible_working_blocks" id = "res_impossible_working_blocks"> 
+
+    <label>required working dept:</label>
+    <input type="text" name="rDept" id = "rDept"> 
+
+    <label>impossible working dept:</label>
+    <input type="text" name="iDept" id = "iDept"> 
+
 
     <!-- Annotation -->
     <p style="color:rgb(32, 135, 144);font-size:14px;">
@@ -50,12 +56,11 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
+      <th scope="col" class="tcolumn">Year</th>
       <th scope="col" class="tcolumn">Resident</th>
-      <th scope="col" class="tcolumn">Class</th>
-      <th scope="col" class="tcolumn">Vacation Request 1</th>
-      <th scope="col" class="tcolumn">Vacation Request 2</th>
-      <th scope="col" class="tcolumn">Vacation Request 3</th>
       <th scope="col" class="tcolumn">Impossible Working Blocks</th>
+      <th scope="col" class="tcolumn">required Working Dept</th>
+      <th scope="col" class="tcolumn">Impossible Working Dept</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
     </tr>
@@ -64,12 +69,11 @@
 
     {% for residentData in residentDatas %}
     <tr class="list-item">
+      <td style="text-align: center;">{{ residentData.year }}</td>
       <td style="text-align: center;">{{ residentData.name }}</td>
-      <td style="text-align: center;">{{ residentData.residentClass }}</td>
-      <td style="text-align: center;">{{ residentData.vacationRequest_1 }}</td> 
-      <td style="text-align: center;">{{ residentData.vacationRequest_2 }}</td>
-      <td style="text-align: center;">{{ residentData.vacationRequest_3 }}</td>  
-      <td style="text-align: center;">{{ residentData.impossible_working_blocks}}</td>    
+      <td style="text-align: center;">{{ residentData.impossible_working_blocks}}</td>  
+      <td style="text-align: center;">{{ residentData.rDept}}</td> 
+      <td style="text-align: center;">{{ residentData.iDept}}</td>   
       <td><a href = "/deleteResident/{{residentData.residentId}}"> Delete </a></td>
       <td><a href = "/updateResident/{{residentData.residentId}}"> Update </a></td>
     </div>

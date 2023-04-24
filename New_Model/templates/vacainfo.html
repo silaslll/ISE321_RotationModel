@@ -8,15 +8,15 @@
 
 <!-- Allow user to add input  -->
 <div id="calc" >
-  <h1>Metadata </h1>
+  <h1>Vacation Info </h1>
   <!-- <p>Please enter details to run the model:</p>  -->
 
-  <form action="{{ url_for('metadata') }}" method="POST">
+  <form action="{{ url_for('vacainfo') }}" method="POST">
     
-    <label>Start date for the model:</label>
-    <input type="text" name="startDate" id = "res_startDate">
-    <label>Number of weeks for the year:    </label>
-    <input type="number" name="weeks" id = "res_week">
+    <label>Number of Vacations:</label>
+    <input type="number" name="vacations" id = "vacations">
+    <label>Max Number of Vacation in Blocks:</label>
+    <input type="number" name="max" id = "max">
     <!-- Annotation
     <p style="color:rgb(32, 135, 144);font-size:14px;">
       *The people not included in the "All Year Residents" are those that do not follow the general 
@@ -28,7 +28,7 @@
   </form>
   <br><br>
   {% if result %}
-    <h3>The Metadata has successfully been stored {{result}}</h3>
+    <h3>The data has successfully been stored {{result}}</h3>
     <br>
     
 {% endif %}
@@ -38,18 +38,18 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">Start Date</th>
-      <th scope="col" class="tcolumn">Weeks</th>
+      <th scope="col" class="tcolumn">Number of Vacations</th>
+      <th scope="col" class="tcolumn">Max Number of Vacation</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   <tbody class="tbody">
 
-    {% for metadataData in metadataDatas %}
+    {% for vacainfoData in vacainfoDatas %}
     <tr class="list-item">
-      <td style="text-align: center;">{{ metadataData.startDate }}</td>
-      <td style="text-align: center;">{{ metadataData.weeks }}</td>
+      <td style="text-align: center;">{{ vacainfoData.vacations }}</td>
+      <td style="text-align: center;">{{ vacainfoData.max }}</td>
       <td><a href = ""> Delete </a></td>
       <td><a href = ""> Update </a></td>
     </div>

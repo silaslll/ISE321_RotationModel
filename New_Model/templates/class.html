@@ -9,27 +9,27 @@
 <!-- Allow user to add input  -->
 <div id="calc" >
   <h1>Class </h1>
-  <!-- <p>Please enter details to run the model:</p>  -->
+  <!-- <p>Please  details to run the model:</p>  -->
 
   <form action="{{ url_for('myClass') }}" method="POST">
     
 
-    <label>Enter class name:</label>
+    <label> class name:</label>
     <input type="text" name="name" id = "res_name">
 
-    <label>Enter number of block:</label>
+    <label> number of block:</label>
     <input type="number" name="block" id = "res_block">
 
-    <label>Enter required departments:</label>
+    <label> required departments:</label>
     <input type="text" name="requiredDepartments" id = "res_requiredDepartments">
 
-    <label>Enter impossible departments:</label>
+    <label> impossible departments:</label>
     <input type="text" name="impossibleDepartments" id = "res_impossibleDepartments">
 
-    <label>Enter Department min:</label>
+    <label> Department min:</label>
     <input type="text" name="deptMin" id = "res_deptMin">
 
-    <label>Enter Department max:</label>
+    <label> Department max:</label>
     <input type="text" name="deptMax" id = "res_deptMax">
 
   
@@ -50,10 +50,10 @@
     <tr class="list-header">
       <th scope="col" class="tcolumn">name</th>
       <th scope="col" class="tcolumn">block</th>
-      <th scope="col" class="tcolumn">requiredDepartments</th>
-      <th scope="col" class="tcolumn">impossibleDepartments</th>
-      <th scope="col" class="tcolumn">deptMin</th>
-      <th scope="col" class="tcolumn">deptMax</th>
+      <th scope="col" class="tcolumn">Required Depts</th>
+      <th scope="col" class="tcolumn">Impo Depts</th>
+      <th scope="col" class="tcolumn">dept Min</th>
+      <th scope="col" class="tcolumn">dept Max</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
     </tr>

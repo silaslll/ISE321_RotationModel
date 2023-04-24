@@ -7,16 +7,19 @@
 {% block content %}
 
 <!-- Allow user to add input  -->
-<div id="calc" >
-  <h1>Metadata </h1>
+<div id="calc" > 
+  <h1> Other information </h1>
   <!-- <p>Please enter details to run the model:</p>  -->
 
-  <form action="{{ url_for('metadata') }}" method="POST">
+  <form action="{{ url_for('other') }}" method="POST">
     
-    <label>Start date for the model:</label>
-    <input type="text" name="startDate" id = "res_startDate">
-    <label>Number of weeks for the year:    </label>
-    <input type="number" name="weeks" id = "res_week">
+    <label>Department:</label>
+    <input type="text" name="dept" id = "res_startDate">
+    <label>Week:    </label>
+    <input type="number" name="week" id = "res_week">
+
+    <label>Max number of residents on vacation:    </label>
+    <input type="number" name="maxResident" id = "res1">
     <!-- Annotation
     <p style="color:rgb(32, 135, 144);font-size:14px;">
       *The people not included in the "All Year Residents" are those that do not follow the general 
@@ -28,7 +31,7 @@
   </form>
   <br><br>
   {% if result %}
-    <h3>The Metadata has successfully been stored {{result}}</h3>
+    <h3>The data has successfully been stored {{result}}</h3>
     <br>
     
 {% endif %}
@@ -38,18 +41,20 @@
 <table class="rtable">
   <thead class="thead">
     <tr class="list-header">
-      <th scope="col" class="tcolumn">Start Date</th>
-      <th scope="col" class="tcolumn">Weeks</th>
+      <th scope="col" class="tcolumn">Department</th>
+      <th scope="col" class="tcolumn">Week</th>
+      <th scope="col" class="tcolumn">Max number of residents on vacation</th>
       <th scope="col" class="tcolumn">Action</th>
       <th scope="col" class="tcolumn">Update</th>
     </tr>
   </thead>
   <tbody class="tbody">
 
-    {% for metadataData in metadataDatas %}
+    {% for otherData in otherDatas %}
     <tr class="list-item">
-      <td style="text-align: center;">{{ metadataData.startDate }}</td>
-      <td style="text-align: center;">{{ metadataData.weeks }}</td>
+      <td style="text-align: center;">{{ otherData.dept }}</td>
+      <td style="text-align: center;">{{ otherData.week }}</td>
+      <td style="text-align: center;">{{ otherData.maxResident }}</td>
       <td><a href = ""> Delete </a></td>
       <td><a href = ""> Update </a></td>
     </div>

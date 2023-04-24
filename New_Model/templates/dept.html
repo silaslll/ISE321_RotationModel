@@ -1,0 +1,79 @@
+
+<!--This file allows user to input, view and delete resident information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Dept </h1>
+  <!-- <p>Please  details to run the model:</p>  -->
+
+  <form action="{{ url_for('dept') }}" method="POST">
+    
+
+    <label> Department List:</label>
+    <select name="name" id = "res_name" required>
+
+      {% for x in range(1, 5) %}
+        <option value="{{ x }}">Dept {{ x }}</option>
+      {% endfor %}
+    </select>
+
+    <label>max number of residents:</label>
+    <input type="number" name="maxresidents" id = "maxresidents">
+
+    <label>min number of residents:</label>
+    <input type="number" name="minresidents" id = "minresidents">
+    
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="busy" value="y" id="busy-option">
+        <label class="form-check-label" for="busy-option">
+          Busy?
+    </label>
+    </div>
+
+  
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The dept has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">name</th>
+      <th scope="col" class="tcolumn">max residents</th>
+      <th scope="col" class="tcolumn">min residents</th>
+      <th scope="col" class="tcolumn">busy</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+    {% for deptData in deptDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ deptData.name }}</td>
+      <td style="text-align: center;">{{ deptData.maxresidents }}</td>
+      <td style="text-align: center;">{{ deptData.minresidents }}</td>
+      <td style="text-align: center;">{{ deptData.busy }}</td>
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+

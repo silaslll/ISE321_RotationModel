@@ -1,0 +1,163 @@
+
+<!--This file allows user to input, view and delete resident information-->
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Allow user to add input  -->
+<div id="calc" >
+  <h1>Vacation Request</h1>
+  <!-- <p>Please details to run the model:</p>  -->
+
+  <form action="{{ url_for('vaca') }}" method="POST">
+
+    <label>Vacation Request:</label>
+    {% for x in range(1, num) %}
+    <h3>Vacation Request {{x}}</h3>
+    <input type="text" name="vacationRequest_{{ x }}" id = "{{ x }}"> 
+    
+    {% endfor %}
+
+
+
+    <!-- Annotation -->
+  
+
+    <input class="button" type="submit" name="Submit" value="Submit">
+  </form>
+  <br><br>
+  {% if result %}
+    <h3>The Vacation has successfully been stored {{result}}</h3>
+    <br>
+    
+{% endif %}
+</div>
+{% endblock %}
+{% block listItems %}
+
+
+{% if num == 2 %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Request1</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+{% endif %}
+
+{% if num == 3 %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Request1</th>
+      <th scope="col" class="tcolumn">Request2</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+{% endif %}
+
+
+{% if num == 4 %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Request1</th>
+      <th scope="col" class="tcolumn">Request2</th>
+      <th scope="col" class="tcolumn">Request3</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+{% endif %}
+
+{% if num == 5 %}
+<table class="rtable">
+  <thead class="thead">
+    <tr class="list-header">
+      <th scope="col" class="tcolumn">ID</th>
+      <th scope="col" class="tcolumn">Request1</th>
+      <th scope="col" class="tcolumn">Request2</th>
+      <th scope="col" class="tcolumn">Request3</th>
+      <th scope="col" class="tcolumn">Request4</th>
+      <th scope="col" class="tcolumn">Action</th>
+      <th scope="col" class="tcolumn">Update</th>
+    </tr>
+  </thead>
+  <tbody class="tbody">
+
+{% endif %}
+
+
+{% if num == 2 %}
+    {% for vacaData in vacaDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ vacaData.vacaId }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_1 }}</td> 
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  {% endif %}
+
+
+  {% if num == 3 %}
+  {% for vacaData in vacaDatas %}
+  <tr class="list-item">
+    <td style="text-align: center;">{{ vacaData.vacaId }}</td>
+    <td style="text-align: center;">{{ vacaData.vacationRequest_1 }}</td> 
+    <td style="text-align: center;">{{ vacaData.vacationRequest_2 }}</td>
+    <td><a href = ""> Delete </a></td>
+    <td><a href = ""> Update </a></td>
+  </div>
+{% endfor %}
+
+{% endif %}
+
+{% if num == 4 %}
+    {% for vacaData in vacaDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ vacaData.vacaId }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_1 }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_2 }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_3 }}</td>
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  {% endif %}
+
+  {% if num == 5 %}
+    {% for vacaData in vacaDatas %}
+    <tr class="list-item">
+      <td style="text-align: center;">{{ vacaData.vacaId }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_1 }}</td> 
+      <td style="text-align: center;">{{ vacaData.vacationRequest_2 }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_3 }}</td>
+      <td style="text-align: center;">{{ vacaData.vacationRequest_4 }}</td>
+      <td><a href = ""> Delete </a></td>
+      <td><a href = ""> Update </a></td>
+    </div>
+  {% endfor %}
+
+  {% endif %}
+
+  </tbody>
+</table>
+{% endblock %}
+
