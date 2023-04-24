@@ -5,9 +5,8 @@
 def dataValidation(dict):
 
     residents = dict['residents']
-    year = dict['year'] ##Josie added
     departments =  dict['departments']
-    blocks = dict['blocks']
+    # blocks = dict['blocks']
 #     priority  = dict['priority'] 
 #     preference = dict['preference']
 #     impossibleAssignments = dict['impossibleAssignments']
@@ -33,15 +32,15 @@ def dataValidation(dict):
     if len(departments) == 0:
         return "The department set is empty. Please input a department."
 
-    if len(blocks) == 0:
-        return "The block set is empty. Please input a block."
+    # if len(blocks) == 0:
+    #     return "The block set is empty. Please input a block."
  
 #     # Capitalize blocks and check their format
-    for b in blocks:
-        b.replace(" ", "")
-        b.capitalize()
-        string = b[0:5]
-        d = b[-1]
+    # for b in blocks:
+    #     b.replace(" ", "")
+    #     b.capitalize()
+    #     string = b[0:5]
+    #     d = b[-1]
  
 #         if(string != 'Block'):
 #             error += "The block \'" + b + "\' is in the wrong format. \n"

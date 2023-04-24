@@ -1,0 +1,115 @@
+##SETS
+#E, The set of residents levels
+#num_classes for example = 5
+num_classes = c.execute('SELECT number FROM class WHERE number IS NOT ""')
+classes = [];
+for e in range(1,num_classes+1):
+    classes.append(e);
+#classes for example = [1,2,3,4,5]
+
+#ResidentsE, the set of all residents in level e of set E
+ResidentsE = {}
+for e in classes: 
+    residentsE[e] = c.execute('SELECT resident_name FROM Resident WHERE class = ?', (e,)).fetchall()
+##residentsE[e] for example is: 
+    #residentsE[1] = ["Sarah", "Kennedy", "Jackson"] #PGY1
+    #residentsE[2] = ["Jeff", "Anna", "Fran"]
+
+#residents, the set of all residents
+residents = {}
+residents = c.execute('SELECT resident_name FROM Resident').fetchall() 
+#residents for example = {"Sarah", "Kennedy", "Jackson", "Jeff", "Anna", "Fran", "Brianna", "Aditi", "Clara", "Prav", "Shayne", "Sam", "Safia", "Sydney", "Tim", "Amanda"}
+
+#BlocksE, the set of blocks for residents in level E
+blocksE = {}
+for e in classes:
+    numBlocksE = c.execute('SELECT number_of_blocks FROM classes WHERE class = ?', (e)).fetchall()     
+    blocksE[e] = np.arange(1,numBlocksE) 
+#for example: blocksE[1] = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+#weeksBE, the set of weeks in each block b of residents in level E
+weeksBE = {}
+for e in classes: 
+    for b in blocksE: 
+        num_weeksBE = c.execute('SELECT num_weeks FROM Class WHERE className = ? WHERE block = ?', (e), (b)).fetchall()
+        weeksBE = np.arange(1,num_weeksBE)
+#for example: weeksBE[1,1] = [1,2,3,4,5,6,7,8]
+              weeksBE[1,2] = [1,2,3,4,5,6,7]
+              weeksBE[2,2] = [1,2,3,4,5,6,7,8,9,10]
+
+#W, the set of weeks in the planning horizon
+weeks = {}
+weeks = np.arange(1,c.execute('SELECT num_weeks FROM PresetData))
+##for example: weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52]
+
+#departments, the set of all departments 
+departments = c.execute('SELECT DeptName FROM Departments')
+##for example: departments = ["cardiac", "ER", "ortho"]
+
+#DepartmentsImp[e] the set of resident r's impossible working departments
+DepartmentsImp[e] = {}
+for e in classes: 
+    departmentsImp[e] = c.execute('SELECT impossibleDepartments FROM Class WHERE className = ?', (e)).fetchall()
+##for example: departmentsImp[1] = ["heart", "ER"]
+
+#DepartmentsReq[e] the set of resident r's required working departments
+DepartmentsReq[e] = {}
+for e in classes: 
+    DepartmentsReq[e] = c.execute('SELECT requiredDepartments FROM Class WHERE className = ?', (e)).fetchall()
+##for example: departmentsReq[2] = ["ortho", "heart"]
+
+#DepartmentsBusy[e] the set of busy departments for class E
+departmentsBusy[e] = {}
+for e in classes:
+    departmentsBusy[e] = c.execute('SELECT DeptName FROM Department WHERE Busy IS true WHERE class = ?', (e)).fetchall()
+##for example: departmentsBusy[2] = ["heart", "ortho"]
+
+#blocksImp[r] the set of resident r's impossible working blocks
+blocksImp[r] = {}
+for r in residents: 
+    blocksImp[r] = c.execute('SELECT ImpossibleBlocks FROM Resident WHERE Name = ?', (r)).fetchall()
+##for example: blocksImp["Sarah"] = [1,4,6]
+
+#weeksVac[r] the set of weeks that resident r requests for vacation
+weeksVac[r] = {}
+for r in residents:
+    weeksVac[r] = c.execute('SELECT VacationRequest FROM Resident WHERE Name = ?, (r)).fetchall()
+##for example: weeksVac["Tom"] = [1,28,36]
+
+##PARAMETERS
+#t_min[r,d] resident r's minimum required working time (in blocks) in department d
+#t_max[r,d] resident r's maximum required working time (in blocks) in department d
+for e in classes:
+    for r in residentsE[e]:
+        for d in departments:
+            t_min[r,d] = c.execute('SELECT DepartmentMin FROM Class WHERE ClassName = ?', (e)).fetchall()   
+            t_max[r,d] = c.execute('SELECT DepartmentMax FROM Class WHERE ClassName = ?', (e)).fetchall()
+##for example: t_min["Ron", "cardiac"] = 1
+##for example: t_max["Ron", "cardiac"] = 14
+
+#r_min[e,d] minimum number of year e's residents required in department d
+#r_max[e,d] minimum number of year e's residents required in department d
+for e in classes: 
+    for d in departments:
+        r_min[e,d] = c.execute('SELECT min_number_of_class FROM Department WHERE class = ? WHERE Department = ?' (e), (d)).fetchall()
+        r_max[e,d] = c.execute('SELECT max_number_of_class FROM Department WHERE class = ? WHERE Department = ?' (e), (d)).fetchall()
+##for example: r_min[5,"ortho"] = 2
+##for example: r_max[5,"ortho"] = 7
+
+#Tvac[r] is resident r's required weeks of vacation
+for r in residents:
+    Tvac[r] = c.execute('SELECT t_vac FROM Resident WHERE Name = ?', r)
+##for example: Tvac["Safia"] = 2
+
+#Dvac[d,e] maximum number of year e's residents in vacation in department d in week W
+for d in departments:
+    for e in classes:
+    Dvac[d,e] = c.execute('SELECT max_res_on_vacation FROM Department WHERE Department = ? WHERE class = ?', d,e).fetchall()
+##for example Dvac["ER",4] = 2
+
+#Rvac[r,b] max number of resident r's vacations allowed in block b
+for e in classes:
+    for r in residentsE[e]:
+        for b in blocksE[e]:
+            Rvac[r,b] = c.execute('SELECT max_vacations_in_block FROM Blocks WHERE class = ?', (e)).fetchall()
+##for example: Rvac["Harry",3] = 1
