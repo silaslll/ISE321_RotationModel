@@ -10,7 +10,8 @@ import sqlite3
 from pandas import read_sql_table, read_sql_query
 import re
 import datavalidation
-
+##Currently works, doesnt match Shutians exact answer bc Dvac?
+##Only running 1 yr rn bc commented others out
 def main():
 
     # Connect with Database
@@ -39,7 +40,7 @@ def main():
     m = gp.Model("rotation_scheduling")
     model(m,dict, residentsE, blocksE, departmentsE, departmentsImp, departmentsReq, departmentsBusyE, blocksImp, weeksBE, t_min, t_max, r_min, r_max, Dvac, Tvac, Rvac)
     
-    solve(m)
+    solve(m, dict, residentsE, departmentsE, blocksE)
     m.write('model.lp')
 
 def getData(dict,c,con):    
@@ -53,11 +54,6 @@ def getData(dict,c,con):
 
     ##Re set, the set of residents in level e of set E 
     residentsE = {}
-    # residentsE[1] = ["Sarah", "Kennedy", "Jackson"] #PGY1
-    # residentsE[2] = ["Jeff", "Anna", "Fran"]
-    # residentsE[3] = ["Brianna", "Aditi", "Clara"]
-    # residentsE[4] = ["Prav", "Shayne", "Sam", "Safia"]
-    # residentsE[5] = ["Sydney", "Tim", "Amanda"] #PGY5
     residentsE[1] = ['Ho','Hun','Ken','Koz','Thorn','Wang','Zhang','Arg','Mit','And','Har','Mich','Pas','Rog','Kaz','Wei','Yos','Faz','Will','Des','Fer','Kim','Mas','Chen','Mor','Yao','Cap','Per','Lan','Web','Hua'] #["Sarah", "Kennedy", "Jackson"] #PGY1
     residentsE[2] = ['Alas', 'Beth', 'Cal', 'Kit', 'Nwi', 'Tes', 'Xia', 'Anz', 'Aziz'] #["Jeff", "Anna", "Fran"]
     residentsE[3] = ['Alja', 'Coh', 'Kosu', 'Rosa', 'San', 'Silv', 'Stae', 'Moroi', 'Pat'] #["Brianna", "Aditi", "Clara"]
@@ -70,6 +66,7 @@ def getData(dict,c,con):
     ##The list of all residents (regardless of class)
     # residents = {"Sarah", "Kennedy", "Jackson", "Jeff", "Anna", "Fran", "Brianna", "Aditi", "Clara", "Prav", "Shayne", "Sam", "Safia", "Sydney", "Tim", "Amanda"}
     residents = {'Ho','Hun','Ken','Koz','Thorn','Wang','Zhang','Arg','Mit','And','Har','Mich','Pas','Rog','Kaz','Wei','Yos','Faz','Will','Des','Fer','Kim','Mas','Chen','Mor','Yao','Cap','Per','Lan','Web','Hua','Alas', 'Beth', 'Cal', 'Kit', 'Nwi', 'Tes', 'Xia', 'Anz', 'Aziz','Alja', 'Coh', 'Kosu', 'Rosa', 'San', 'Silv', 'Stae', 'Moroi', 'Pat','Abra', 'Dug', 'Eyo', 'Iqb', 'Kee', 'Pok', 'Tho','Koss', 'Krim', 'Leiv', 'Min', 'Tcho', 'Wong'}
+    # residents = {'Koss', 'Krim', 'Leiv', 'Min', 'Tcho', 'Wong'} 
 
     # residents = {}
     # residents = c.execute('SELECT resident_name FROM Resident').fetchall()    ##Be the set of blocks for residents in level e
@@ -161,21 +158,21 @@ def getData(dict,c,con):
     departmentsE[4] = ['Overlook', 'Elective', 'Vascular', 'HPB', 'ACS', 'Nights', 'Allen'] #["heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"]
     departmentsE[5] = ['Nights', 'HPB-Chabot', 'CR', 'HPB', 'Lap', 'Elective'] #["heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"]
 
-    # departments = ["heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"]
     departments = ['Allen','Vascular','Breast','VTF','Thoracic','CR','SICU','HPB','Peds','Rainbow','Overlook','Lap','ACS-OR', 'Consults', 'CTICU','Renal','Trauma','Elective', 'ACS', 'Nights','HPB-Chabot']
+    # departments = ['Nights', 'HPB-Chabot', 'CR', 'HPB', 'Lap', 'Elective'] #["heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"]
 
     # departments = c.execute('SELECT DeptName FROM Departments')  
        
     ##set Dimp,r = the set of class e's impossible working departments
     departmentsImp = {}
-    # for e in classes: 
-    #     for r in residentsE[e]:
-    #         departmentsImp[r] = []
-    departmentsImp[1]=[]
-    departmentsImp[2]=[]
-    departmentsImp[3]=[]
-    departmentsImp[4]=[]
-    departmentsImp[5]=[]
+    for e in classes: 
+        for r in residentsE[e]:
+            departmentsImp[r] = []
+    # departmentsImp[1]=[]
+    # departmentsImp[2]=[]
+    # departmentsImp[3]=[]
+    # departmentsImp[4]=[]
+    # departmentsImp[5]=[]
     # for e in classes: 
     #     departmentsImp[e] = c.execute('SELECT impossibleDepartments FROM Class WHERE className = ?', (e)).fetchall()
 
@@ -294,22 +291,6 @@ def getData(dict,c,con):
     weeksVac = {}
     # for r in residents:
     # weeksVac[r] = {"input from database"}
-    # weeksVac["Sarah"] = [2,5]
-    # weeksVac["Kennedy"] = [9,8]
-    # weeksVac["Jackson"] = [28, 17]
-    # weeksVac["Jeff"] = [10]
-    # weeksVac["Anna"] = [2,6]
-    # weeksVac["Fran"] = [7]
-    # weeksVac["Brianna"] = [2,23]
-    # weeksVac["Aditi"] = [2,48]
-    # weeksVac["Clara"] = [17, 34]
-    # weeksVac["Prav"] = [28,8]
-    # weeksVac["Shayne"] = [12,5]
-    # weeksVac["Sam"] = [28,17]
-    # weeksVac["Safia"] = [28,21]
-    # weeksVac["Sydney"] = [10,24]
-    # weeksVac["Tim"] = [28,17]
-    # weeksVac["Amanda"] = [28,8]
     weeksVac['Ho'] = [28, 17]
     weeksVac['Hun'] = [28, 47]
     weeksVac['Ken'] = [28, 17]
@@ -409,6 +390,15 @@ def getData(dict,c,con):
                 else:
                     t_min[r,d]=0
                     t_max[r,d]=0
+
+        for r in residentsE[2]: 
+            t_min[r,"Consults"] = 3
+            t_max[r,"Consults"] = 3
+
+        for r in residentsE[3]:
+            t_max[r,'Trauma']= 2
+            t_max[r,'CR']= 2
+            t_max[r,'Breast']= 2
 
 
         #for e,v in Residents.items(): #if required its at least 1, if possible at least 0
@@ -1694,43 +1684,12 @@ def getData(dict,c,con):
     
    ##Parameter, Tvac,r, resident r's required weeks of vacation
     Tvac = {}
-    # for r in residents:
-    #     Tvac[r] = c.execute('SELECT t_vac FROM Resident WHERE Name = ?', r)
-    # Tvac["Sarah"] = 1
-    # Tvac["Kennedy"] = 1
-    # Tvac["Jackson"] = 1
-    # Tvac["Jeff"] = 1
-    # Tvac["Anna"] = 1
-    # Tvac["Fran"] = 1
-    # Tvac["Brianna"] = 1
-    # Tvac["Aditi"] = 1
-    # Tvac["Clara"] = 1
-    # Tvac["Prav"] = 1
-    # Tvac["Shayne"] = 1
-    # Tvac["Sam"] = 1
-    # Tvac["Safia"] = 1
-    # Tvac["Sydney"] = 1
-    # Tvac["Tim"] = 1
-    # Tvac["Amanda"] = 1
     # Tvac = {}
     for r in residents:
         # print("r: ", r)
         Tvac[r] = 4
     ##Parameter Dvac,d,w, the maximum number of year e's residents allowed on vacation in department d in week w 
     Dvac = {} 
-    # for d in departments:
-    #     for e in classes:
-    #         Dvac[d,e] = c.execute('SELECT max_res_on_vacation FROM Department WHERE Department = ? WHERE class = ?', d,e).fetchall()
-    # for e in classes:
-    #     Dvac["heart", e] = 1
-    #     Dvac["stomach", e] = 1
-    #     Dvac["ER", e] = 1
-    #     Dvac["ortho", e] = 2
-    #     Dvac["brain", e] = 1
-    #     Dvac["ear", e] = 1
-    #     Dvac["plastic", e] = 2
-            # Dvac[d,e] = 4
-    # departments = ["heart", "stomach", "ER", "ortho", "brain", "ear", "plastic"
     for d in departments: 
         for w in weeks:
             Dvac[d,w] = 1
@@ -1766,24 +1725,12 @@ def model(m, dict, residentsE, blocksE, departmentsE, departmentsImp, department
 
     #Decision Variables
     ##z = 1 if resident r is assigned to department d in block b
-    z = m.addVars(dict["residents"], dict["departments"], dict["block_range"], vtype=GRB.BINARY,name="z") 
-    # for e in dict["classes"]:
-    #     z = m.addVars(residentsE[e], departmentsE[e], blocksE[e], vtype=GRB.BINARY,name="z") 
-    #     for r in residentsE[e]:
-    #         for d in departmentsE[e]:
-    #             for b in blocksE[e]:
-    #                 print("z[",r,",",d,",",b,"]: ")
-    #                 print("z: ", z[r,d,b])
-    v = m.addVars(dict["residents"],dict["departments"],dict["weeks"],vtype=GRB.BINARY,name='v')
+    z = m.addVars(dict["residents"], dict["departments"], dict["block_range"], vtype=GRB.BINARY,name='z') 
+    ##v = 1 if resident r is on vacation in department d in week w
+    v = m.addVars(dict["residents"], dict["departments"], dict["weeks"],vtype=GRB.BINARY,name='v')
     # Defines the decision variables (x[r,d,b]=1 if resident r works in department d in week w x[p,r,b]=0 otherwise)
-    x = m.addVars(dict['residents'], dict['departments'], dict['weeks'], vtype=GRB.BINARY, name = "x")
+    x = m.addVars(dict['residents'], dict['departments'], dict['weeks'], vtype=GRB.BINARY, name = 'x')
 	# m.update() ##what does this do?
-    # for e in dict["classes"]:
-    #         for r in residentsE[e]:
-    #             for d in dict["departments"]:
-    #                 for w in dict["weeksVac"][r]:
-    #                     print("r: ", r, " d: ", d, " w: ", w)
-    #                     print("v[r,d,w]: ", v[r,d,w])
     
     m.setObjective(
     	# quicksum(v[r,d,w] for e in dict["classes"] for r in residentsE[e] for d in departmentsE[e] if d not in departmentsImp[e] for w in dict["weeksVac"][r]),GRB.MAXIMIZE)
@@ -1796,71 +1743,143 @@ def model(m, dict, residentsE, blocksE, departmentsE, departmentsImp, department
     
 def constraints(m, t_min, t_max, r_min, r_max, Dvac, Tvac, Rvac, residentsE, blocksE, departmentsE, departmentsImp, departmentsReq, departmentsBusyE, blocksImp, weeksBE, dict,x,z,v):
     for e in dict["classes"]:
-        # for r in residentsE[e]:
-        #     for d in departmentsE[e]:
-        #         for w in dict["weeks"]:
-        #             print("r: ", r, " d: ", d, " w: ", w, " v[r,d,w]: ", v[r,d,w])
+        ##SHUTIANS CONSTRAINTS
+        #set z = 0 if block number is greater than the number of blocks for a given year (ie. block 11 for a class with only 10 blocks)
+        # con_preass_1= m.addConstrs(z[r,d,b]==0 for d in dict["departments"] if d in dict["departments"] for r in residentsE[e] for b in dict["block_range"] if b not in blocksE[e]) #from Shutians code
+        ##constraint 1b, ensures each resident is assigned to at most one department in each block
+        # con_one_dept_per_person = m.addConstrs(quicksum(z[r,d,b]for d in departmentsE[e])<=1 for r in residentsE[e] for b in blocksE[e]) #or dict["departments"]
+        # con_preass_2= m.addConstrs(z[r,d,b]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for b in dict["block_range"])
+        # con_preass_3= m.addConstrs(x[r,d,w]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for w in dict["weeks"])
+        # con_preass_4= m.addConstrs(v[r,d,w]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for w in dict["weeks"])
+        # con_onedept= m.addConstrs(quicksum(z[r,d,b]for d in departmentsE[e])<=1 for r in residentsE[e] for b in blocksE[e]) #from Shutians code
+        ##constraint 1c, ensures each resident is assigned to required departments at least once
+        # con_reqdept = m.addConstrs(quicksum(z[r,d,b] for b in blocksE[e])>=1 for r in residentsE[e] for d in departmentsE[e]) #Shutians model uses the departmentsE[e], the overleaf uses DepartmentsReq
+        ##constraint 1e, ensures residents aren't assigned to impossible blocks
+        # con_impblck= m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for b in blocksImp[r]  for d in departmentsE[e])
+        ##ensures residents aren't assigned vacation weeks in their impossible blocks
+        # con_novacbk= m.addConstrs(v[r,d,w]==0 for r in residentsE[e] for b in blocksImp[r] for w in weeksBE[e,b] for d in departmentsE[e])
+        ##constraint 1f, ensures that each resident has the required vacation weeks
+        # con_vac= m.addConstrs(quicksum(v[r,d,w] for w in dict["weeks"] for d in departmentsE[e])==Tvac[r]  for r in residentsE[e])
+        ##constraint 1g, ensures that the length of resident r's rotation in department d satisfies the required minimum Tmin,r,d and maximum Tmax,r,d rotation length
+        # con_res_min_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])>=t_min[r,d] for r in residentsE[e] for d in departmentsE[e]) #departmentsReq[r])#dict["departments"])
+        # con_res_max_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])<=t_max[r,d]  for r in residentsE[e]  for d in departmentsE[e])#departmentsReq[r])
+        ##constraint 1h, ensures that for each block b, the number of residents of class e working in department d satisfies Rmin,e,d,b and Rmax,e,d,b for that department
+        # con_resmin= m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])>=r_min[e,d] for d in departmentsE[e] for b in blocksE[e])
+        # con_resmax= m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])<=r_max[e,d] for d in departmentsE[e] for b in blocksE[e])
+        ##constraint 1i, ensures that residents can't take a vacation while in a busy department
+        # con_varblok= m.addConstrs(z[r,d,b]<=1-v[r,d,w] for d in departmentsBusyE[e] for r in residentsE[e] for b in blocksE[e] for w in weeksBE[e,b])
+        ##ensures that a resident can only take one vacation in a given week <- Came from Shutians model...not sure if I should include?
+        # con_onevac= m.addConstrs(quicksum(v[r,d,w]for d in departmentsE[e] for w in weeksBE[e,b])<=1 for r in residentsE[e] for b in blocksE[e]) #from Shutians code
+        #Breast ['1', '3']# Renal ['1', '3']# Thoracic ['1', '3']Trauma ['1', '3']
+            # con_team_13 = m.addConstrs(quicksum(v[r,d,w] for r in (residentsE[1]+residentsE[3]))<=1  for d in ['Breast','Thoracic'] for w in dict["weeks"])
+            # con_team_13 = m.addConstrs(quicksum(v[r,d,w] for r in (residentsE[1]+residentsE[3]))<=1  for d in ['Breast','Renal','Thoracic','Trauma'] for w in dict["weeks"])
+
+        #     # #Overlook ['1', '2', '3', '4']
+        #     con_team_Overlook = m.addConstrs(quicksum(v[r,d,w]for r in RList)<=1 for d in ['Overlook']for w in Weeks)
+
+        #     # #Elective ['1', '4', '5']
+        con_team_Elec = m.addConstrs(quicksum(v[r,d,w] for e in [5] for r in residentsE[e])<=1 for d in ['Elective'] for w in dict["weeks"])
+
+        #     # # Lap ['1', '3', '5']# CR ['1', '3', '5']
+        #     con_team_Lap = m.addConstrs(quicksum(v[r,d,w]for e in ['1','3','5']for r in Residents[e])<=1 for d in ['Lap','CR']for w in Weeks)
+        con_team_Lap = m.addConstrs(quicksum(v[r,d,w]for e in [5] for r in residentsE[e])<=1 for d in ['Lap','CR']for w in dict["weeks"])
+
+        #     # # Allen ['1', '2', '4']
+        #     con_team_Allen = m.addConstrs(quicksum(v[r,'Allen',w]for e in ['1','2','4']for r in Residents[e])<=1 for w in Weeks)
+
+        #     # # Vascular ['1', '3', '4']
+        #     con_team_Vasu = m.addConstrs(quicksum(v[r,d,w]for e in ['1','3','4']for r in Residents[e])<=1 for d in ['Vascular']for w in Weeks)
+
+        #     # Peds ['1', '2']CTICU ['1','2']
+        #     con_team_Peds = m.addConstrs(quicksum(v[r,d,w] for e in ['1','2'] for r in Residents[e])<=1  for d in ['Peds','CTICU'] for w in Weeks)
+
+        #     # # Nights ['1','4', '5']
+        #     con_team_nights = m.addConstrs(quicksum(v[r,d,w] for e in ['1','4','5'] for r in Residents[e] for d in ['VTF','Rainbow','Nights'])<=1 for w in Weeks)                                      
+        con_team_nights = m.addConstrs(quicksum(v[r,d,w] for e in [5] for r in residentsE[e] for d in ['VTF', 'Rainbow','Nights'])<=1 for w in dict["weeks"])                                      
+
+        #     # # HPB ['1', '4', '5']
+        #     # con_team_HPB = m.addConstrs(quicksum(v[r,d,w] for e in ['1','4','5'] for r in Residents[e] for d in ['HPB','HPB-Chabot'])<=1 for w in Weeks)      
+        con_team_HPB = m.addConstrs(quicksum(v[r,d,w] for e in [5] for r in residentsE[e] for d in ['HPB','HPB-Chabot'])<=1 for w in dict["weeks"])      
+
+        # # ACS ['1','2','4']
+        con_team_ACS = m.addConstrs(quicksum(v[r,d,w] for e in [1,4,2] for r in residentsE[e]  for d in ['ACS','ACS-OR','Consults'])<=1 for w in dict["weeks"])                                            
+
+
+
+
         ##set z = 0 if block number is greater than the number of blocks for a given year (ie. block 11 for a class with only 10 blocks)
         # con_block_limit = m.addConstrs((z[r,d,b]==0 for r in residentsE[e] for d in dict["departments"] if d in dict["departments"] for b in dict["block_range"] if b not in blocksE[e])) 
         con_block_limit = m.addConstrs((z[r,d,b]==0 for r in residentsE[e] for d in dict["departments"] if d in departmentsE[e] for b in dict["block_range"] if b not in blocksE[e])) 
-        
+
 		##constraint 1b, ensures each resident is assigned to at most one department in each block
-        # con_one_dept_per_person = m.addConstrs(quicksum(z[r,d,b]for d in dict["departments"])<=1 for r in residentsE[e] for b in blocksE[e])
-        con_one_dept_per_person = m.addConstrs(quicksum(z[r,d,b]for d in departmentsE[e])<=1 for r in residentsE[e] for b in blocksE[e])
+        con_one_dept_per_person = m.addConstrs(quicksum(z[r,d,b]for d in departmentsE[e])<=1 for r in residentsE[e] for b in blocksE[e]) #or dict["departments"]
 
         #######DID I INCLUDE THIS ALREADY???
         con_preass_2= m.addConstrs(z[r,d,b]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for b in dict["block_range"])
         con_preass_3= m.addConstrs(x[r,d,w]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for w in dict["weeks"])
-        # con_preass_4= m.addConstrs(v[r,d,w]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for w in dict["weeks"])
+        con_preass_4= m.addConstrs(v[r,d,w]==0 for d in dict["departments"] if d not in departmentsE[e] for r in residentsE[e] for w in dict["weeks"])
         
-        ##constraint 1c, ensures each resident is assigned to required departments exactly once
-        con_req_dept_once = m.addConstrs(quicksum(z[r,d,b] for b in blocksE[e])>=1 for r in residentsE[e] for d in departmentsReq[r]) #Shutians model uses the departmentsE[e], the overleaf uses DepartmentsReq
-        con_dept_once = m.addConstrs(quicksum(z[r,d,b] for b in blocksE[e])>=1 for r in residentsE[e] for d in departmentsE[e]) #Shutians model uses the departmentsE[e], the overleaf uses DepartmentsReq
+        con_onedept= m.addConstrs(quicksum(z[r,d,b]for d in departmentsE[e])<=1 for r in residentsE[e] for b in blocksE[e]) #from Shutians code
+#         
+        ##constraint 1c, ensures each resident is assigned to required departments at least once
+        con_reqdept = m.addConstrs(quicksum(z[r,d,b] for b in blocksE[e])>=1 for r in residentsE[e] for d in departmentsReq[r]) #Shutians model uses the departmentsE[e], the overleaf uses DepartmentsReq
+
+        # con_dept_once = m.addConstrs(quicksum(z[r,d,b] for b in blocksE[e])>=1 for r in residentsE[e] for d in departmentsE[e]) #Shutians model uses the departmentsE[e], the overleaf uses DepartmentsReq
         # con_req_dept_once = m.addConstrs(quicksum(z[r,d,b] for d in departmentsE[e])>=1 for r in residentsE[e] for b in blocksE[e])
 
         ##^This one potentially needs to be adjusted in future, to account for if residents need to serve in certain departments more than once
         
         ##constraint 1d, ensures residents aren't assigned to rotations in impossible departments
-        # con_dept_imp = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in dict["departments"] if d in departmentsImp[e] for b in blocksE[e]) 
-        con_dept_imp = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in departmentsE[e] if d in departmentsImp[e] for b in blocksE[e]) 
-
+        # con_dept_imp = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in departmentsE[e] if d in departmentsImp[r] for b in blocksE[e]) # or dict["departments"]
+#         
         ##constraint 1e, ensures residents aren't assigned to impossible blocks
-        # con_imp_blck = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in dict["departments"] for b in blocksImp[r])
-        con_imp_blck = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in departmentsE[e] for b in blocksImp[r])
+        # con_imp_blck = m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for d in departmentsE[e] for b in blocksImp[r]) #or dict["departments"]
+        con_impblck= m.addConstrs(z[r,d,b]==0 for r in residentsE[e] for b in blocksImp[r]  for d in departmentsE[e])
 
         ##ensures residents aren't assigned vacation weeks in their impossible blocks
-        con_no_vac_in_imp_blck = m.addConstrs(v[r,d,w]==0 for r in residentsE[e] for b in blocksImp[r] for w in weeksBE[e,b] for d in departmentsE[e])
-        
+        # con_no_vac_in_imp_blck = m.addConstrs(v[r,d,w]==0 for r in residentsE[e] for b in blocksImp[r] for w in dict["weeks"] for d in departmentsE[e]) #or weeksBE[e,b]
+        con_novacbk= m.addConstrs(v[r,d,w]==0 for r in residentsE[e] for b in blocksImp[r] for w in weeksBE[e,b] for d in departmentsE[e])
+
         ##constraint 1f, ensures that each resident has the required vacation weeks
         # con_req_vac= m.addConstrs(quicksum(v[r,d,w] for w in dict["weeks"] for d in dict["departments"])==Tvac[r] for r in residentsE[e])#dict["residents"])
-        con_req_vac= m.addConstrs(quicksum(v[r,d,w] for w in dict["weeks"] for d in departmentsE[e])==Tvac[r] for r in residentsE[e])#dict["residents"])
-        
+        con_vac= m.addConstrs(quicksum(v[r,d,w] for w in dict["weeks"] for d in departmentsE[e])==Tvac[r]  for r in residentsE[e])
+
         ##constraint 1g, ensures that the length of resident r's rotation in department d satisfies the required minimum Tmin,r,d and maximum Tmax,r,d rotation length
-        con_res_min_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])>=t_min[r,d] for r in residentsE[e] for d in departmentsReq[r])#dict["departments"])
-        con_res_max_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])<=t_max[r,d]  for r in residentsE[e]  for d in departmentsReq[r])
+        con_res_min_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])>=t_min[r,d] for r in residentsE[e] for d in departmentsE[e]) #departmentsReq[r])#dict["departments"])
+        con_res_max_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])<=t_max[r,d]  for r in residentsE[e]  for d in departmentsE[e])#departmentsReq[r])
+        # con_res_min_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])>=t_min[r,d] for r in residentsE[e] for d in departmentsReq[r])#dict["departments"])
+        # con_res_max_time_in_dept = m.addConstrs(quicksum(z[r,d,b]for b in blocksE[e])<=t_max[r,d]  for r in residentsE[e]  for d in departmentsReq[r])
 
+          
         ##constraint 1h, ensures that for each block b, the number of residents of class e working in department d satisfies Rmin,e,d,b and Rmax,e,d,b for that department
-        con_class_e_res_min = m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])>=r_min[e,d] for r in residentsE[e] for d in departmentsReq[r] for b in blocksE[e])
-        con_class_e_res_max = m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])<=r_max[e,d] for  r in residentsE[e] for d in departmentsReq[r] for b in blocksE[e])
-
+        # con_class_e_res_min = m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])>=r_min[e,d] for r in residentsE[e] for d in departmentsReq[r] for b in blocksE[e])
+        # con_class_e_res_max = m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])<=r_max[e,d] for  r in residentsE[e] for d in departmentsReq[r] for b in blocksE[e])
+        con_resmin= m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])>=r_min[e,d] for d in departmentsE[e] for b in blocksE[e])
+        con_resmax= m.addConstrs(quicksum(z[r,d,b]for r in residentsE[e])<=r_max[e,d] for d in departmentsE[e] for b in blocksE[e])
+#         
         ##constraint 1i, ensures that residents can't take a vacation while in a busy department
-        con_vac_busy_blok= m.addConstrs(v[r,d,w]<=1-z[r,d,b] for d in departmentsBusyE[e] for r in residentsE[e] for b in blocksE[e] for w in weeksBE[e,b])
+        # con_vac_busy_blok= m.addConstrs(v[r,d,w]<=1-z[r,d,b] for d in departmentsBusyE[e] for r in residentsE[e] for b in blocksE[e] for w in weeksBE[e,b])
+        con_varblok= m.addConstrs(z[r,d,b]<=1-v[r,d,w] for d in departmentsBusyE[e] for r in residentsE[e] for b in blocksE[e] for w in weeksBE[e,b])
 
         ##ensures that a resident can only take one vacation in a given week <- Came from Shutians model...not sure if I should include?
-        con_onevac= m.addConstrs(quicksum(v[r,d,w] for d in dict["departments"] for w in weeksBE[e,b])<=1 for r in residentsE[e] for b in blocksE[e])
+        # con_onevac= m.addConstrs(quicksum(v[r,d,w] for d in departmentsE[e] for w in dict["weeks"])<=1 for r in residentsE[e]) # for b in blocksE[e])
+        # con_onevac= m.addConstrs(quicksum(v[r,d,w] for d in dict["departments"])<=1 for w in dict["weeks"] for r in dict["residents"]) # for b in blocksE[e]) #the one running most recently
+        # con_onevac= m.addConstrs(quicksum(v[r,d,w] for d in dict["departments"] for w in dict["weeks"])<=1 for r in residentsE[e] for b in blocksE[e])
+        con_onevac= m.addConstrs(quicksum(v[r,d,w]for d in departmentsE[e] for w in weeksBE[e,b])<=1 for r in residentsE[e] for b in blocksE[e]) #from Shutians code
 
         ##constraint 1j, ensures that the total number of residents on vacation in department d in week w, should be less than or equal to Dvac,d,w
-        #######THIS IS A DIFFERENCE BETWEEN SHUTIAN AND MY CODE
+        #######THIS IS A DIFFERENCE BETWEEN SHUTIAN AND MY CODE (Shutians doesn't have it)
         # con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w]for r in dict["residents"])<=Dvac[d,w] for d in dict["departments"] for w in dict["weeks"])
         # con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w]for r in residentsE[e])<=Dvac[d,w] for d in departmentsE[e] for w in dict["weeks"])
 
         ##constraints 1k, ensures that each resident r, can take at most Rvac,r weeks of vacation in each block
         # con_lim_res_vacs_in_block = m.addConstrs(quicksum(v[r,d,w] for b in blocksE[e] for w in weeksBE[e,b] for d in dict["departments"]) <= Rvac[r,b] for r in residentsE[e] for b in blocksE[e])
-        con_lim_res_vacs_in_block = m.addConstrs(quicksum(v[r,d,w] for w in weeksBE[e,b] for d in departmentsE[e]) <= Rvac[r,b] for r in residentsE[e] for b in blocksE[e])
+        # con_lim_res_vacs_in_block = m.addConstrs(quicksum(v[r,d,w] for w in weeksBE[e,b] for d in departmentsE[e]) <= Rvac[r,b] for r in residentsE[e] for b in blocksE[e])
+        # con_lim_res_vacs_in_block = m.addConstrs(quicksum(v[r,d,w] for w in weeksBE[e,b] for d in dict["departments"]) <= 1 for r in residentsE[e] for b in blocksE[e]) ##Shutians doesnt have this one
 
         ##constraints 1l, ensures that if resident r is assigned to department d in block b, they either work or have vacation for each week within block b
-        # con_link = m.addConstrs(z[r,d,b]== x[r,d,w]+v[r,d,w] for r in residentsE[e] for d in dict["departments"] for b in blocksE[e] for w in weeksBE[e,b])
-        con_link = m.addConstrs(z[r,d,b]== x[r,d,w]+v[r,d,w] for r in residentsE[e] for d in departmentsE[e] for b in blocksE[e] for w in weeksBE[e,b])
+        # con_link = m.addConstrs(z[r,d,b]== x[r,d,w]+v[r,d,w] for r in residentsE[e] for d in departmentsE[e] for b in blocksE[e] for w in weeksBE[e,b]) #or dict["departments"]
+        con_link = m.addConstrs(z[r,d,b]== x[r,d,w]+v[r,d,w] for r in residentsE[e] for d in dict["departments"] for b in blocksE[e] for w in weeksBE[e,b])
 
         ##Additional Constraints I'm testing for Dvac
     yearInDept = {}
@@ -1885,15 +1904,19 @@ def constraints(m, t_min, t_max, r_min, r_max, Dvac, Tvac, Rvac, residentsE, blo
             for r in residentsE[y]:
                 print("Residents[y]: ", r)
              
+    
         # con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w] for r in residentsE[y])<=Dvac[d,w] for y in yearInDept[d] for d in departmentsE[e] for w in dict["weeks"])
-        con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w] for e in yearInDept[d] for r in residentsE[e])<=Dvac[d,w] for d in departmentsE[e] for w in dict["weeks"])
+        # con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w] for e in yearInDept[d] for r in residentsE[e])<=Dvac[d,w] for d in departmentsE[e] for w in dict["weeks"]) #my attempt at the DVac
         # con_team_Elec = m.addConstrs(quicksum(v[r,d,w] for e in [1,4,5] for r in residentsE[e])<=1 for d in ['Elective'] for w in dict["weeks"])
 
         # con_limit_res_on_vac_in_dep = m.addConstrs(quicksum(v[r,d,w]for r in residentsE[e])<=Dvac[d,w] for d in departmentsE[e] for w in dict["weeks"])
 
 
 
-def solve(m):
+
+
+
+def solve(m, dict, residentsE, departmentsE, blocksE):
     m.optimize()
     a = m.getObjective()
 
@@ -1901,33 +1924,64 @@ def solve(m):
     if m.status == GRB.Status.INFEASIBLE :
         raise Exception("Model is infeasible")
 
+    # # Save the solution to a dictionary
+    # for e in dict["classes"]:
+    #         for r in residentsE[e]:
+    #             for d in departmentsE[e]:
+    #                 for b in blocksE[e]:
+    #                     if z[r,d,b].x>0.99:
+
+    #                         # Solz[r].append([d,b])
+    #                 for w in dict["weeksVac"][r]:
+    #                     if v[r,d,w].x>0.99:
+    # #                         Solv[r].append([d,w])
+    # #                         print(r,d,w)
+
     # output list is where we store the list of x variables when it's equal to 1
     output = [] # An empty list named output is created to store the results.
-
+    output3 = []
     for v in m.getVars(): # A for loop iterates over the variables from the optimization model (from Gurobi) using the m.getVars() method.
         # print("V: ", v)
-        if v.x == 1: # When assign the resident to this rotation in the block 
-            # print('%s %g' % (v.varName,v.x))
-            if v.varName[0] == 'z':
-                print(v.varName) 
-                output.append(re.split(',+', v.varName.strip(' z[]')))
-            # varName's type is String. We need to strip unnecessary parts and store in the list 
+        for e in dict["classes"]:
+            for r in residentsE[e]:
+                for d in departmentsE[e]:
+                    # for b in blocksE[e]:
+                    for w in dict["weeksVac"][r]:
+                        if v.x == 1: # When assign the resident to this rotation in the block 
+                        # print('%s %g' % (v.varName,v.x))
+                        # z_val = ",".join(r,d,b)
+                        # z_val = 'z[' + z_val + ']'
+                            vVal = "v[{res},{dept},{week}]".format(res = r, dept = d, week = w)
+                            # print("ZVal: ", zVal)
+
+                            if v.varName == vVal:
+                                print("vVal: ", vVal)
+                                output3.append(re.split(',+', v.varName.strip(' v[]')))
+                            if v.varName[0] == 'z':
+                                # print(v.varName) 
+                                output.append(re.split(',+', v.varName.strip(' z[]')))
+        # varName's type is String. We need to strip unnecessary parts and store in the list 
             
     # Store everything in a table group by resident name
     num = np.array(output)
     sch = pd.DataFrame(num, columns=['Resident','Department','Block'])
     sch.to_csv('./output.csv', index = False)
     
+    num2 = np.array(output3)
+    sch2 = pd.DataFrame(num2, columns=['Resident','Department','Block'])
+    sch2.to_csv('./output_satisfied_vac.csv', index = False)
+    
+    outputVac = []
     for v in m.getVars(): # A for loop iterates over the variables from the optimization model (from Gurobi) using the m.getVars() method.
         # print("V: ", v)
         if v.x == 1: # When assign the resident to this rotation in the block 
             # print('%s %g' % (v.varName,v.x))
             if v.varName[0] == 'v':
                 # print(v.varName) 
-                output.append(re.split(',+', v.varName.strip(' v[]')))
-    num = np.array(output)
-    sch = pd.DataFrame(num, columns=['Resident','Department','Week'])
-    sch.to_csv('./VacOutput.csv', index = False)
+                outputVac.append(re.split(',+', v.varName.strip(' v[]')))
+    num3 = np.array(outputVac)
+    sch3 = pd.DataFrame(num3, columns=['Resident','Department','Week'])
+    sch3.to_csv('./VacOutput.csv', index = False)
     
 if __name__ == "__main__":
     main()   
